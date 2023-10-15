@@ -10,6 +10,7 @@ public class Program
         var app = new CommandApp();
         app.Configure(config => 
         {
+            config.AddCommand<ListGroupCommand>("list");
             config.AddCommand<CreateGroupCommand>("create");
             config.AddCommand<RemoveGroupCommand>("remove");
         });
