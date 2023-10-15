@@ -1,42 +1,48 @@
-using System.CommandLine;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Server.GitShell.Lib.Logging;
+using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
 
-public class CreateGroupCommand : GroupBaseCommand
+[Description("Creates a group.")]
+public class CreateGroupCommand : Command<CreateGroupCommand.Settings>
 {
-    public CreateGroupCommand() : base("create", "Creates a group on the Server.")
+    public class Settings : BaseGroupCommandSettings
     {
-        _ForceOption.Description = "Overrides group if it exists.";
-        this.SetHandler(Handle, _GroupNameArgument, _ForceOption);
+        [Description("Overrides group if it already exists.")]
+        [CommandOption("-f|--force")]
+        [DefaultValue(false)]
+        public bool Force { get; init; }
     }
 
-    public static void Handle(string groupname, bool force)
+    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
-        if (string.IsNullOrEmpty(groupname))
+        if (string.IsNullOrEmpty(settings.Groupname))
         {
             throw new ArgumentException("Groupname cannot be empty.");
         }
-        if (force && Directory.Exists(groupname))
+        if (settings.Force && Directory.Exists(settings.Groupname))
         {
-            Directory.Move(groupname, groupname + "___tmp");
+            Directory.Move(settings.Groupname, settings.Groupname + "___tmp");
         }
-        else if (Directory.Exists(groupname))
+        else if (Directory.Exists(settings.Groupname))
         {
-            throw new Exception($"The group \"{groupname}\" already exists.");
+            throw new Exception($"The group \"{settings.Groupname}\" already exists.");
         }
 
-        Directory.CreateDirectory(groupname);
+        Directory.CreateDirectory(settings.Groupname);
 
-        if (force && Directory.Exists(groupname + "___tmp")) 
+        if (settings.Force && Directory.Exists(settings.Groupname + "___tmp")) 
         {
-            Directory.Delete(groupname + "___tmp", true);
+            Directory.Delete(settings.Groupname + "___tmp", true);
             CommandLogger.Default.LogWarning(
-                "Group \"{groupname}\" already exists. Old group removed.", groupname
+                "Group \"{groupname}\" already exists. Old group removed.", settings.Groupname
             );
         }
 
-        CommandLogger.Default.LogInformation("Created group \"{groupname}\".", groupname);
+        CommandLogger.Default.LogInformation("Created group \"{groupname}\".", settings.Groupname);
+        return 0;
     }
 }

@@ -1,30 +1,40 @@
-using System.CommandLine;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
+using Server.GitShell.Lib.Logging;
+using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
 
-public class RemoveGroupCommand : Command
+[Description("Removes a group.")]
+public class RemoveGroupCommand : Command<RemoveGroupCommand.Settings>
 {
-    public RemoveGroupCommand() : base("remove", "Removes a group on the Server.")
+    public class Settings : BaseGroupCommandSettings
     {
-        var groupnameArgument = new Argument<string>(
-            name: "groupname",
-            description: "The name of the Group."
-        );
-        AddArgument(groupnameArgument);
-        this.SetHandler(Handle, groupnameArgument);
+        [Description("Overrides group if it already exists.")]
+        [CommandOption("-f|--force")]
+        [DefaultValue(false)]
+        public bool Force { get; init; }
     }
 
-    public static void Handle(string groupname) {
-        if (string.IsNullOrEmpty(groupname)) 
+    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
+    {
+        if (string.IsNullOrEmpty(settings.Groupname)) 
         {
             throw new ArgumentException("Groupname cannot be empty.");
         }
         
-        if (Directory.Exists(groupname))
+        if (!Directory.Exists(settings.Groupname))
         {
-            throw new Exception($"The group \"{groupname}\" already exists.");
+            throw new Exception($"The group \"{settings.Groupname}\" does not exist.");
         }
-        
-        Directory.CreateDirectory(groupname);
+
+        if (!settings.Force && Directory.EnumerateFileSystemEntries(settings.Groupname).Any())
+        {
+            throw new Exception($"The group \"{settings.Groupname}\" is not empty. To remove anyway use option \"-f\".");
+        }
+        Directory.Delete(settings.Groupname, true);
+        CommandLogger.Default.LogInformation("Removed group \"{groupname}\".", settings.Groupname);
+        return 0;
     }
 }
