@@ -5,30 +5,8 @@ using Tests.Server.GitShell.Utils;
 namespace Tests.Server.GitShell.Commands.Group;
 
 [Collection("File System Sequential")]
-public class RemoveGroupCommandTests : DisableConsole
+public class RemoveGroupCommandTests : BaseGroupCommandTests
 {
-    private static string _ValidGroupname = "groupname";
-    private static string _SubDir = "subdir";
-    private static string _InvalidGroupname = "";
-    private readonly IRemainingArguments _remainingArgs = new Mock<IRemainingArguments>().Object;
-
-    public override void Dispose()
-    {
-        base.Dispose();
-        if (Directory.Exists(_ValidGroupname)) Directory.Delete(_ValidGroupname, true);
-    }
-
-    private static void _CreateGroupDirectory(string directory)
-    {
-        Directory.CreateDirectory(directory);
-    }
-
-    private static void _CreateNonEmptyGroupDirectory(string directory, string subdir)
-    {
-        Directory.CreateDirectory(directory);
-        Directory.CreateDirectory(Path.Combine(directory, subdir));
-    }
-
     [Fact]
     public void Execute_EmptyGroupname_ThrowsException()
     {

@@ -1,22 +1,11 @@
 using Server.GitShell.Commands.Group;
 using Spectre.Console.Cli;
-using Tests.Server.GitShell.Utils;
 
 namespace Tests.Server.GitShell.Commands.Group;
 
 [Collection("File System Sequential")]
-public class CreateGroupCommandTests : DisableConsole
+public class CreateGroupCommandTests : BaseGroupCommandTests
 {
-    private static string _ValidGroupname = "groupname";
-    private static string _InvalidGroupname = "";
-    private readonly IRemainingArguments _remainingArgs = new Mock<IRemainingArguments>().Object;
-
-    public override void Dispose()
-    {
-        base.Dispose();
-        if (Directory.Exists(_ValidGroupname)) Directory.Delete(_ValidGroupname, true);
-    }
-
     [Fact]
     public void Execute_EmptyGroupname_ThrowsException()
     {
@@ -54,8 +43,7 @@ public class CreateGroupCommandTests : DisableConsole
         };
         var command = new CreateGroupCommand();
 
-        var resultFirstRun = command.Execute(context, settings);
-        Assert.Equal(0, resultFirstRun);
+        _CreateGroupDirectory(_ValidGroupname);
         Assert.True(Directory.Exists(_ValidGroupname));
         Assert.Throws<Exception>(() => command.Execute(context, settings));
         Directory.Delete(_ValidGroupname);
@@ -86,11 +74,10 @@ public class CreateGroupCommandTests : DisableConsole
         };
         var command = new CreateGroupCommand();
 
-        var resultFirstRun = command.Execute(context, settings);
-        Assert.Equal(0, resultFirstRun);
+        _CreateGroupDirectory(_ValidGroupname);
         Assert.True(Directory.Exists(_ValidGroupname));
-        var resultSecondRun = command.Execute(context, settings);
-        Assert.Equal(0, resultSecondRun);
+        var result = command.Execute(context, settings);
+        Assert.Equal(0, result);
         Assert.True(Directory.Exists(_ValidGroupname));
         Directory.Delete(_ValidGroupname);
     }
