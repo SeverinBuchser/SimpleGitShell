@@ -1,4 +1,4 @@
-using System.CommandLine;
+using Server.GitShell.Lib.Commands;
 
 namespace Server.GitShell.Commands.Group;
 

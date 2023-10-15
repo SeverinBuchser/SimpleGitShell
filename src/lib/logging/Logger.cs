@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace Server.GitShell.Logging;
+namespace Server.GitShell.Lib.Logging;
 
 public class CommandLogger : ILogger
 {
@@ -29,7 +29,7 @@ public class CommandLogger : ILogger
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        Console.Write($"{logLevel}: ");
+        Console.Write($"{logLevel}:".PadRight(15));
         Console.WriteLine(state);
     }
 }

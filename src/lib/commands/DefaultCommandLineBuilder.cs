@@ -3,9 +3,9 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using Microsoft.Extensions.Logging;
 
-using Server.GitShell.Logging;
+using Server.GitShell.Lib.Logging;
 
-namespace Server.GitShell.Commands;
+namespace Server.GitShell.Lib.Commands;
 
 public class DefaultCommandLineBuilder : CommandLineBuilder {
     public DefaultCommandLineBuilder(RootCommand rootCommand) : base(rootCommand) 

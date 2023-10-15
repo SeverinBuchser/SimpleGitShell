@@ -1,11 +1,10 @@
 using System.CommandLine;
-using System.IO;
 
 namespace Server.GitShell.Commands.Group;
 
-public class CreateGroupCommand : Command
+public class RemoveGroupCommand : Command
 {
-    public CreateGroupCommand() : base("create", "Creates a group on the Server.")
+    public RemoveGroupCommand() : base("remove", "Removes a group on the Server.")
     {
         var groupnameArgument = new Argument<string>(
             name: "groupname",

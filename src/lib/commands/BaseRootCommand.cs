@@ -2,7 +2,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
 
-namespace Server.GitShell.Commands;
+namespace Server.GitShell.Lib.Commands;
 
 public class BaseRootCommand : RootCommand
 {

@@ -22,9 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\logging\logging.csproj" />
-    <ProjectReference Include="..\src\commands\commands.csproj" />
-    <ProjectReference Include="..\src\group\group.csproj" />
+    <ProjectReference Include="..\src\lib\lib.csproj" />
+    <ProjectReference Include="..\src\commands\group\group.csproj" />
   </ItemGroup>
 
 </Project>
