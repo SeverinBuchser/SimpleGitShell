@@ -1,126 +1,134 @@
 using Server.GitShell.Commands.Group;
-using Spectre.Console.Cli;
-using Tests.Server.GitShell.Utils;
+using Spectre.Console.Testing;
 
 namespace Tests.Server.GitShell.Commands.Group;
 
 [Collection("File System Sequential")]
 public class RemoveGroupCommandTests : BaseGroupCommandTests
 {
+    private static CommandAppTester App()
+    {
+        var app = new CommandAppTester();
+        app.SetDefaultCommand<RemoveGroupCommand>();
+        return app;
+    }
+    
     [Fact]
     public void Execute_EmptyGroupname_ThrowsException()
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _InvalidGroupname,
-            Force = false
-        };
-        var command = new RemoveGroupCommand();
-        Assert.Throws<ArgumentException>(() => command.Execute(context, settings));
+        // Given
+        var args = new string[]{_InvalidGroupname};
+
+        // When
+        var result = App().RunAndCatch<Exception>(args);
+
+        // Then
+        Assert.IsType<ArgumentException>(result.Exception);
+        Assert.Equal($"Groupname cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
     public void Execute_ValidGroupnameNonExisting_ThrowsException() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = false
-        };
-        var command = new RemoveGroupCommand();
-        Assert.Throws<Exception>(() => command.Execute(context, settings));
+        // Given
+        var args = new string[]{_ValidGroupname};
+
+        // When
+        var result = App().RunAndCatch<Exception>(args);
+
+        // Then
+        Assert.IsType<Exception>(result.Exception);
+        Assert.Equal($"The group \"{_ValidGroupname}\" does not exist.", result.Exception.Message);
     }
 
     [Fact]
     public void Execute_ValidGroupnameExistingEmpty_RemovesDirectory() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = false
-        };
-        var command = new RemoveGroupCommand();
+        // Given
+        _CreateDirectory(_ValidGroupname);
+        var args = new string[]{_ValidGroupname};
 
-        _CreateGroupDirectory(_ValidGroupname);
-        Assert.True(Directory.Exists(_ValidGroupname));
-        var result = command.Execute(context, settings);
-        Assert.Equal(0, result);
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroupname));
     }
 
     [Fact]
     public void Execute_ValidGroupnameExistingNonEmpty_ThrowsException() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = false
-        };
-        var command = new RemoveGroupCommand();
+        // Given
+        _CreateNonEmptyDirectory(_ValidGroupname, _SubDir);
+        var args = new string[]{_ValidGroupname};
 
-        _CreateNonEmptyGroupDirectory(_ValidGroupname, _SubDir);
-        Assert.True(Directory.Exists(_ValidGroupname));
-        Assert.True(Directory.Exists(Path.Combine(_ValidGroupname, _SubDir)));
-        Assert.Throws<Exception>(() => command.Execute(context, settings));
-        Directory.Delete(_ValidGroupname, true);
+        // When
+        var result = App().RunAndCatch<Exception>(args);
+
+        // Then
+        Assert.IsType<Exception>(result.Exception);
+        Assert.Equal($"The group \"{_ValidGroupname}\" is not empty. To remove anyway use option \"-f\".", result.Exception.Message);
+        
+        // Finally
+        _DeleteDirectory(_ValidGroupname);
     }
 
     [Fact]
     public void Execute_EmptyGroupnameWithForce_ThrowsException()
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _InvalidGroupname,
-            Force = true
-        };
-        var command = new RemoveGroupCommand();
-        Assert.Throws<ArgumentException>(() => command.Execute(context, settings));
+        // Given
+        var args = new string[]{_InvalidGroupname, "-f"};
+
+        // When
+        var result = App().RunAndCatch<Exception>(args);
+
+        // Then
+        Assert.IsType<ArgumentException>(result.Exception);
+        Assert.Equal($"Groupname cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
     public void Execute_ValidGroupnameNonExistingWithForce_ThrowsException() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = true
-        };
-        var command = new RemoveGroupCommand();
-        Assert.Throws<Exception>(() => command.Execute(context, settings));
+        // Given
+        var args = new string[]{_ValidGroupname, "-f"};
+
+        // When
+        var result = App().RunAndCatch<Exception>(args);
+
+        // Then
+        Assert.IsType<Exception>(result.Exception);
+        Assert.Equal($"The group \"{_ValidGroupname}\" does not exist.", result.Exception.Message);
     }
 
     [Fact]
     public void Execute_ValidGroupnameExistingWithForce_RemovesDirectory() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = true
-        };
-        var command = new RemoveGroupCommand();
+        // Given
+        _CreateDirectory(_ValidGroupname);
+        var args = new string[]{_ValidGroupname, "-f"};
 
-        _CreateGroupDirectory(_ValidGroupname);
-        Assert.True(Directory.Exists(_ValidGroupname));
-        var result = command.Execute(context, settings);
-        Assert.Equal(0, result);
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroupname));
     }
 
     [Fact]
     public void Execute_ValidGroupnameExistingNonEmptyWithForce_RemovesDirectory() 
     {
-        var context = new CommandContext(_remainingArgs, "", null);
-        var settings = new RemoveGroupCommand.Settings {
-            Groupname = _ValidGroupname,
-            Force = true
-        };
-        var command = new RemoveGroupCommand();
+        // Given
+        _CreateNonEmptyDirectory(_ValidGroupname, _SubDir);
+        var args = new string[]{_ValidGroupname, "-f"};
 
-        _CreateNonEmptyGroupDirectory(_ValidGroupname, _SubDir);
-        Assert.True(Directory.Exists(_ValidGroupname));
-        Assert.True(Directory.Exists(Path.Combine(_ValidGroupname, _SubDir)));
-        var result = command.Execute(context, settings);
-        Assert.Equal(0, result);
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroupname));
     }
 } 

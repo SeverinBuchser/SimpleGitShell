@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
-using Server.GitShell.Lib.Logging;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
@@ -37,12 +36,13 @@ public class CreateGroupCommand : Command<CreateGroupCommand.Settings>
         if (settings.Force && Directory.Exists(settings.Groupname + "___tmp")) 
         {
             Directory.Delete(settings.Groupname + "___tmp", true);
-            CommandLogger.Default.LogWarning(
-                "Group \"{groupname}\" already exists. Old group removed.", settings.Groupname
+            AnsiConsole.Markup(
+                "[yellow]Group \"{0}\" already exists. Old group removed.\n[/]", 
+                settings.Groupname
             );
         }
 
-        CommandLogger.Default.LogInformation("Created group \"{groupname}\".", settings.Groupname);
+        AnsiConsole.Markup("[green]Created group \"{0}\".\n[/]", settings.Groupname);
         return 0;
     }
 }

@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
-using Server.GitShell.Lib.Logging;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
@@ -34,7 +33,7 @@ public class RemoveGroupCommand : Command<RemoveGroupCommand.Settings>
             throw new Exception($"The group \"{settings.Groupname}\" is not empty. To remove anyway use option \"-f\".");
         }
         Directory.Delete(settings.Groupname, true);
-        CommandLogger.Default.LogInformation("Removed group \"{groupname}\".", settings.Groupname);
+        AnsiConsole.Markup("[green]Removed group \"{0}\".\n[/]", settings.Groupname);
         return 0;
     }
 }

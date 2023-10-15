@@ -1,28 +1,72 @@
 namespace Tests.Server.GitShell.Utils;
 
-public class DisableConsole : IDisposable
+public class TestConsole : IDisposable
 {
-    public DisableConsole()
+    protected StringWriter _OutWriter = new();
+    protected StringWriter _ErrWriter = new();
+
+    public StringWriter OutWriter { 
+        get => _OutWriter;
+    }
+    public StringWriter ErrWriter { 
+        get => _OutWriter;
+    }
+
+    public TestConsole()
     {
-        Console.SetOut(TextWriter.Null);
-        Console.SetError(TextWriter.Null);
-        Console.SetIn(TextReader.Null);
+        if (Environment.GetEnvironmentVariable("VERBOSE") != "true") 
+        {
+            _DisableConsole();
+        }
     }
 
     public virtual void Dispose()
+    {
+        _EnableConsole();
+    }
+
+    private void _DisableConsole() 
+    {
+        SetOut(OutWriter);
+        SetError(ErrWriter);
+    }
+
+    private void _EnableConsole()
     {
         var stdOut = new StreamWriter(Console.OpenStandardOutput())
         {
             AutoFlush = true
         };
-        Console.SetOut(stdOut);
+        SetOut(stdOut);
 
-        var stdErr = new StreamWriter(Console.OpenStandardError())
+        var stdError = new StreamWriter(Console.OpenStandardError())
         {
             AutoFlush = true
         };
-        Console.SetError(stdErr);
+        SetError(stdError);
+    }
 
-        Console.SetIn(new StreamReader(Console.OpenStandardInput()));
+    public void WriteDebug(string message)
+    {
+        _EnableConsole();
+        Console.Write(message);
+        _DisableConsole();
+    }
+
+    public void WriteLineDebug(string message)
+    {
+        _EnableConsole();
+        Console.WriteLine(message);
+        _DisableConsole();
+    }
+
+    public static void SetOut(TextWriter textWriter)
+    {
+        Console.SetOut(textWriter);
+    }
+
+    public static void SetError(TextWriter textWriter)
+    {
+        Console.SetError(textWriter);
     }
 } 

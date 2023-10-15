@@ -1,0 +1,7 @@
+<RunSettings>
+	<RunConfiguration>
+		<EnvironmentVariables>
+				<VERBOSE>true</VERBOSE>
+		</EnvironmentVariables>
+	</RunConfiguration>
+</RunSettings>
