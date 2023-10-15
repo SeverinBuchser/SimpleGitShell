@@ -11,21 +11,18 @@ public class ListGroupCommand : Command
 
     public override int Execute([NotNull] CommandContext context)
     {
-        var table = new Table().AddColumns("Groupname", "Creation Time");
         AnsiConsole.WriteLine("Available Groups:");
-        AnsiConsole.Live(table).Start(ctx => 
-        {   
-            var directories = Directory.GetDirectories(".")
-                .Where(dir => !dir.EndsWith(".git") && !dir.StartsWith("./.") && !dir.Equals("./git-shell-commands"));
-            foreach (var directory in directories)
-            {                
-                table.AddRow(
-                    Path.GetFileName(directory),
-                    Directory.GetCreationTime(directory).ToString()
-                );
-            }
-            ctx.Refresh();
-        });
+        var table = new Table().AddColumns("Groupname", "Creation Time");
+        var directories = Directory.GetDirectories(".")
+            .Where(dir => !dir.EndsWith(".git") && !dir.StartsWith("./.") && !dir.Equals("./git-shell-commands"));
+        foreach (var directory in directories)
+        {                
+            table.AddRow(
+                Path.GetFileName(directory),
+                Directory.GetCreationTime(directory).ToString()
+            );
+        }
+        AnsiConsole.Write(table);
         return 0;
     }
 }
