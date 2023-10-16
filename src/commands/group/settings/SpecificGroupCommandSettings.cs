@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Group;
+namespace Server.GitShell.Commands.Group.Settings;
 
-public class BaseGroupCommandSettings : CommandSettings
+public class SpecificGroupCommandSettings : BaseGroupCommandSettings
 {
     [Description("The name of the Group.")]
     [CommandArgument(0, "<group>")]

@@ -1,22 +1,15 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Server.GitShell.Commands.Group.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
 
 [Description("Creates a group.")]
-public class CreateGroupCommand : Command<CreateGroupCommand.Settings>
+public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
 {
-    public class Settings : BaseGroupCommandSettings
-    {
-        [Description("Overrides group if it already exists.")]
-        [CommandOption("-f|--force")]
-        [DefaultValue(false)]
-        public bool Force { get; init; }
-    }
-
-    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
+    public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
     {
         GroupUtils.ThrowOnEmptyGroupName(settings.Group);
         if (!settings.Force) GroupUtils.ThrowOnExistingGroup(settings.Group!);
@@ -24,11 +17,11 @@ public class CreateGroupCommand : Command<CreateGroupCommand.Settings>
         try
         {
             Directory.CreateDirectory(settings.Group!);
-        } catch (System.Exception e) 
+        } catch (Exception e) 
         {
             // Rollback
             GroupUtils.UndoRenameTmp(settings.Group!);
-            throw new System.Exception(e.Message);
+            throw new Exception(e.Message);
         }
 
         if (GroupUtils.RemoveTmp(settings.Group!)) {

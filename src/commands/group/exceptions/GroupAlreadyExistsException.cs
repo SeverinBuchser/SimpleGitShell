@@ -1,4 +1,4 @@
-namespace Server.GitShell.Commands.Group.Exception;
+namespace Server.GitShell.Commands.Group.Exceptions;
 
 public class GroupAlreadyExistsException : GroupException
 {
