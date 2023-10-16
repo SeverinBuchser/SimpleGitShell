@@ -7,5 +7,5 @@ public class BaseRepoCommandSettings : CommandSettings
 {    
     [Description("The name of the Group.")]
     [CommandOption("-g|--group")]
-    public string? Groupname { get; init; }
+    public string? Group { get; init; }
 }

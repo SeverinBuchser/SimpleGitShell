@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\lib\lib.csproj" />
+		<ProjectReference Include="..\group\group.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

@@ -12,10 +12,18 @@ public class ListRepoCommand : Command<BaseRepoCommandSettings>
 
     public override int Execute([NotNull] CommandContext context, [NotNull] BaseRepoCommandSettings settings)
     {
-        AnsiConsole.WriteLine("Available Groups:");
-        var table = new Table().AddColumns("Groupname", "Creation Time");
-        var directories = Directory.GetDirectories(".")
-            .Where(dir => !dir.EndsWith(".git") && !dir.StartsWith("./.") && !dir.Equals("./git-shell-commands"));
+        var path = ".";
+        var group = "root";
+        if (!string.IsNullOrEmpty(settings.Group)) {
+            GroupUtils.ThrowOnNonExistingGroup(settings.Group);
+            path = Path.Combine(path, group);
+            group = settings.Group;
+        }
+
+        AnsiConsole.WriteLine($"Available Repos in Group \"{group}\":");
+        var table = new Table().AddColumns("Repository", "Creation Time");
+        var directories = Directory.GetDirectories(path)
+            .Where(dir => dir.EndsWith(".git"));
         foreach (var directory in directories)
         {                
             table.AddRow(
