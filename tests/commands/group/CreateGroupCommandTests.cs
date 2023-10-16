@@ -1,8 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
 using Server.GitShell.Commands.Group;
-using Server.GitShell.Lib.Infrastructure;
-using Spectre.Console;
-using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
 namespace Tests.Server.GitShell.Commands.Group;
@@ -18,16 +14,16 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_EmptyGroup_ThrowsException()
+    public void Execute_EmptyGroup_ThrowsEmptyGroupNameException()
     {
         // Given
         var args = new string[]{_InvalidGroup};
         
         // When
-        var result = App().RunAndCatch<ArgumentException>(args);
+        var result = App().RunAndCatch<EmptyGroupNameException>(args);
 
         // Then
-        Assert.IsType<ArgumentException>(result.Exception);
+        Assert.IsType<EmptyGroupNameException>(result.Exception);
         Assert.Equal($"The name of the Group cannot be empty.", result.Exception.Message);
     }
 
@@ -49,17 +45,17 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_ValidGroupExisting_ThrowsException() 
+    public void Execute_ValidGroupExisting_ThrowsGroupAlreadyExistsException() 
     {
         // Given
         _CreateDirectory(_ValidGroup);
         var args = new string[]{_ValidGroup};
         
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<GroupAlreadyExistsException>(args);
 
         // Then
-        Assert.IsType<Exception>(result.Exception);
+        Assert.IsType<GroupAlreadyExistsException>(result.Exception);
         Assert.Equal($"The group \"{_ValidGroup}\" already exists.", result.Exception.Message);
 
         // Finally

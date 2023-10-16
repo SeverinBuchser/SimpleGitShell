@@ -14,30 +14,30 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
     }
     
     [Fact]
-    public void Execute_EmptyGroup_ThrowsException()
+    public void Execute_EmptyGroup_ThrowsEmptyGroupNameException()
     {
         // Given
         var args = new string[]{_InvalidGroup};
 
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<EmptyGroupNameException>(args);
 
         // Then
-        Assert.IsType<ArgumentException>(result.Exception);
+        Assert.IsType<EmptyGroupNameException>(result.Exception);
         Assert.Equal($"The name of the Group cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
-    public void Execute_ValidGroupNonExisting_ThrowsException() 
+    public void Execute_ValidGroupNonExisting_ThrowsGroupDoesNotExistException() 
     {
         // Given
         var args = new string[]{_ValidGroup};
 
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
 
         // Then
-        Assert.IsType<Exception>(result.Exception);
+        Assert.IsType<GroupDoesNotExistException>(result.Exception);
         Assert.Equal($"The group \"{_ValidGroup}\" does not exist.", result.Exception.Message);
     }
 
@@ -57,48 +57,48 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_ValidGroupExistingNonEmpty_ThrowsException() 
+    public void Execute_ValidGroupExistingNonEmpty_ThrowsGroupNonEmptyException() 
     {
         // Given
         _CreateNonEmptyDirectory(_ValidGroup, _SubDir);
         var args = new string[]{_ValidGroup};
 
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<GroupNonEmptyException>(args);
 
         // Then
-        Assert.IsType<Exception>(result.Exception);
-        Assert.Equal($"The group \"{_ValidGroup}\" is not empty. To remove anyway use option \"-f\".", result.Exception.Message);
+        Assert.IsType<GroupNonEmptyException>(result.Exception);
+        Assert.Equal($"The group \"{_ValidGroup}\" is not empty.", result.Exception.Message);
         
         // Finally
         _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]
-    public void Execute_EmptyGroupWithForce_ThrowsException()
+    public void Execute_EmptyGroupWithForce_ThrowsEmptyGroupNameException()
     {
         // Given
         var args = new string[]{_InvalidGroup, "-f"};
 
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<EmptyGroupNameException>(args);
 
         // Then
-        Assert.IsType<ArgumentException>(result.Exception);
+        Assert.IsType<EmptyGroupNameException>(result.Exception);
         Assert.Equal($"The name of the Group cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
-    public void Execute_ValidGroupNonExistingWithForce_ThrowsException() 
+    public void Execute_ValidGroupNonExistingWithForce_ThrowsGroupDoesNotExistException() 
     {
         // Given
         var args = new string[]{_ValidGroup, "-f"};
 
         // When
-        var result = App().RunAndCatch<Exception>(args);
+        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
 
         // Then
-        Assert.IsType<Exception>(result.Exception);
+        Assert.IsType<GroupDoesNotExistException>(result.Exception);
         Assert.Equal($"The group \"{_ValidGroup}\" does not exist.", result.Exception.Message);
     }
 
