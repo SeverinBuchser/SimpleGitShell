@@ -1,5 +1,4 @@
-namespace Server.GitShell.Commands.Group.Exceptions;
-
+namespace Server.GitShell.Lib.Exceptions.Group;
 public class GroupDoesNotExistException : GroupException 
 {
     public GroupDoesNotExistException(string group) : 

@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Group.Exceptions;
+using Server.GitShell.Lib.Exceptions.Group;
+
+namespace Server.GitShell.Lib.Utils;
 
 public static class GroupUtils {
 

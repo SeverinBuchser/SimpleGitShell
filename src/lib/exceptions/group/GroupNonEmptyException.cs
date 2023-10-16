@@ -1,5 +1,4 @@
-namespace Server.GitShell.Commands.Group.Exceptions;
-
+namespace Server.GitShell.Lib.Exceptions.Group;
 public class GroupNonEmptyException : GroupException 
 {
     public GroupNonEmptyException(string group) : 

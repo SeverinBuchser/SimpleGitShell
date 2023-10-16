@@ -1,4 +1,4 @@
-namespace Server.GitShell.Commands.Group.Exceptions;
+namespace Server.GitShell.Lib.Exceptions.Group;
 
 public class EmptyGroupNameException : ArgumentException 
 {
