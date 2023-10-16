@@ -12,7 +12,7 @@ public class ListGroupCommand : Command
     public override int Execute([NotNull] CommandContext context)
     {
         AnsiConsole.WriteLine("Available Groups:");
-        var table = new Table().AddColumns("Groupname", "Creation Time");
+        var table = new Table().AddColumns("Group", "Creation Time");
         var directories = Directory.GetDirectories(".")
             .Where(dir => !dir.EndsWith(".git") && !dir.StartsWith("./.") && !dir.Equals("./git-shell-commands"));
         foreach (var directory in directories)
