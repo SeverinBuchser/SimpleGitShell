@@ -6,9 +6,9 @@ namespace Tests.Server.GitShell.Commands.Group;
 public class BaseGroupCommandTests : TestConsole
 {
     protected static string _CWD = "test_dir";
-    protected static string _ValidGroupname = "groupname";
+    protected static string _ValidGroup = "Group";
     protected static string _SubDir = "subdir";
-    protected static string _InvalidGroupname = "";
+    protected static string _InvalidGroup = "";
     protected readonly IRemainingArguments _remainingArgs = new Mock<IRemainingArguments>().Object;
 
     public BaseGroupCommandTests() 

@@ -18,31 +18,31 @@ public class CreateGroupCommand : Command<CreateGroupCommand.Settings>
 
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
-        if (string.IsNullOrEmpty(settings.Groupname))
+        if (string.IsNullOrEmpty(settings.Group))
         {
-            throw new ArgumentException("Groupname cannot be empty.");
+            throw new ArgumentException("The name of the Group cannot be empty.");
         }
-        if (settings.Force && Directory.Exists(settings.Groupname))
+        if (settings.Force && Directory.Exists(settings.Group))
         {
-            Directory.Move(settings.Groupname, settings.Groupname + "___tmp");
+            Directory.Move(settings.Group, settings.Group + "___tmp");
         }
-        else if (Directory.Exists(settings.Groupname))
+        else if (Directory.Exists(settings.Group))
         {
-            throw new Exception($"The group \"{settings.Groupname}\" already exists.");
+            throw new Exception($"The group \"{settings.Group}\" already exists.");
         }
 
-        Directory.CreateDirectory(settings.Groupname);
+        Directory.CreateDirectory(settings.Group);
 
-        if (settings.Force && Directory.Exists(settings.Groupname + "___tmp")) 
+        if (settings.Force && Directory.Exists(settings.Group + "___tmp")) 
         {
-            Directory.Delete(settings.Groupname + "___tmp", true);
+            Directory.Delete(settings.Group + "___tmp", true);
             AnsiConsole.Markup(
                 "[yellow]Group \"{0}\" already exists. Old group removed.\n[/]", 
-                settings.Groupname
+                settings.Group
             );
         }
 
-        AnsiConsole.Markup("[green]Created group \"{0}\".\n[/]", settings.Groupname);
+        AnsiConsole.Markup("[green]Created group \"{0}\".\n[/]", settings.Group);
         return 0;
     }
 }

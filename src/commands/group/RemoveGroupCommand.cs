@@ -18,22 +18,22 @@ public class RemoveGroupCommand : Command<RemoveGroupCommand.Settings>
 
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
-        if (string.IsNullOrEmpty(settings.Groupname)) 
+        if (string.IsNullOrEmpty(settings.Group)) 
         {
-            throw new ArgumentException("Groupname cannot be empty.");
+            throw new ArgumentException("The name of the Group cannot be empty.");
         }
         
-        if (!Directory.Exists(settings.Groupname))
+        if (!Directory.Exists(settings.Group))
         {
-            throw new Exception($"The group \"{settings.Groupname}\" does not exist.");
+            throw new Exception($"The group \"{settings.Group}\" does not exist.");
         }
 
-        if (!settings.Force && Directory.EnumerateFileSystemEntries(settings.Groupname).Any())
+        if (!settings.Force && Directory.EnumerateFileSystemEntries(settings.Group).Any())
         {
-            throw new Exception($"The group \"{settings.Groupname}\" is not empty. To remove anyway use option \"-f\".");
+            throw new Exception($"The group \"{settings.Group}\" is not empty. To remove anyway use option \"-f\".");
         }
-        Directory.Delete(settings.Groupname, true);
-        AnsiConsole.Markup("[green]Removed group \"{0}\".\n[/]", settings.Groupname);
+        Directory.Delete(settings.Group, true);
+        AnsiConsole.Markup("[green]Removed group \"{0}\".\n[/]", settings.Group);
         return 0;
     }
 }

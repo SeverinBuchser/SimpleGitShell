@@ -14,7 +14,7 @@ public class ListGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_ValidGroupname_DoesNotListGitDirectories()
+    public void Execute_ValidGroup_DoesNotListGitDirectories()
     {
         // Given
         _CreateDirectory("git1.git");
@@ -22,7 +22,7 @@ public class ListGroupCommandTests : BaseGroupCommandTests
         _CreateDirectory("git3.git");
         _CreateDirectory("git4.git");
         _CreateDirectory("git-shell-commands");
-        _CreateDirectory(_ValidGroupname);
+        _CreateDirectory(_ValidGroup);
 
         // When
         var result = App().Run();
@@ -32,7 +32,7 @@ public class ListGroupCommandTests : BaseGroupCommandTests
         // TODO Test output
 
         // Finally
-        _DeleteDirectory(_ValidGroupname);
+        _DeleteDirectory(_ValidGroup);
         _DeleteDirectory("git1.git");
         _DeleteDirectory("git2.git");
         _DeleteDirectory("git3.git");
