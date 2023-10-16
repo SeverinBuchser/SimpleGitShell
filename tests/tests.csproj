@@ -29,4 +29,8 @@
     <ProjectReference Include="..\src\commands\group\group.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.1" />
+  </ItemGroup> 
+
 </Project>
