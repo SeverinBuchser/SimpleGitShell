@@ -1,18 +1,17 @@
 namespace Tests.Server.GitShell.Utils;
 
-public class FileSystemCommandTests : TestConsole
+public class FileSystemCommandTests : TestConsole, IDisposable
 {
     protected static string _CWD = "test_dir";
 
-    public FileSystemCommandTests() 
+    public FileSystemCommandTests() : base()
     {
         _CreateDirectory(_CWD);
         Directory.SetCurrentDirectory(_CWD);
     }
 
-    public override void Dispose()
+    public void Dispose()
     {
-        base.Dispose();
         Directory.SetCurrentDirectory(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName);
         Directory.Delete(_CWD, true);
     }

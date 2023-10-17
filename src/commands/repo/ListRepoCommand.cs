@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Server.GitShell.Commands.Repo.Settings;
+using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -22,22 +23,22 @@ public class ListRepoCommand : Command<BaseRepoCommandSettings>
             group = settings.Group;
         }
 
-        AnsiConsole.WriteLine($"Available Repos in Group \"{group}\":");
+        Logger.Instance.Info($"Available Repos in Group \"{group}\":\n");
         var directories = Directory.GetDirectories(path)
             .Where(dir => dir.EndsWith(".git"));
 
         if (!directories.Any()) {
-            AnsiConsole.Markup($"[blue]There are no Repositories.\n[/]");
+            Logger.Instance.Info($"There are no Repositories.\n");
         } else {
-            var table = new Table().AddColumns("Repository", "Creation Time");
+            var rows = new List<string[]>();
             foreach (var directory in directories)
             {                
-                table.AddRow(
+                rows.Add(new string[] {
                     Path.GetFileName(directory),
                     Directory.GetCreationTime(directory).ToString()
-                );
+                });
             }
-            AnsiConsole.Write(table);
+            Logger.Instance.Table(new string[] {"Repository", "Creation Time"}, rows);
         }
         return 0;
     }

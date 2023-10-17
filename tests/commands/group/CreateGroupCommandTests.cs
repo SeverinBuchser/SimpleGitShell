@@ -22,6 +22,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         
         // When
         var result = App().RunAndCatch<EmptyGroupNameException>(args);
+        Console.Write(_CaptureWriter);
 
         // Then
         Assert.IsType<EmptyGroupNameException>(result.Exception);

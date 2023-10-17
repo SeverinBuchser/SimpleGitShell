@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.Group.Settings;
+using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Utils;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
@@ -17,7 +17,7 @@ public class RemoveGroupCommand : Command<SpecificGroupCommandSettings>
         if (!settings.Force) GroupUtils.ThrowOnNonEmptyGroup(settings.Group!);
 
         Directory.Delete(settings.Group!, true);
-        AnsiConsole.Markup("[green]Removed group \"{0}\".\n[/]", settings.Group!);
+        Logger.Instance.Info($"Removed group \"{ settings.Group }\".\n");
         return 0;
     }
 }

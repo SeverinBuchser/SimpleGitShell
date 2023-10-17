@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.Group.Settings;
+using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -26,13 +27,10 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
         }
 
         if (GroupUtils.RemoveTmp(settings.Group!)) {
-            AnsiConsole.Markup(
-                "[yellow]Group \"{0}\" already exists. Old group removed.\n[/]", 
-                settings.Group!
-            );
+            Logger.Instance.Info($"Group \"{ settings.Group }\" already exists. Old group removed.\n");
         } 
 
-        AnsiConsole.Markup("[green]Created group \"{0}\".\n[/]", settings.Group!);
+        Logger.Instance.Info($"Created group \"{ settings.Group }\".\n");
         return 0;
     }
 }
