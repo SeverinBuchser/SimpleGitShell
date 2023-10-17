@@ -25,7 +25,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<EmptyGroupNameException>(result.Exception);
-        Assert.Equal($"The name of the Group cannot be empty.", result.Exception.Message);
+        Assert.Equal($"The name of the group cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
