@@ -15,18 +15,18 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
     {
         GroupUtils.ThrowOnEmptyGroupName(settings.Group);
         if (!settings.Force) GroupUtils.ThrowOnExistingGroup(settings.Group!);
-        if (settings.Force) GroupUtils.RenameTmp(settings.Group!);
+        if (settings.Force) DirectoryUtils.RenameTmp(settings.Group!);
         try
         {
             Directory.CreateDirectory(settings.Group!);
         } catch (Exception e) 
         {
             // Rollback
-            GroupUtils.UndoRenameTmp(settings.Group!);
+            DirectoryUtils.UndoRenameTmp(settings.Group!);
             throw new Exception(e.Message);
         }
 
-        if (GroupUtils.RemoveTmp(settings.Group!)) {
+        if (DirectoryUtils.RemoveTmp(settings.Group!)) {
             Logger.Instance.Warn($"Group \"{ settings.Group }\" already exists. Old group removed.\n");
         } 
 
