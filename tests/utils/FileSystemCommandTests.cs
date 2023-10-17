@@ -31,4 +31,9 @@ public class FileSystemCommandTests : TestConsole, IDisposable
     {
         Directory.Delete(directory, true);
     }
+
+    protected static string _CreationTime(string directory)
+    {
+        return Directory.GetCreationTime(directory).ToString();
+    }
 } 

@@ -11,6 +11,10 @@ public class TestConsole
         if (Environment.GetEnvironmentVariable("VERBOSE") != "true") 
         {
             Logger.SetOut(_CaptureWriter);
+        } 
+        else
+        {
+            Logger.AddOut(_CaptureWriter);
         }
     }
 

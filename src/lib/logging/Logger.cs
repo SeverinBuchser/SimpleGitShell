@@ -2,7 +2,9 @@ namespace Server.GitShell.Lib.Logging;
 
 public class Logger : ILogger
 {
-    private static TextWriter _writer = Console.Out;
+    private static List<TextWriter> _writers = new() {
+        Console.Out
+    };
     private static readonly Logger _instance = new();
 
     public static Logger Instance
@@ -10,7 +12,8 @@ public class Logger : ILogger
         get => _instance;
     }
 
-    static Logger() {}
+    static Logger() {
+    }
 
     private static readonly int _levelWidth = 7;
 
@@ -18,17 +21,36 @@ public class Logger : ILogger
 
     public void Log(string message, LogLevel level)
     {
+        var completeMessage = "";
         var levelString = $"[{ Enum.GetName(typeof(LogLevel), level)! }]".PadRight(_levelWidth);
         var lines = message.Split("\n");
 
         if (lines.Length > 2) 
         {
-            _writer.Write($"{ levelString }\n");
+            completeMessage += $"{ levelString }\n";
+        } else {
+            completeMessage += $"{ levelString }";
         }
-        _writer.Write(message);
+        completeMessage += message;
+        Write(completeMessage);
+    }
+
+    private void Write(string message)
+    {
+        foreach (var writer in _writers)
+        {
+            writer.Write(message);
+        }
     }
 
     public static void SetOut(TextWriter writer) {
-        _writer = writer;
+        _writers = new List<TextWriter>
+        {
+            writer
+        };
+    }
+
+    public static void AddOut(TextWriter writer) {
+        _writers.Add(writer);
     }
 }

@@ -55,6 +55,7 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
+        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -116,6 +117,7 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
+        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -131,5 +133,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
+        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 } 

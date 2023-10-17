@@ -11,7 +11,7 @@ public class ListGroupCommand : Command
 
     public override int Execute([NotNull] CommandContext context)
     {
-        Logger.Instance.Info($"Available Groups:\n");
+        Logger.Instance.Info($"Available groups:\n");
         var directories = Directory.GetDirectories(".")
             .Where(dir => !dir.EndsWith(".git") && !dir.StartsWith("./.") && !dir.Equals("./git-shell-commands"));
         if (!directories.Any()) {

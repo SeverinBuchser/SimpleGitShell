@@ -27,7 +27,7 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
         }
 
         if (GroupUtils.RemoveTmp(settings.Group!)) {
-            Logger.Instance.Info($"Group \"{ settings.Group }\" already exists. Old group removed.\n");
+            Logger.Instance.Warn($"Group \"{ settings.Group }\" already exists. Old group removed.\n");
         } 
 
         Logger.Instance.Info($"Created group \"{ settings.Group }\".\n");

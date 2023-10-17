@@ -23,12 +23,12 @@ public class ListRepoCommand : Command<BaseRepoCommandSettings>
             group = settings.Group;
         }
 
-        Logger.Instance.Info($"Available Repos in Group \"{group}\":\n");
+        Logger.Instance.Info($"Available repositories in group \"{group}\":\n");
         var directories = Directory.GetDirectories(path)
             .Where(dir => dir.EndsWith(".git"));
 
         if (!directories.Any()) {
-            Logger.Instance.Info($"There are no Repositories.\n");
+            Logger.Instance.Info($"There are no repositories.\n");
         } else {
             var rows = new List<string[]>();
             foreach (var directory in directories)

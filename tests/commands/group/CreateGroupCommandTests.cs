@@ -22,7 +22,6 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         
         // When
         var result = App().RunAndCatch<EmptyGroupNameException>(args);
-        Console.Write(_CaptureWriter);
 
         // Then
         Assert.IsType<EmptyGroupNameException>(result.Exception);
@@ -41,6 +40,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidGroup));
+        Assert.Equal($"[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
 
         // Finally
         _DeleteDirectory(_ValidGroup);
@@ -76,6 +76,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidGroup));
+        Assert.Equal($"[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
 
         // Finally
         _DeleteDirectory(_ValidGroup);
@@ -95,6 +96,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidGroup));
         Assert.False(Directory.Exists(Path.Combine(_ValidGroup, _SubDir)));
+        Assert.Equal($"[WARN] Group \"{ _ValidGroup }\" already exists. Old group removed.\n[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
 
         // Finally
         _DeleteDirectory(_ValidGroup);
