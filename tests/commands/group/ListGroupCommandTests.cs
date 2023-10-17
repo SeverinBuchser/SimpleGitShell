@@ -18,7 +18,7 @@ public class ListGroupCommandTests : BaseGroupCommandTests
     public void Execute_ValidGroup_DoesNotListGitDirectories()
     {
         // Given
-        foreach (var girDir in _GitDirs) _CreateDirectory(girDir);
+        foreach (var girDir in _ValidRepos) _CreateDirectory(girDir);
         _CreateDirectory("git-shell-commands");
         _CreateDirectory(_ValidGroup);
         
@@ -40,7 +40,7 @@ public class ListGroupCommandTests : BaseGroupCommandTests
         Assert.Equal($"[INFO] Available groups:\n[INFO] \n{ writer }", _CaptureWriter.ToString());
 
         // Finally
-        foreach (var girDir in _GitDirs) _DeleteDirectory(girDir);
+        foreach (var girDir in _ValidRepos) _DeleteDirectory(girDir);
         _CreateDirectory("git-shell-commands");
         _DeleteDirectory(_ValidGroup);
     }
