@@ -7,5 +7,5 @@ public class SpecificRepoCommandSettings : BaseRepoCommandSettings
 {
     [Description("The name of the repository.")]
     [CommandArgument(0, "<repository>")]
-    public string? Repository { get; init; }
+    public string? Repo { get; init; }
 }
