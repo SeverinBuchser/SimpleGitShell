@@ -25,7 +25,7 @@ public class ListRepoCommand : Command<BaseRepoCommandSettings>
 
         Logger.Instance.Info($"Available repositories in group \"{group}\":\n");
         var directories = Directory.GetDirectories(path)
-            .Where(dir => dir.EndsWith(".git"));
+            .Where(dir => dir.EndsWith(".git")).OrderBy(s => s);
 
         if (!directories.Any()) {
             Logger.Instance.Info($"There are no repositories.\n");
