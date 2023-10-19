@@ -40,11 +40,6 @@ public class ListRepoCommandTests : BaseGroupCommandTests
         table.Write(Format.Alternative);
 
         Assert.Equal($"[INFO] Available repositories in group \"root\":\n[INFO] \n{ writer }", _CaptureWriter.ToString());
-
-        // Finally
-        foreach (var gitDir in _ValidRepos) _DeleteDirectory(gitDir);
-        _CreateDirectory("git-shell-commands");
-        _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]
@@ -74,10 +69,5 @@ public class ListRepoCommandTests : BaseGroupCommandTests
         table.Write(Format.Alternative);
 
         Assert.Equal($"[INFO] Available repositories in group \"{ _ValidGroup }\":\n[INFO] \n{ writer }", _CaptureWriter.ToString());
-
-        // Finally
-        _CreateDirectory("git-shell-commands");
-        _DeleteDirectory(_ValidGroup);
-        _DeleteDirectory("root.git");
     }
 } 

@@ -15,7 +15,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_EmptyGroup_ThrowsEmptyGroupNameException()
+    public void Run_EmptyGroup_ThrowsEmptyGroupNameException()
     {
         // Given
         var args = new string[]{_InvalidGroup};
@@ -29,7 +29,7 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
     }
 
     [Fact]
-    public void Execute_ValidGroupNonExisting_CreatesDirectory() 
+    public void Run_ValidGroupNonExisting_CreatesDirectory() 
     {
         // Given
         var args = new string[]{_ValidGroup};
@@ -41,13 +41,10 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidGroup));
         Assert.Equal($"[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
-
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]
-    public void Execute_ValidGroupExisting_ThrowsGroupAlreadyExistsException() 
+    public void Run_ValidGroupExisting_ThrowsGroupAlreadyExistsException() 
     {
         // Given
         _CreateDirectory(_ValidGroup);
@@ -59,13 +56,10 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.IsType<GroupAlreadyExistsException>(result.Exception);
         Assert.Equal($"The group \"{_ValidGroup}\" already exists.", result.Exception.Message);
-
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]
-    public void Execute_ValidGroupNonExistingWithForce_CreatesDirectory() 
+    public void Run_ValidGroupNonExistingWithForce_CreatesDirectory() 
     {
         // Given
         var args = new string[]{_ValidGroup, "-f"};
@@ -77,13 +71,10 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidGroup));
         Assert.Equal($"[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
-
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]
-    public void Execute_ValidGroupExistingWithForce_OverridesDirectory() 
+    public void Run_ValidGroupExistingWithForce_OverridesDirectory() 
     {
         // Given
         _CreateNonEmptyDirectory(_ValidGroup, _SubDir);
@@ -97,8 +88,70 @@ public class CreateGroupCommandTests : BaseGroupCommandTests
         Assert.True(Directory.Exists(_ValidGroup));
         Assert.False(Directory.Exists(Path.Combine(_ValidGroup, _SubDir)));
         Assert.Equal($"[WARN] Group \"{ _ValidGroup }\" already exists. Old group removed.\n[INFO] Created group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
-
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
+
+    [Fact]
+    public void Run_NonExistingBaseGroup_ThrowsGroupDoesNotExistException() 
+    {
+        // Given
+        var args = new string[]{_ValidGroup, $"-b={ _ValidGroup }"};
+        
+        // When
+        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+
+        // Then
+        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.Equal($"The group \"{ _ValidGroup }\" does not exist.", result.Exception.Message);
+    }
+
+    [Fact]
+    public void Run_ExistingBaseGroup_CreatesDirectoryInGroup() 
+    {
+        // Given
+        _CreateDirectory(_ValidGroup);
+        var args = new string[]{_ValidGroup, $"-b={ _ValidGroup }"};
+        
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        Assert.True(Directory.Exists(Path.Combine(_ValidGroup, _ValidGroup)));
+        Assert.Equal($"[INFO] Created group \"{ Path.Combine(_ValidGroup, _ValidGroup) }\".\n", _CaptureWriter.ToString());
+    }
+
+    [Fact]
+    public void Run_ExistingGroupInBaseGroup_ThrowsGroupAlreadyExistsException() 
+    {
+        // Given
+        _CreateNonEmptyDirectory(_ValidGroup, _ValidGroup);
+        var args = new string[]{_ValidGroup, $"-b={ _ValidGroup }"};
+        
+        // When
+        var result = App().RunAndCatch<GroupAlreadyExistsException>(args);
+
+        // Then
+        Assert.IsType<GroupAlreadyExistsException>(result.Exception);
+        Assert.Equal($"The group \"{ Path.Combine(_ValidGroup, _ValidGroup) }\" already exists.", result.Exception.Message);
+    }
+
+    [Fact]
+    public void Run_ExistingGroupInBaseGroupWithForce_OverridesGroupInBaseGroup() 
+    {
+        // Given
+        _CreateNonEmptyDirectory(_ValidGroup, _ValidGroup);
+        _CreateNonEmptyDirectory(Path.Combine(_ValidGroup, _ValidGroup), _SubDir);
+        var args = new string[]{_ValidGroup, $"-b={ _ValidGroup }", "-f"};
+        
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        Assert.True(Directory.Exists(Path.Combine(_ValidGroup, _ValidGroup)));
+        Assert.False(Directory.Exists(Path.Combine(_ValidGroup, _ValidGroup, _SubDir)));
+        Assert.Equal($"[WARN] Group \"{ Path.Combine(_ValidGroup, _ValidGroup) }\" already exists. Old group removed.\n[INFO] Created group \"{ Path.Combine(_ValidGroup, _ValidGroup) }\".\n", _CaptureWriter.ToString());
+    }
+
+
 } 

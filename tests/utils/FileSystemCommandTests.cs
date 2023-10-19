@@ -23,7 +23,6 @@ public class FileSystemCommandTests : TestConsole, IDisposable
 
     protected static void _CreateNonEmptyDirectory(string directory, string subdir)
     {
-        Directory.CreateDirectory(directory);
         Directory.CreateDirectory(Path.Combine(directory, subdir));
     }
 

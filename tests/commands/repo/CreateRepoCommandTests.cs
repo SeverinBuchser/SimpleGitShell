@@ -18,7 +18,7 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
     }
 
     [Fact]
-    public void Execute_EmptyRepo_ThrowsEmptyRepoNameException()
+    public void Run_EmptyRepo_ThrowsEmptyRepoNameException()
     {
         // Given
         var args = new string[]{_InvalidRepo};
@@ -40,7 +40,7 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Execute_InvalidRepo_ThrowsRepoNameNotValidException(string repo)
+    public void Run_InvalidRepo_ThrowsRepoNameNotValidException(string repo)
     {
         // Given
         var args = new string[]{repo};
@@ -55,7 +55,7 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
 
     [Fact]
-    public void Execute_ValidRepoNonExisting_CreatesRepo()
+    public void Run_ValidRepoNonExisting_CreatesRepo()
     {
         // Given
         var args = new string[]{_ValidRepo};
@@ -67,13 +67,10 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidRepoPath));
         Assert.Equal($"[INFO] Created repository \"{ _ValidRepoPath }\".\n", _CaptureWriter.ToString());
-        
-        // Finally
-        _DeleteDirectory(_ValidRepoPath);
     }
 
     [Fact]
-    public void Execute_ValidRepoExisting_ThrowsRepoAlreadyExistsException()
+    public void Run_ValidRepoExisting_ThrowsRepoAlreadyExistsException()
     {
         // Given
         new GitInitBareCommand(_ValidRepoPath).Start();
@@ -86,13 +83,10 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         // Then
         Assert.IsType<RepoAlreadyExistsException>(result.Exception);
         Assert.Equal($"The repository \"{ _ValidRepoPath }\" already exists.", result.Exception.Message);
-        
-        // Finally
-        _DeleteDirectory(_ValidRepoPath);
     }
 
     [Fact]
-    public void Execute_ValidRepoValidGroupNonExisting_ThrowsGroupDoesNotExistException()
+    public void Run_ValidRepoValidGroupNonExisting_ThrowsGroupDoesNotExistException()
     {
         // Given
         var args = new string[]{_ValidRepo, $"--group={ _ValidGroup }"};
@@ -106,7 +100,7 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
     }
 
     [Fact]
-    public void Execute_ValidRepoNonExistingValidGroupExisting_CreatesRepoInGroup()
+    public void Run_ValidRepoNonExistingValidGroupExisting_CreatesRepoInGroup()
     {
         // Given
         _CreateDirectory(_ValidGroup);
@@ -120,13 +114,10 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(repoPath));
         Assert.Equal($"[INFO] Created repository \"{ repoPath }\".\n", _CaptureWriter.ToString());
-
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
     
     [Fact]
-    public void Execute_ValidRepoExistingValidGroupExisting_ThrowsRepoAlreadyExistsException()
+    public void Run_ValidRepoExistingValidGroupExisting_ThrowsRepoAlreadyExistsException()
     {
         // Given
         _CreateDirectory(_ValidGroup);
@@ -140,8 +131,5 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         // Then
         Assert.IsType<RepoAlreadyExistsException>(result.Exception);
         Assert.Equal($"The repository \"{ repoPath }\" already exists.", result.Exception.Message);
-        
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
 } 

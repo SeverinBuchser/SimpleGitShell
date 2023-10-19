@@ -71,9 +71,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.IsType<GroupNonEmptyException>(result.Exception);
         Assert.Equal($"The group \"{_ValidGroup}\" is not empty.", result.Exception.Message);
-        
-        // Finally
-        _DeleteDirectory(_ValidGroup);
     }
 
     [Fact]

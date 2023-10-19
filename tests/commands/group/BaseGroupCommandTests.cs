@@ -8,6 +8,10 @@ public class BaseGroupCommandTests : FileSystemCommandTests
     protected static string _SubDir = "subdir";
     protected static string _InvalidGroup = "";
 
+    protected static string[] _ValidGroups = new string[] {
+        "group1", "group2", "group3", "group4"
+    };
+
     protected static string[] _ValidRepos = new string[] {
         "git1.git", "git2.git", "git3.git", "git4.git"
     };
