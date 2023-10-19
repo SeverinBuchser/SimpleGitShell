@@ -1,6 +1,6 @@
 namespace Tests.Server.GitShell.Utils;
 
-public class FileSystemCommandTests : TestConsole, IDisposable
+public class FileSystemCommandTests : TestReader, IDisposable
 {
     protected static string _CWD = "test_dir";
 

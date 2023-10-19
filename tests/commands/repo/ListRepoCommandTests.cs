@@ -1,4 +1,3 @@
-using ConsoleTables;
 using Server.GitShell.Commands.Repo;
 using Spectre.Console.Testing;
 using Tests.Server.GitShell.Commands.Group;

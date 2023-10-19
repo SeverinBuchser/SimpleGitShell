@@ -12,4 +12,17 @@ public class RemoveRepoCommandTests : BaseRepoCommandTests
         app.SetDefaultCommand<RemoveRepoCommand>();
         return app;
     }
+
+    [Fact]
+    public void Run_RemoveExistingRepo_RemovesRepo()
+    {
+        // Given
+        _SetInput("SampleInput");
+        var args = new string[]{_InvalidGroup};
+        
+        // When
+        var result = App().Run(args);
+
+        // Then
+    }
 } 
