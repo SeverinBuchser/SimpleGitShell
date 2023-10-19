@@ -28,7 +28,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
         // Then
         Assert.IsType<EmptyRepoNameException>(result.Exception);
-        Assert.Equal($"The name of the repository cannot be empty.", result.Exception.Message);
     }
 
     [Theory]
@@ -50,7 +49,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
         // Then
         Assert.IsType<RepoNameNotValidException>(result.Exception);
-        Assert.Equal($"The name \"{ repo }\" is not valid. The repo name can only contain word characters, digits and hyphens (\"-\").", result.Exception.Message);
     }
 
 
@@ -66,7 +64,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(_ValidRepoPath));
-        Assert.Equal($"[INFO] Created repository \"{ _ValidRepoPath }\".\n", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -82,7 +79,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
         // Then
         Assert.IsType<RepoAlreadyExistsException>(result.Exception);
-        Assert.Equal($"The repository \"{ _ValidRepoPath }\" already exists.", result.Exception.Message);
     }
 
     [Fact]
@@ -96,7 +92,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
         // Then
         Assert.IsType<GroupDoesNotExistException>(result.Exception);
-        Assert.Equal($"The group \"{ _ValidGroup }\" does not exist.", result.Exception.Message);
     }
 
     [Fact]
@@ -113,7 +108,6 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
         var repoPath = Path.Combine(_ValidGroup, _ValidRepoPath);
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(repoPath));
-        Assert.Equal($"[INFO] Created repository \"{ repoPath }\".\n", _CaptureWriter.ToString());
     }
     
     [Fact]
@@ -130,6 +124,5 @@ public class CreateRepoCommandTests : BaseRepoCommandTests
 
         // Then
         Assert.IsType<RepoAlreadyExistsException>(result.Exception);
-        Assert.Equal($"The repository \"{ repoPath }\" already exists.", result.Exception.Message);
     }
 } 

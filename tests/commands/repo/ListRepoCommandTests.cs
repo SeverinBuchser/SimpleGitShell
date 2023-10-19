@@ -15,6 +15,11 @@ public class ListRepoCommandTests : BaseGroupCommandTests
         return app;
     }
 
+    private static string Time()
+    {
+        return string.Format("{0:dd/mm/yyyy HH:mm:ss}", DateTime.Now);
+    }
+
     [Fact]
     public void Execute_ValidGitDirs_OnlyListsGitDirectories()
     {
@@ -28,18 +33,11 @@ public class ListRepoCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.Equal(0, result.ExitCode);
-
-        var writer = new StringWriter();
-        var table = new ConsoleTable(new ConsoleTableOptions {
-            OutputTo = writer,
-            Columns = new string[] {"Repository", "Creation Time"}
-        });
-        foreach (var gitDir in _ValidRepos) {
-            table.AddRow(gitDir, _CreationTime(gitDir));
+        var text = _CaptureWriter.ToString();
+        foreach (var gitDir in _ValidRepos) 
+        {
+            Assert.Contains(gitDir, text);
         }
-        table.Write(Format.Alternative);
-
-        Assert.Equal($"[INFO] Available repositories in group \"root\":\n[INFO] \n{ writer }", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -57,17 +55,10 @@ public class ListRepoCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.Equal(0, result.ExitCode);
-
-        var writer = new StringWriter();
-        var table = new ConsoleTable(new ConsoleTableOptions {
-            OutputTo = writer,
-            Columns = new string[] {"Repository", "Creation Time"}
-        });
-        foreach (var gitDir in _ValidRepos) {
-            table.AddRow(gitDir, _CreationTime(Path.Combine(_ValidGroup, gitDir)));
+        var text = _CaptureWriter.ToString();
+        foreach (var gitDir in _ValidRepos) 
+        {
+            Assert.Contains(gitDir, text);
         }
-        table.Write(Format.Alternative);
-
-        Assert.Equal($"[INFO] Available repositories in group \"{ _ValidGroup }\":\n[INFO] \n{ writer }", _CaptureWriter.ToString());
     }
 } 

@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 namespace Server.GitShell.Lib.Logging;
 
 public class Logger : ILogger
@@ -15,24 +17,19 @@ public class Logger : ILogger
     static Logger() {
     }
 
-    private static readonly int _levelWidth = 7;
+    private static readonly int _prefixWidth = 28;
 
     private Logger() {}
 
     public void Log(string message, LogLevel level)
     {
-        var completeMessage = "";
-        var levelString = $"[{ Enum.GetName(typeof(LogLevel), level)! }]".PadRight(_levelWidth);
-        var lines = message.Split("\n");
-
-        if (lines.Length > 2) 
-        {
-            completeMessage += $"{ levelString }\n";
-        } else {
-            completeMessage += $"{ levelString }";
-        }
-        completeMessage += message;
-        Write(completeMessage);
+        var levelString = Enum.GetName(typeof(LogLevel), level);
+        var timeString = string.Format("{0:dd/mm/yyyy HH:mm:ss}", DateTime.Now);
+        var prefix = $"[{ timeString } { levelString }]".PadRight(_prefixWidth);
+        var lines = message.Split("\n").Select(line => prefix + line);
+        var outMessage = string.Join("\n", lines);
+        if (!outMessage.EndsWith("\n")) outMessage += "\n";
+        Write(outMessage);
     }
 
     private void Write(string message)

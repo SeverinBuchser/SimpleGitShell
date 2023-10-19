@@ -17,7 +17,7 @@ public class RemoveGroupCommand : Command<SpecificGroupCommandSettings>
         if (!settings.Force) GroupUtils.ThrowOnNonEmptyGroup(settings.Group!);
 
         Directory.Delete(settings.Group!, true);
-        Logger.Instance.Info($"Removed group \"{ settings.Group }\".\n");
+        Logger.Instance.Info($"Removed group \"{ settings.Group }\".");
         return 0;
     }
 }

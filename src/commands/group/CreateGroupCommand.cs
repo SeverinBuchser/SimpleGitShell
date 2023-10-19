@@ -37,10 +37,10 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
 
         // on success, remove the old group
         if (DirectoryUtils.RemoveTmp(groupPath)) {
-            Logger.Instance.Warn($"Group \"{ groupPath }\" already exists. Old group removed.\n");
+            Logger.Instance.Warn($"Group \"{ groupPath }\" already exists. Old group removed.");
         } 
         
-        Logger.Instance.Info($"Created group \"{ groupPath }\".\n");
+        Logger.Instance.Info($"Created group \"{ groupPath }\".");
         return 0;
     }
 }

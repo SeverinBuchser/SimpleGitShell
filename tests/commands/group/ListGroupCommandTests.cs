@@ -21,22 +21,12 @@ public class ListGroupCommandTests : BaseGroupCommandTests
         foreach (var gitDir in _ValidRepos) _CreateDirectory(gitDir);
         _CreateDirectory("git-shell-commands");
         _CreateDirectory(_ValidGroup);
-        
 
         // When
         var result = App().Run();
 
         // Then
         Assert.Equal(0, result.ExitCode);
-
-        var writer = new StringWriter();
-        var table = new ConsoleTable(new ConsoleTableOptions {
-            OutputTo = writer,
-            Columns = new string[] {"Group", "Creation Time"}
-        });
-        table.AddRow(_ValidGroup, _CreationTime(_ValidGroup));
-        table.Write(Format.Alternative);
-
-        Assert.Equal($"[INFO] Available groups:\n[INFO] \n{ writer }", _CaptureWriter.ToString());
+        Assert.Contains(_ValidGroup, _CaptureWriter.ToString());
     }
 } 

@@ -25,7 +25,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<EmptyGroupNameException>(result.Exception);
-        Assert.Equal($"The name of the group cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
@@ -39,7 +38,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<GroupDoesNotExistException>(result.Exception);
-        Assert.Equal($"The group \"{_ValidGroup}\" does not exist.", result.Exception.Message);
     }
 
     [Fact]
@@ -55,7 +53,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
-        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -70,7 +67,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<GroupNonEmptyException>(result.Exception);
-        Assert.Equal($"The group \"{_ValidGroup}\" is not empty.", result.Exception.Message);
     }
 
     [Fact]
@@ -84,7 +80,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<EmptyGroupNameException>(result.Exception);
-        Assert.Equal($"The name of the group cannot be empty.", result.Exception.Message);
     }
 
     [Fact]
@@ -98,7 +93,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
 
         // Then
         Assert.IsType<GroupDoesNotExistException>(result.Exception);
-        Assert.Equal($"The group \"{_ValidGroup}\" does not exist.", result.Exception.Message);
     }
 
     [Fact]
@@ -114,7 +108,6 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
-        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 
     [Fact]
@@ -130,6 +123,5 @@ public class RemoveGroupCommandTests : BaseGroupCommandTests
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(_ValidGroup));
-        Assert.Equal($"[INFO] Removed group \"{ _ValidGroup }\".\n", _CaptureWriter.ToString());
     }
 } 

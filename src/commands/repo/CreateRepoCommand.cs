@@ -28,7 +28,7 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
             throw new GitException(process.StandardError.ReadToEnd());
         }
 
-        Logger.Instance.Info($"Created repository \"{ repoPath }\".\n");
+        Logger.Instance.Info($"Created repository \"{ repoPath }\".");
         return 0;
     }
 }
