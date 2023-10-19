@@ -7,6 +7,9 @@ public class Logger : ILogger
     private static List<TextWriter> _writers = new() {
         Console.Out
     };
+
+    private static TextReader _reader = Console.In;
+
     private static readonly Logger _instance = new();
 
     public static Logger Instance
@@ -20,6 +23,11 @@ public class Logger : ILogger
     private static readonly int _prefixWidth = 28;
 
     private Logger() {}
+
+    public static string? ReadLine()
+    {
+        return _reader.ReadLine();
+    }
 
     public void Log(string message, LogLevel level)
     {
@@ -40,14 +48,21 @@ public class Logger : ILogger
         }
     }
 
-    public static void SetOut(TextWriter writer) {
+    public static void SetOut(TextWriter writer) 
+    {
         _writers = new List<TextWriter>
         {
             writer
         };
     }
 
-    public static void AddOut(TextWriter writer) {
+    public static void AddOut(TextWriter writer) 
+    {
         _writers.Add(writer);
+    }
+
+    public static void SetIn(TextReader reader)
+    {
+        _reader = reader;
     }
 }
