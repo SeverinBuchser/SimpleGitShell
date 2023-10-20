@@ -11,8 +11,8 @@ public class Program
         app.Configure(config => 
         {
             config.AddCommand<ListRepoCommand>("list");
-            // config.AddCommand<CreateGroupCommand>("create");
-            // config.AddCommand<RemoveGroupCommand>("remove");
+            config.AddCommand<CreateRepoCommand>("create");
+            config.AddCommand<RemoveRepoCommand>("remove");
         });
         try 
         {
