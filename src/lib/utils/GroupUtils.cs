@@ -18,18 +18,8 @@ public static class GroupUtils
         if (!Regex.IsMatch(repo, PATTERN)) throw new GroupNameNotValidException(repo);
     }
 
-    public static void ThrowOnExistingGroup(string group) 
-    {
-        if (Directory.Exists(group)) throw new GroupAlreadyExistsException(group);
-    }
-
     public static void ThrowOnNonExistingGroup(string group) 
     {
         if (!Directory.Exists(group)) throw new GroupDoesNotExistException(group);
-    }
-
-    public static void ThrowOnNonEmptyGroup(string group)
-    {
-        if(Directory.EnumerateFileSystemEntries(group).Any()) throw new GroupNonEmptyException(group);
     }
 }

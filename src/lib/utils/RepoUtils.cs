@@ -17,18 +17,8 @@ public static class RepoUtils
         if (!Regex.IsMatch(repo, PATTERN)) throw new RepoNameNotValidException(repo);
     }
 
-    public static void ThrowOnExistingRepo(string repo) 
-    {
-        if (Directory.Exists(repo)) throw new RepoAlreadyExistsException(repo);
-    }
-
     public static void ThrowOnNonExistingRepo(string repo) 
     {
         if (!Directory.Exists(repo)) throw new RepoDoesNotExistException(repo);
-    }
-
-    public static void ThrowOnNonEmptyRepo(string repo)
-    {
-        if(Directory.EnumerateFileSystemEntries(repo).Any()) throw new RepoNonEmptyException(repo);
     }
 }
