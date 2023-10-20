@@ -10,8 +10,9 @@ public class FileSystemCommandTests : TestReader, IDisposable
         Directory.SetCurrentDirectory(_CWD);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
+        base.Dispose();
         Directory.SetCurrentDirectory(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName);
         Directory.Delete(_CWD, true);
     }

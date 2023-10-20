@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.Group.Settings;
 using Server.GitShell.Lib.Logging;
+using Server.GitShell.Lib.Reading;
 using Server.GitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
@@ -12,12 +13,22 @@ public class RemoveGroupCommand : Command<SpecificGroupCommandSettings>
 {
     public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
     {
-        GroupUtils.ThrowOnEmptyGroupName(settings.Group);
-        GroupUtils.ThrowOnNonExistingGroup(settings.Group!);
-        if (!settings.Force) GroupUtils.ThrowOnNonEmptyGroup(settings.Group!);
+        var group = settings.CheckGroupName();
+        var baseGroup = settings.CheckBaseGroupName();
+        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
+        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
+        var groupPath = Path.Combine(baseGroupPath, group);
+        GroupUtils.ThrowOnNonExistingGroup(groupPath);
 
-        Directory.Delete(settings.Group!, true);
-        Logger.Instance.Info($"Removed group \"{ settings.Group }\".");
+        Logger.Instance.Warn($"Please confirm by typing the name of the group ({ groupPath }):");
+        if (Reader.Instance.ReadLine() != groupPath) 
+        {
+            Logger.Instance.Warn("The input did not match the name of the group. Aborting.");
+            return 0;
+        }
+
+        Directory.Delete(groupPath, true);
+        Logger.Instance.Info($"Removed group \"{ group }\" of group \"{ baseGroup }\".");
         return 0;
     }
 }

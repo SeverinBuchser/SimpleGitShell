@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Server.GitShell.Lib.Exceptions.Repo;
 
@@ -10,7 +9,7 @@ public static class RepoUtils
 
     public static void ThrowOnEmptyRepoName(string? repo)
     {
-        if (string.IsNullOrEmpty(repo)) throw new EmptyRepoNameException();
+        if (string.IsNullOrWhiteSpace(repo)) throw new EmptyRepoNameException();
     }
 
     public static void ThrowOnRepoNameNotValid(string repo)

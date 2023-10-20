@@ -17,7 +17,7 @@ public class Reader : IReader
     private Reader() {}
 
     public string? ReadLine()
-    {
+    {   
         return _reader.ReadLine();
     }
 

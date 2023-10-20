@@ -1,17 +1,21 @@
 using System.ComponentModel;
+using Server.GitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group.Settings;
 
 public class BaseGroupCommandSettings : CommandSettings
 {
-    [Description("Overrides group if it already exists.")]
-    [CommandOption("-f|--force")]
-    [DefaultValue(false)]
-    public bool Force { get; init; }
-
     [Description("The base group in which to perform the command.")]
     [CommandOption("-b|--base-group")]
-    [DefaultValue(".")]
+    [DefaultValue("root")]
     public string? BaseGroup { get; init; }
+
+
+    public string CheckBaseGroupName()
+    {
+        GroupUtils.ThrowOnEmptyGroupName(BaseGroup);
+        GroupUtils.ThrowOnGroupNameNotValid(BaseGroup!);
+        return BaseGroup!;
+    }
 }

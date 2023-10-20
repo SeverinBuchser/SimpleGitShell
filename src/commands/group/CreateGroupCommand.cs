@@ -2,8 +2,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.Group.Settings;
 using Server.GitShell.Lib.Logging;
+using Server.GitShell.Lib.Reading;
 using Server.GitShell.Lib.Utils;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Group;
@@ -13,34 +13,25 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
 {
     public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
     {
-        // check if the group name is valid
-        GroupUtils.ThrowOnEmptyGroupName(settings.Group);
-        // change to base group directory
-        GroupUtils.ThrowOnNonExistingGroup(settings.BaseGroup!);
-        
-        var basePath = settings.BaseGroup == "." ? "" : settings.BaseGroup!;
-        var groupPath = Path.Combine(basePath, settings.Group!);
+        var group = settings.CheckGroupName();
+        var baseGroup = settings.CheckBaseGroupName();
+        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
+        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
+        var groupPath = Path.Combine(baseGroupPath, group);
 
-        // check if the new group would override an existing group
-        if (!settings.Force) GroupUtils.ThrowOnExistingGroup(groupPath);
-        // rename the old group, if it exists
-        if (settings.Force) DirectoryUtils.RenameTmp(groupPath);
-        try
-        {
-            Directory.CreateDirectory(groupPath);
-        } catch (Exception e) 
-        {
-            // rename the old group back to its original name, if it exists
-            DirectoryUtils.UndoRenameTmp(groupPath);
-            throw new Exception(e.Message);
+        if (Directory.Exists(groupPath)) {
+            Logger.Instance.Warn($"The group already exists. The group will be removed and created again!");
+            Logger.Instance.Warn($"Please confirm by typing the name of the group ({ groupPath }), or anything else to abort:");
+            if (Reader.Instance.ReadLine() != groupPath) 
+            {
+                Logger.Instance.Warn("The input did not match the name of the group. Aborting.");
+                return 0;
+            }
+            Directory.Delete(groupPath, true);
         }
 
-        // on success, remove the old group
-        if (DirectoryUtils.RemoveTmp(groupPath)) {
-            Logger.Instance.Warn($"Group \"{ groupPath }\" already exists. Old group removed.");
-        } 
-        
-        Logger.Instance.Info($"Created group \"{ groupPath }\".");
+        Directory.CreateDirectory(groupPath);
+        Logger.Instance.Info($"Created group \"{ group }\" of group \"{ baseGroup }\".");
         return 0;
     }
 }
