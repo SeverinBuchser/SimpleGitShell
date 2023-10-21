@@ -1,9 +1,6 @@
 using Server.GitShell.Commands.SSH.Settings;
 using Server.GitShell.Commands.SSH.User;
-using Server.GitShell.Lib.Exceptions.Group;
-using Server.GitShell.Lib.Exceptions.Repo;
 using Server.GitShell.Lib.Exceptions.SSH;
-using Server.GitShell.Lib.Utils.Commands.Git;
 using Spectre.Console.Testing;
 using Tests.Server.GitShell.Utils;
 

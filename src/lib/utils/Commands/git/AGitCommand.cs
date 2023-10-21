@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Server.GitShell.Lib.Utils.Commands.Git;
 
 public abstract class AGitCommand : ACommand

@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using Server.GitShell.Commands.Repo.Settings;
 using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Utils;

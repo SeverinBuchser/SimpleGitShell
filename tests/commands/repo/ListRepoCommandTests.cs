@@ -1,6 +1,5 @@
 using Server.GitShell.Commands.Repo;
 using Server.GitShell.Lib.Exceptions.Group;
-using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.Server.GitShell.Utils;
 

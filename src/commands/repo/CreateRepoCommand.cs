@@ -34,7 +34,8 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
 
         var gitInitCommand = new GitInitBareCommand(repoPath);
         var process = gitInitCommand.Start();
-        if (process.ExitCode != 0) {
+        if (process.ExitCode != 0) 
+        {
             throw new GitException(process.StandardError.ReadToEnd());
         }
 
