@@ -11,7 +11,10 @@ public class Program
         var app = new CommandApp();
         app.Configure(config => 
         {
-            config.AddCommand<SSHUser>("user");
+            config.AddBranch("user", config => 
+            {
+                config.AddCommand<AddSSHUserCommand>("add");
+            });
         });
         try 
         {
