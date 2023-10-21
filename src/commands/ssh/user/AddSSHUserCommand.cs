@@ -12,7 +12,7 @@ public class AddSSHUserCommand : Command<AddSSHUserCommand.Settings>
 {
     public class Settings : BaseSSHCommandSettings
     {
-        [Description("")]
+        [Description("The public key in of the new user. The key needs to be in plain text.")]
         [CommandArgument(0, "<public-key>")]
         public string? PublicKey { get; init; }
     }
