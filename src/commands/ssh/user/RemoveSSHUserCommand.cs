@@ -1,21 +1,30 @@
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.SSH.Settings;
+using Server.GitShell.Lib.Exceptions.SSH;
+using Server.GitShell.Lib.Logging;
+using Server.GitShell.Lib.Reading;
+using Server.GitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.SSH.User;
 
-public class RemoveSSHUserCommand : Command<RemoveSSHUserCommand.Settings>
+public class RemoveSSHUserCommand : Command<BaseSSHCommandSettings>
 {
-    public class Settings : BaseSSHCommandSettings
+    public override int Execute([NotNull] CommandContext context, [NotNull] BaseSSHCommandSettings settings)
     {
-        [Description("The user or the users email to remove. This is the \"comment\" of the ssh-key.")]
-        [CommandArgument(0, "<user-or-email>")]
-        public string? Comment { get; init; }
-    }
+        if (string.IsNullOrWhiteSpace(settings.PublicKey)) throw new PublicKeyNotValidException();
+        if (!SSHUtils.DoesKeyExist(settings.PublicKey)) throw new PublicKeyDoesNotExistException();
+        var comment = SSHUtils.Comment(settings.PublicKey);
+        Logger.Instance.Warn($"Please confirm by typing the comment of the public key ({ comment }):");
+        if (Reader.Instance.ReadLine() != comment) 
+        {
+            Logger.Instance.Warn("The input did not match the comment of the public key. Aborting.");
+            return 0;
+        }
 
-    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
-    {
+
+        SSHUtils.RemoveKey(settings.PublicKey);
+        Logger.Instance.Info($"Removed { comment }'s ssh-key form the authorized keys.");
         return 0;
     }
 }

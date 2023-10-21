@@ -36,4 +36,16 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.1" />
   </ItemGroup> 
 
+
+
+  <ItemGroup>
+    <None Remove="data/keys/keys.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="data/keys/keys.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
