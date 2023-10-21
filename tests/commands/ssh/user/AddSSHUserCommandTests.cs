@@ -113,7 +113,6 @@ public class AddSSHUserCommandTests : FileSystemTests
         Assert.True(Directory.Exists(BaseSSHCommandSettings.SSH_PATH));
         Assert.True(File.Exists(BaseSSHCommandSettings.SSH_AUTORIZED_KEYS));
         var authorizedKeys = File.ReadAllText(BaseSSHCommandSettings.SSH_AUTORIZED_KEYS);
-        Console.WriteLine(authorizedKeys);
         foreach(var publicKey in publicKeys)
         {
             Assert.Contains(publicKey + "\n", authorizedKeys);
