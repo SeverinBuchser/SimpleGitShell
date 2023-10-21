@@ -1,5 +1,4 @@
 # Commands
-- Remove Git Repo (in group)
 - Add ssh user
 - Remove ssh user
 - List ssh users

@@ -7,7 +7,7 @@ using Tests.Server.GitShell.Utils;
 namespace Tests.Server.GitShell.Commands.Repo;
 
 [Collection("File System Sequential")]
-public class ListRepoCommandTests : FileSystemCommandTests
+public class ListRepoCommandTests : FileSystemTests
 {
     private static CommandAppTester App()
     {

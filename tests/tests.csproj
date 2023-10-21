@@ -29,6 +29,7 @@
     <ProjectReference Include="..\src\lib\lib.csproj" />
     <ProjectReference Include="..\src\commands\group\group.csproj" />
     <ProjectReference Include="..\src\commands\repo\repo.csproj" />
+    <ProjectReference Include="..\src\commands\ssh\ssh.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
-using Server.GitShell.Lib.Utils.Git;
+using Server.GitShell.Lib.Utils.Commands.Git;
 using Tests.Server.GitShell.Utils;
 
-namespace Tests.Server.GitShell.Lib.utils;
+namespace Tests.Server.GitShell.Lib.Utils.Commands.Git;
 
 [Collection("File System Sequential")]
 public class GitInitBareCommandTests : GitTests

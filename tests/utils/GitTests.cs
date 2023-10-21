@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Tests.Server.GitShell.Utils;
 
-public class GitTests : FileSystemCommandTests 
+public class GitTests : FileSystemTests 
 {
     protected static Process _GitLog(string repo, string? extraArgs)
     {

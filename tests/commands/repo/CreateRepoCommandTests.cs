@@ -1,15 +1,14 @@
 using Server.GitShell.Commands.Repo;
 using Server.GitShell.Lib.Exceptions.Group;
 using Server.GitShell.Lib.Exceptions.Repo;
-using Server.GitShell.Lib.Utils.Git;
-using Spectre.Console.Cli;
+using Server.GitShell.Lib.Utils.Commands.Git;
 using Spectre.Console.Testing;
 using Tests.Server.GitShell.Utils;
 
 namespace Tests.Server.GitShell.Commands.Repo;
 
 [Collection("File System Sequential")]
-public class CreateRepoCommandTests : FileSystemCommandTests
+public class CreateRepoCommandTests : FileSystemTests
 {
     private static CommandAppTester App()
     {

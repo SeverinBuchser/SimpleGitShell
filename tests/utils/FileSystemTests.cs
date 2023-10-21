@@ -1,10 +1,10 @@
 namespace Tests.Server.GitShell.Utils;
 
-public class FileSystemCommandTests : TestReader, IDisposable
+public class FileSystemTests : TestReader, IDisposable
 {
     protected static string _CWD = "test_dir";
 
-    public FileSystemCommandTests() : base()
+    public FileSystemTests() : base()
     {
         _CreateDirectory(_CWD);
         Directory.SetCurrentDirectory(_CWD);
@@ -35,5 +35,17 @@ public class FileSystemCommandTests : TestReader, IDisposable
     protected static string _CreationTime(string directory)
     {
         return Directory.GetCreationTime(directory).ToString();
+    }
+
+    protected static void _CreateFile(string filename, string content)
+    {
+        var writer = File.CreateText(filename);
+        writer.Write(content);
+        writer.Close();
+    }
+
+    protected static void _DeleteFile(string filename)
+    {
+        File.Delete(filename);
     }
 } 
