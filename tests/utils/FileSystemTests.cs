@@ -1,10 +1,10 @@
 namespace Tests.Server.GitShell.Utils;
 
-public class FileSystemCommandTests : TestReader, IDisposable
+public class FileSystemTests : TestReader, IDisposable
 {
     protected static string _CWD = "test_dir";
 
-    public FileSystemCommandTests() : base()
+    public FileSystemTests() : base()
     {
         _CreateDirectory(_CWD);
         Directory.SetCurrentDirectory(_CWD);

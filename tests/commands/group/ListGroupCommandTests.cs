@@ -6,7 +6,7 @@ using Tests.Server.GitShell.Utils;
 namespace Tests.Server.GitShell.Commands.Group;
 
 [Collection("File System Sequential")]
-public class ListGroupCommandTests : FileSystemCommandTests
+public class ListGroupCommandTests : FileSystemTests
 {
     private static CommandAppTester App()
     {

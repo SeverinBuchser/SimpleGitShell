@@ -4,6 +4,7 @@ using Server.GitShell.Commands.Repo.Settings;
 using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Reading;
 using Server.GitShell.Lib.Utils;
+using Server.GitShell.Lib.Utils.Commands.Git;
 using Server.GitShell.Lib.Utils.Git;
 using Spectre.Console.Cli;
 
