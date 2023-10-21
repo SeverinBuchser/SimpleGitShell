@@ -1,5 +1,5 @@
 ﻿using Server.GitShell.Commands.SSH.User;
-using Spectre.Console;
+using Server.GitShell.Lib.Logging;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.SSH;
@@ -21,7 +21,7 @@ public class Program
             return app.Run(args);
         }
         catch (Exception e) {
-            AnsiConsole.WriteException(e);
+            Logger.Instance.Error(e.Message);
             return 128;
         }
     }
