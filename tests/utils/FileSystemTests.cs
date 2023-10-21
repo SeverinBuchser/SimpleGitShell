@@ -36,4 +36,16 @@ public class FileSystemTests : TestReader, IDisposable
     {
         return Directory.GetCreationTime(directory).ToString();
     }
+
+    protected static void _CreateFile(string filename, string content)
+    {
+        var writer = File.CreateText(filename);
+        writer.Write(content);
+        writer.Close();
+    }
+
+    protected static void _DeleteFile(string filename)
+    {
+        File.Delete(filename);
+    }
 } 
