@@ -265,4 +265,4 @@ This project is licensed under the [MIT License][license].
 [release-badge]: https://img.shields.io/github/v/release/SeverinBuchser/SimpleGitShell
 [issues-badge]: https://img.shields.io/github/issues/SeverinBuchser/SimpleGitShell
 [pr-badge]: https://img.shields.io/github/issues-pr/SeverinBuchser/SimpleGitShell
-[coverage-badge]: https://img.shields.io/codecov/c/github/SeverinBuchser/SimpleGitShell
+[coverage-badge]: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SeverinBuchser/cf21e101721df17339c0a05c23f4d7c2/raw/code-coverage.yml
