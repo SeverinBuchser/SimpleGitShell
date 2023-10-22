@@ -18,7 +18,7 @@ Simple Git Shell is a .NET-based project that provides a set of git-shell execut
 
 ## Features
 
-To use Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage][usage] section. The following features are available:
+To use Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage](#usage) section. The following features are available:
 
 ### 1. Group
 
@@ -98,7 +98,7 @@ ssh git@<your-git-server> group list
 
 If the command returns a list of groups, it means that the installation was successful, and the Git Shell Executables are functioning properly. You can similarly check the functionality of other commands provided by the executables.
 
-For more information on using the Git Shell Executables, refer to the [Usage](#Usage) section in this README.
+For more information on using the Git Shell Executables, refer to the [Usage](#usage) section in this README.
 
 ### Troubleshooting
 
@@ -242,7 +242,7 @@ If you make changes to the source code, you can build the project with the follo
 dotnet build
 ```
 
-This will compile the project, and you can then execute the generated executables as described in the [Usage][usage] section.
+This will compile the project, and you can then execute the generated executables as described in the [Usage](#usage) section.
 
 ### Publishing
 
