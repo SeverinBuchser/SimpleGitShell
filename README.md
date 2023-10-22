@@ -98,7 +98,7 @@ ssh git@<your-git-server> group list
 
 If the command returns a list of groups, it means that the installation was successful, and the Git Shell Executables are functioning properly. You can similarly check the functionality of other commands provided by the executables.
 
-For more information on using the Git Shell Executables, refer to the [Usage][usage] section in this README.
+For more information on using the Git Shell Executables, refer to the [Usage](#Usage) section in this README.
 
 ### Troubleshooting
 
