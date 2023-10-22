@@ -1,6 +1,6 @@
 # Simple Git Shell
 
-[![![License](https://img.shields.io/github/license/SeverinBuchser/SimpleGitShell)](LICENSE)
+![License][license-badge] ![GitHub Release][release-badge] ![GitHub Issues][issues-badge] ![GitHub Pull Requests][pr-badge] ![Code Coverage][coverage-badge]
 
 Simple Git Shell is a .NET-based project that provides a set of git-shell executables for managing groups, repositories, and SSH access on a Git server. These executables allow administrators to perform essential Git server management tasks from the command line. They are designed to be run using the `ssh` syntax, making it easy to integrate them into your Git server infrastructure.
 
@@ -18,7 +18,7 @@ Simple Git Shell is a .NET-based project that provides a set of git-shell execut
 
 ## Features
 
-To use Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage](#usage) section. The following features are available:
+To use Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage][usage] section. The following features are available:
 
 ### 1. Group
 
@@ -40,37 +40,45 @@ To use Simple Git Shell, please refer to the detailed usage instructions provide
 
 ## Installation
 
-1. **Download Executables**: Download the latest release of Git Server Shell Executables from the [Releases](https://github.com/SeverinBuchser/SimpleGitShell/releases) section on GitHub. You will find a zip file containing the executables.
+### Install with Install Script
 
-2. **Extract and Copy**: Extract the contents of the zip file to your local machine. Copy the extracted executables to your Git server. If you already enabled `git-shell` you need to do this with another user who has `sudo` access on the server. If not, you can use the git user.
-   
-   1. **Copy Executables to the git-server:**
-      
-	```bash
-	scp -rq /path/to/extracted-folder <user-with-sudo>@<your-git-server>:extracted-folder
-	```
-   
-   2. **Copy the Executables to the `git-shell-commands` directory on the git-server:**
-      
-	```bash
-	sudo cp -rf extracted-folder/* /path/to/git-shell-commands
-	```
-   
-   3.  **Remove the `extracted-folder` from the git-server:**
-      
-	```bash
-	sudo rm -rf extracted-folder
-	```
-   
-   4.  **Remove the `extracted-folder` from your local machine:**
-      
-	```bash
-	rm -rf /path/to/extracted-folder
-	```
+To simplify the installation process, you can use the provided [install.sh][install-script] script. This script automates the installation of the Git Shell Executables on your remote Git server. Follow these steps to use the script:
 
-4. **Set Ownership**: Set the owner of the executables to the `git` user recursively by running the following command on the git-server:
+1. **Download Executables**: Obtain the Git Shell Executables by downloading the latest release from the [Releases][releases] page on the project's GitHub repository. You will find a zip file containing the executables. Extract the executables from the zip file.
+
+2. **Download Installation Script**: Additionally, download the [install.sh][install-script] script from the same [Releases][releases] page. This script is essential for the installation process.
+
+3. **Execute the Installation Script**: Open your terminal and navigate to the directory where you downloaded the [install.sh][install-script] script. Run the script using the following command:
 
     ```bash
+    bash install.sh
+    ```
+
+4. **Follow Prompts**: The script will prompt you for the necessary information to complete the installation. Follow the prompts:
+
+    - When prompted, provide the local path to the directory where you extracted the Git Shell Executables.
+
+    - When prompted, provide the remote server's SSH access in the format `user@server`.
+
+    - When prompted, provide the path to the home directory of the `git` user on your remote server.
+
+5. **Complete Installation**: The script will copy the Git Shell Executables to your remote server and configure them for use.
+
+Your Git Shell Executables are now installed and ready to use on your remote Git server. You can access and manage your Git server infrastructure using the provided command-line executables.
+
+### Manual Installation
+
+If you prefer to perform the installation manually, you can follow these steps:
+
+1. **Download Executables**: Obtain the Git Shell Executables by downloading the latest release from the [Releases][releases] page on the project's GitHub repository. You will find a zip file containing the executables.
+
+2. **Extract Executables**: Extract the contents of the zip file to your local machine.
+
+3. **Copy Executables**: Copy the extracted executables to your Git server. If you have `git-shell` enabled, use the provided commands below. Replace placeholders with actual values:
+
+    ```bash
+    scp -rq /path/to/extracted-folder <user-with-sudo>@<your-git-server>:extracted-folder
+    sudo cp -rf extracted-folder/* /path/to/git-shell-commands
     sudo chown -R git:git /path/to/git-shell-commands/
     ```
 
@@ -80,15 +88,17 @@ To use Simple Git Shell, please refer to the detailed usage instructions provide
     sudo chsh -s $(which git-shell) git
     ```
 
-   For more information on configuring `git-shell`, refer to the [git-shell documentation](https://git-scm.com/docs/git-shell) provided by the official Git documentation.
+### **Verify Installation**
 
-5. **Checking installation:** You should now be able to log into the git-server via ssh and be able to execute the scripts. To verify you can run the following command on your local machine:
-   
-    ```bash
-	ssh git@<your-git-server> group --version
-    ```
-    
-    This is also the intended usage of the commands.
+After the installation, it's important to verify that the Git Shell Executables are correctly installed and working. You can do this by connecting to your Git server using the `ssh` syntax and running a simple command. For example, you can check the list of groups by using the following command:
+
+```bash
+ssh git@<your-git-server> group list
+```
+
+If the command returns a list of groups, it means that the installation was successful, and the Git Shell Executables are functioning properly. You can similarly check the functionality of other commands provided by the executables.
+
+For more information on using the Git Shell Executables, refer to the [Usage][usage] section in this README.
 
 ### Troubleshooting
 
@@ -100,7 +110,8 @@ sudo chmod +x /path/to/git-shell-commands/*
 
 This command ensures that all the executables in the directory are made executable.
 
-Please ensure that you follow the project's code of conduct and licensing terms.
+[releases]: https://github.com/SeverinBuchser/SimpleGitShell/releases/latest
+[install-script]: https://github.com/SeverinBuchser/SimpleGitShell/releases/latest/download/install.sh
 
 ## Usage
 
@@ -181,9 +192,11 @@ ssh user <COMMAND>
 ssh user add <public-key>
 ```
 
-Where the `<public-key>` has the following format:
+Where the
 
-```shell
+ `<public-key>` has the following format:
+
+```bash
 "ssh-rsa YOUR_SSH_PUBLIC_KEY"
 ```
 
@@ -191,11 +204,11 @@ Where the `<public-key>` has the following format:
 
 ```bash
 ssh user remove <public-key>
-``````
+```
 
 Where the `<public-key>` has the following format:
 
-```shell
+```bash
 "ssh-rsa YOUR_SSH_PUBLIC_KEY"
 ```
 
@@ -215,11 +228,11 @@ Before submitting a pull request, ensure that you have tested the project with .
 
 1. Navigate to the project directory and run the tests using the following command:
 
-   ```bash
-   dotnet test
-   ```
+```bash
+dotnet test
+```
 
-   This will execute the test suite to verify that your changes do not introduce regressions and conform to the project's coding standards.
+This will execute the test suite to verify that your changes do not introduce regressions and conform to the project's coding standards.
 
 ### Building
 
@@ -229,7 +242,7 @@ If you make changes to the source code, you can build the project with the follo
 dotnet build
 ```
 
-This will compile the project, and you can then execute the generated executables as described in the [Usage](#usage) section.
+This will compile the project, and you can then execute the generated executables as described in the [Usage][usage] section.
 
 ### Publishing
 
@@ -245,4 +258,11 @@ Please ensure that you follow the project's code of conduct and licensing terms.
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/SeverinBuchser/SimpleGitShell/blob/develop/LICENSE).
+This project is licensed under the [MIT License][license].
+
+[license]: https://github.com/SeverinBuchser/SimpleGitShell/blob/develop/LICENSE
+[license-badge]: https://img.shields.io/github/license/SeverinBuchser/SimpleGitShell
+[release-badge]: https://img.shields.io/github/v/release/SeverinBuchser/SimpleGitShell
+[issues-badge]: https://img.shields.io/github/issues/SeverinBuchser/SimpleGitShell
+[pr-badge]: https://img.shields.io/github/issues-pr/SeverinBuchser/SimpleGitShell
+[coverage-badge]: https://img.shields.io/codecov/c/github/SeverinBuchser/SimpleGitShell
