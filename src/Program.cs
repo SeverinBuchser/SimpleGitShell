@@ -1,0 +1,75 @@
+﻿using Server.GitShell.Commands.Group;
+using Server.GitShell.Commands.Repo;
+using Server.GitShell.Commands.SSH.User;
+using Server.GitShell.Lib.Logging;
+using Server.GitShell.Lib.Utils.Processes;
+using Spectre.Console.Cli;
+
+namespace SimpleGitShell;
+
+public class Program
+{
+    static int Main(string[] args)
+    {
+        if (args.Length > 1) {
+            if (args[0] == "-c") args = args[1].Split(" ");
+            switch (args[0])
+            {
+                case "git-receive-pack":
+                case "git-upload-pack":
+                    var process = new Process(args[0], string.Join(" ", args.Skip(1)));
+                    process.Attach();
+                    return process.StartSync();
+                    
+                default:
+                    return Shell(args);
+            }  
+        }
+        return 0;
+    }
+
+    private static int Shell(string[] args)
+    {
+        var app = BuildShell();
+        try 
+        {
+            return app.Run(args);
+        }
+        catch (Exception e) {
+            Logger.Instance.Error(e.Message);
+            return 128;
+        }
+    }
+
+    private static CommandApp BuildShell()
+    {
+        var app = new CommandApp();
+        app.Configure(config => 
+        {
+            // TODO
+            config.SetApplicationVersion("___VERSION___");
+            config.AddBranch("group", config => 
+            {
+                config.AddCommand<ListGroupCommand>("list");
+                config.AddCommand<CreateGroupCommand>("create");
+                config.AddCommand<RemoveGroupCommand>("remove");
+            });
+
+            config.AddBranch("repo", config => 
+            {
+                config.AddCommand<ListRepoCommand>("list");
+                config.AddCommand<CreateRepoCommand>("create");
+                config.AddCommand<RemoveRepoCommand>("remove");
+            });
+            config.AddBranch("ssh", config => 
+            {
+                config.AddBranch("user", config => 
+                {
+                    config.AddCommand<AddSSHUserCommand>("add");
+                    config.AddCommand<RemoveSSHUserCommand>("remove");
+                });
+            });
+        });
+        return app;
+    }
+}

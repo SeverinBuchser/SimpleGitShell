@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Server.GitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.SSH.Settings;

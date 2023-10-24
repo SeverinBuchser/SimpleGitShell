@@ -1,4 +1,4 @@
-using Server.GitShell.Lib.Utils.Commands.Git;
+using Server.GitShell.Lib.Utils.Processes.Git;
 using Tests.Server.GitShell.Utils;
 
 namespace Tests.Server.GitShell.Lib.Utils.Commands.Git;
@@ -12,15 +12,15 @@ public class GitInitBareCommandTests : GitTests
     {
         // Given
         var repo = "repo";
-        var initCommand = new GitInitBareCommand(repo);
+        var initProcess = new GitInitBareProcess(repo);
         
         // When
-        var process = initCommand.Start();
+        var exitCode = initProcess.StartSync();
 
         // Then
         var fullRepoDir = Path.GetFullPath(repo) + "/";
-        Assert.Equal(0, process.ExitCode);
-        Assert.Equal($"Initialized empty Git repository in { fullRepoDir }", process.StandardOutput.ReadLine());
+        Assert.Equal(0, exitCode);
+        Assert.Equal($"Initialized empty Git repository in { fullRepoDir }", initProcess.StandardOutput.ReadLine());
         Assert.True(Directory.Exists(repo));
 
         // Finally

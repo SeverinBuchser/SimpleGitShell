@@ -4,8 +4,7 @@ using Server.GitShell.Commands.Repo.Settings;
 using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Reading;
 using Server.GitShell.Lib.Utils;
-using Server.GitShell.Lib.Utils.Commands.Git;
-using Server.GitShell.Lib.Utils.Git;
+using Server.GitShell.Lib.Utils.Processes.Git;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Repo;
@@ -32,11 +31,11 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
             Directory.Delete(repoPath, true);
         }
 
-        var gitInitCommand = new GitInitBareCommand(repoPath);
-        var process = gitInitCommand.Start();
-        if (process.ExitCode != 0) 
+        var gitInitBareProcess = new GitInitBareProcess(repoPath);
+        var exitCode = gitInitBareProcess.StartSync();
+        if (exitCode != 0) 
         {
-            throw new GitException(process.StandardError.ReadToEnd());
+            throw new GitException(gitInitBareProcess.StandardError.ReadToEnd());
         }
 
         Logger.Instance.Info($"Created repository \"{ repo }\" of group \"{ group }\".");

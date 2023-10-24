@@ -2,7 +2,7 @@
 
 ![License][license-badge] ![GitHub Release][release-badge] ![GitHub Issues][issues-badge] ![GitHub Pull Requests][pr-badge] ![Code Coverage][coverage-badge]
 
-Simple Git Shell is a .NET-based project that provides a set of git-shell executables for managing groups, repositories, and SSH access on a Git server. These executables allow administrators to perform essential Git server management tasks from the command line. They are designed to be run using the `ssh` syntax, making it easy to integrate them into your Git server infrastructure.
+Simple Git Shell is a .NET-based project that provides a custom Git shell for managing groups, repositories, and SSH access on a Git server. This Git shell is designed to be used as the default shell for a Git user on the server, allowing administrators to perform essential Git server management tasks directly from the command line.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ Simple Git Shell is a .NET-based project that provides a set of git-shell execut
 
 ## Features
 
-To use Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage](#usage) section. The following features are available:
+To use the Simple Git Shell, please refer to the detailed usage instructions provided in the [Usage](#usage) section. The following features are available:
 
 ### 1. Group
 
@@ -42,159 +42,169 @@ To use Simple Git Shell, please refer to the detailed usage instructions provide
 
 ### Install with Install Script
 
-To simplify the installation process, you can use the provided [install.sh][install-script] script. This script automates the installation of the Git Shell Executables on your remote Git server. Follow these steps to use the script:
+To simplify the installation process, you can use the provided [install.sh][install-script] script. This script automates the installation of the Simple Git Shell on your remote Git server. Follow these steps to use the script:
 
-1. **Download Executables**: Obtain the Git Shell Executables by downloading the latest release from the [Releases][releases] page on the project's GitHub repository. You will find a zip file containing the executables. Extract the executables from the zip file.
+1. **Download the Shell Executable and install script**: Obtain the Simple Git Shell script and the [install.sh][install-script] script by downloading them from the latest release on the [Releases][releases] page of the project's GitHub repository.
 
-2. **Download Installation Script**: Additionally, download the [install.sh][install-script] script from the same [Releases][releases] page. This script is essential for the installation process.
-
-3. **Execute the Installation Script**: Open your terminal and navigate to the directory where you downloaded the [install.sh][install-script] script. Run the script using the following command:
+2. **Execute the Installation Script**: Open your terminal and navigate to the directory where you downloaded the [install.sh][install-script] script. Run the script using the following command:
 
     ```bash
     bash install.sh
     ```
 
-4. **Follow Prompts**: The script will prompt you for the necessary information to complete the installation. Follow the prompts:
+3. **Follow Prompts**: The script will prompt you for the local path to the Simple Git Shell executable and the destination SSH address (in the format user@host). Follow the prompts without specifying where to store the shell script.
 
-    - When prompted, provide the local path to the directory where you extracted the Git Shell Executables.
-
-    - When prompted, provide the remote server's SSH access in the format `user@server`.
-
-    - When prompted, provide the path to the home directory of the `git` user on your remote server.
-
-5. **Complete Installation**: The script will copy the Git Shell Executables to your remote server and configure them for use.
-
-Your Git Shell Executables are now installed and ready to use on your remote Git server. You can access and manage your Git server infrastructure using the provided command-line executables.
+Your Simple Git Shell is now installed to `/usr/bin/simple-git-shell` on your remote Git server and ready to use as the default shell for Git users.
 
 ### Manual Installation
 
-If you prefer to perform the installation manually, you can follow these steps:
+If you prefer to perform the installation manually, you can follow these steps (**you will need to login to the git-server with a `sudoer` user**):
 
-1. **Download Executables**: Obtain the Git Shell Executables by downloading the latest release from the [Releases][releases] page on the project's GitHub repository. You will find a zip file containing the executables.
+1. **Download the Shell Executable**: Obtain the Simple Git Shell script by downloading the latest release from the [Releases][releases] page on the project's GitHub repository. You will find the executable in the release assets.
 
-2. **Extract Executables**: Extract the contents of the zip file to your local machine.
+2. **Copy the Shell Script to the Server**: Use the following command to copy the downloaded shell script to your Git server:
 
-3. **Copy Executables**: Copy the extracted executables to your Git server. If you have `git-shell` enabled, use the provided commands below. Replace placeholders with actual values:
+	```bash
+	scp -q path/to/simple-git-shell user@host:simple-git-shell
+	```
+
+	Replace "path/to/simple-git-shell" with the path to the downloaded executable and the "user@host" with the credentials of your git-server. The `user` should not be the git-user but a `sudoer`.
+
+3. **SSH into the Server**: After copying the shell script, SSH into your Git server using the following command:
+
+	```bash
+	ssh user@host
+	```
+
+4. **Move the Shell Script**: Once connected to the server, run the following command to move the shell script to the `/usr/bin` directory:
+
+	```bash
+	sudo mv -f simple-git-shell "/usr/bin/simple-git-shell"
+	```
+
+5. **Change Ownership**: Run the following command to change the ownership of the Simple Git Shell script to `root`:
+
+	```bash
+	sudo chown root:root "/usr/bin/simple-git-shell"
+	```
+
+	This step is just in case there are some owner issues.
+
+6. **Set as Default Shell for the git user**: Configure the Git user's default shell to use the Simple Git Shell script. Run the following command on the Git server:
 
     ```bash
-    scp -rq /path/to/extracted-folder <user-with-sudo>@<your-git-server>:extracted-folder
-    sudo cp -rf extracted-folder/* /path/to/git-shell-commands
-    sudo chown -R git:git /path/to/git-shell-commands/
+    sudo chsh -s /path/to/simple-git-shell-script git
     ```
 
-4. **Configure `git` User's Shell**: Configure the `git` user's shell to use `git-shell` by running the following command on the git-server:
-
-    ```bash
-    sudo chsh -s $(which git-shell) git
-    ```
+Your Simple Git Shell is now installed, configured as the default shell for Git users, and ready for use on your remote Git server.
 
 ### **Verify Installation**
 
-After the installation, it's important to verify that the Git Shell Executables are correctly installed and working. You can do this by connecting to your Git server using the `ssh` syntax and running a simple command. For example, you can check the list of groups by using the following command:
+After the installation, it's important to verify that the Simple Git Shell is correctly installed and working. You can do this by running the following command:
 
 ```bash
-ssh git@<your-git-server> group list
+ssh user@host -- --version
 ```
 
-If the command returns a list of groups, it means that the installation was successful, and the Git Shell Executables are functioning properly. You can similarly check the functionality of other commands provided by the executables.
+If you see a version number being returned, the installation is successful. 🥳
 
-For more information on using the Git Shell Executables, refer to the [Usage](#usage) section in this README.
+For more information on using the Simple Git Shell, refer to the [Usage](#usage) section in this README.
 
 ### Troubleshooting
 
-If the executables are not automatically marked as executable after the installation, you may need to make them executable manually using the `chmod` command on the git-server:
+If the Simple Git Shell script is not automatically marked as executable after the installation, you may need to make it executable manually using the `chmod` command on the Git server:
 
 ```bash
-sudo chmod +x /path/to/git-shell-commands/*
+sudo chmod +x /usr/bin/simple-git-shell
 ```
 
-This command ensures that all the executables in the directory are made executable.
+This command ensures that the shell script is made executable.
 
 [releases]: https://github.com/SeverinBuchser/SimpleGitShell/releases/latest
 [install-script]: https://github.com/SeverinBuchser/SimpleGitShell/releases/latest/download/install.sh
 
 ## Usage
 
-You can use the executables by connecting to your Git server using the `ssh` syntax and specifying the desired command. All commands support a `--help` option for displaying command-specific help, e.g:
+The Simple Git Shell is intended to be used as the default shell for Git users on your Git server. Once configured, Git users can log in using SSH and directly interact with the Simple Git Shell to manage groups, repositories, and SSH access, e.g:
 
 ```bash
-group list --help
+ssh user@host group list
 ```
 
-or
+### Simple Git Shell Commands
+
+The Simple Git Shell provides a set of commands to manage your Git server. Users can run these commands with various options to perform specific tasks. To get help on a specific command, you can use the `--help` option, e.g:
 
 ```bash
-repo --help
+simple-git-shell group list --help
 ```
 
-### Group Commands:
+#### Group Commands:
 
 ```bash
-group <COMMAND>
+simple-git-shell group <COMMAND>
 ```
 #### List all groups:
 
 ```bash
-group list [-b|--base-group]
+simple-git-shell group list [-b|--base-group]
 ```
 
 #### Create a new group:
 
 ```bash
-group create <group> [-b|--base-group]
+simple-git-shell group create <group> [-b|--base-group]
 ```
 
 #### Remove a group:
 
 ```bash
-group remove <group> [-b|--base-group]
+simple-git-shell group remove <group> [-b|--base-group]
 ```
 
-### Repository Commands:
+#### Repository Commands:
 
 ```bash
-repo <COMMAND>
+simple-git-shell repo <COMMAND>
 ```
 
 #### List all repositories:
 
 ```bash
-repo list [-g|--group]
+simple-git-shell repo list [-g|--group]
 ```
 
 #### Create a new repository:
 
 ```bash
-repo create <repository> [-g|--group]
+simple-git-shell repo create <repository> [-g|--group]
 ```
 
 #### Remove a repository:
 
 ```bash
-repo remove <repository> [-g|--group]
+simple-git-shell repo remove <repository> [-g|--group]
 ```
 
-### SSH Commands:
+#### SSH Commands:
 
 ```bash
-ssh <COMMAND>
+simple-git-shell ssh <COMMAND>
 ```
 
 #### Manage SSH access for users:
 
 ```bash
-ssh user <COMMAND>
+simple-git-shell ssh user <COMMAND>
 ```
 
 ##### Add a user by adding an SSH key:
 
 ```bash
-ssh user add <public-key>
+simple-git-shell ssh user add <public-key>
 ```
 
-Where the
-
- `<public-key>` has the following format:
+Where the `<public-key>` has the following format:
 
 ```bash
 "ssh-rsa YOUR_SSH_PUBLIC_KEY"
@@ -203,7 +213,7 @@ Where the
 ##### Remove a user by removing an SSH key:
 
 ```bash
-ssh user remove <public-key>
+simple-git-shell ssh user remove <public-key>
 ```
 
 Where the `<public-key>` has the following format:
@@ -214,7 +224,7 @@ Where the `<public-key>` has the following format:
 
 ## Contributing
 
-We welcome contributions from the open-source community. If you would like to contribute to the Git Server Shell Executables project, please follow these guidelines:
+We welcome contributions from the open-source community. If you would like to contribute to the Simple Git Shell project, please follow these guidelines:
 
 ### Prerequisites
 
@@ -224,15 +234,30 @@ Before contributing, ensure you have the following prerequisites:
 
 ### Testing
 
-Before submitting a pull request, ensure that you have tested the project with .NET to validate the changes:
+Before submitting a pull request, ensure that you have tested the project to validate your changes. You have two options for testing:
 
-1. Navigate to the project directory and run the tests using the following command:
+1. **Manual Testing**: Navigate to the project directory and run the tests using the following command:
 
-```bash
-dotnet test
-```
+     ```bash
+     dotnet test
+     ```
 
-This will execute the test suite to verify that your changes do not introduce regressions and conform to the project's coding standards.
+   This will execute the test suite to verify that your changes do not introduce regressions and conform to the project's coding standards.
+
+2. **Automated Testing Script**: Alternatively, you can use the provided testing script located at `.scripts/test.sh` to run the tests:
+
+     ```bash
+     .scripts/test.sh [options]
+     ```
+
+	Options:
+	- `-c, --coverage`: Perform coverage analysis. Cannot be used with the watch option.
+	- `-w, --watch`: Start watching for changes.
+	- `-d, --debug`: Enable debugging mode.
+
+	This script automates the testing process, making it a convenient way to ensure that your changes do not introduce regressions. It can be used as an alternative to manual testing.
+
+Both options help ensure that your contributions conform to the project's standards and do not introduce issues.
 
 ### Building
 
@@ -242,19 +267,36 @@ If you make changes to the source code, you can build the project with the follo
 dotnet build
 ```
 
-This will compile the project, and you can then execute the generated executables as described in the [Usage](#usage) section.
+This will compile the project, and you can then execute the generated shell script as described in the [Usage](#usage) section.
 
 ### Publishing
 
-To publish the project and create executables, use the following command:
+To publish the project and create the shell script, use the following command:
 
 ```bash
 dotnet publish
 ```
 
-This command will create the executables and place them into the `bin` directory of the root of the project.
+This command will generate the shell script, and you can deploy it to your Git server.
 
 Please ensure that you follow the project's code of conduct and licensing terms.
+
+### Deployment
+
+If you are responsible for deploying the Simple Git Shell to a Git server, you can use the provided deployment script located at `.scripts/deploy.sh`. To deploy the Simple Git Shell, follow these steps:
+
+1. Open a terminal and navigate to your project directory.
+2. Run the deployment script using the following command:
+
+   ```bash
+   .scripts/deploy.sh -d user@host
+   ```
+
+   Replace `user@host` with the destination SSH address of your Git server.
+
+This deployment script automates the process of deploying the Simple Git Shell to your remote Git server, making it a convenient way to ensure a smooth deployment.
+
+If you have any further updates or questions, please let me know.
 
 ## License
 

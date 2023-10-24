@@ -1,10 +1,10 @@
-using Server.GitShell.Lib.Utils.Commands.SSH;
+using Server.GitShell.Lib.Utils.Processes.SSH;
 using Tests.Server.GitShell.Utils;
 
 namespace Tests.Server.GitShell.Lib.Utils.Commands.SSH;
 
 [Collection("File System Sequential")]
-public class SSHKeygenCommandTests : FileSystemTests
+public class SSHKeygenGenerateProcessTests : FileSystemTests
 {
 
     [Fact]
@@ -16,13 +16,13 @@ public class SSHKeygenCommandTests : FileSystemTests
         var publicKeyfile = Path.Combine(sshDir, "id_rsa.pub");
         var email = "some-email@host.com";
         _CreateDirectory(sshDir);
-        var sshKeygenCommand = new SSHKeygenCommand(privateKeyfile, email);
+        var sshKeygenGenerateProcess = new SSHKeygenGenerateProcess(privateKeyfile, email);
         
         // When
-        var process = sshKeygenCommand.Start();
+        var exitCode = sshKeygenGenerateProcess.StartSync();
 
         // Then
-        Assert.Equal(0, process.ExitCode);
+        Assert.Equal(0, exitCode);
 
         Assert.True(File.Exists(privateKeyfile));
         var privateKeyfileText = File.ReadAllText(privateKeyfile);
@@ -46,18 +46,18 @@ public class SSHKeygenCommandTests : FileSystemTests
         var secondKeygenEmail = "second-email@host.com";
         _CreateDirectory(sshDir);
 
-        var firstKeygen = new SSHKeygenCommand(privateKeyfile, firstKeygenEmail);
-        firstKeygen.Start();
+        var firstKeygen = new SSHKeygenGenerateProcess(privateKeyfile, firstKeygenEmail);
+        firstKeygen.StartSync();
         var firstKeygenPrivateKeyfileText = File.ReadAllText(privateKeyfile);
         var firstKeygenPublicKeyfileText = File.ReadAllText(publicKeyfile);
         
-        var secondKeygen = new SSHKeygenCommand(privateKeyfile, secondKeygenEmail);
+        var secondKeygen = new SSHKeygenGenerateProcess(privateKeyfile, secondKeygenEmail);
         
         // When
-        var process = secondKeygen.Start();
+        var exitCode = secondKeygen.StartSync();
 
         // Then
-        Assert.Equal(1, process.ExitCode);
+        Assert.Equal(1, exitCode);
         var secondKeygenPrivateKeyfileText = File.ReadAllText(privateKeyfile);
         var secondKeygenPublicKeyfileText = File.ReadAllText(publicKeyfile);
         Assert.Equal(firstKeygenPrivateKeyfileText, secondKeygenPrivateKeyfileText);

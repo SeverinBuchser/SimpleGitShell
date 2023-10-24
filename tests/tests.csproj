@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.4.2" />
+    <PackageReference Include="ConsoleTables" Version="2.5.0" />
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -30,10 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\lib\lib.csproj" />
-    <ProjectReference Include="..\src\commands\group\group.csproj" />
-    <ProjectReference Include="..\src\commands\repo\repo.csproj" />
-    <ProjectReference Include="..\src\commands\ssh\ssh.csproj" />
+    <ProjectReference Include="..\src\simple-git-shell.csproj" />
   </ItemGroup>
 
   <ItemGroup>

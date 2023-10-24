@@ -32,7 +32,7 @@ public static class LoggerExtensions
             Columns = headers
         });
         foreach (var row in rows) table.AddRow(row);
-        table.Write(Format.Alternative);
+        table.Write();
         logger.Log(writer.ToString(), level);
     }
 }

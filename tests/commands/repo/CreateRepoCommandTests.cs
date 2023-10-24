@@ -1,7 +1,7 @@
 using Server.GitShell.Commands.Repo;
 using Server.GitShell.Lib.Exceptions.Group;
 using Server.GitShell.Lib.Exceptions.Repo;
-using Server.GitShell.Lib.Utils.Commands.Git;
+using Server.GitShell.Lib.Utils.Processes.Git;
 using Spectre.Console.Testing;
 using Tests.Server.GitShell.Utils;
 
@@ -88,7 +88,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepo_PromptsUserForConfirmation()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
+        new GitInitBareProcess("repo.git").StartSync();
         _SetInput("abort");
         var args = new string[]{"repo"};
         
@@ -107,7 +107,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoAbort_DoesNotOverrideRepo()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
+        new GitInitBareProcess("repo.git").StartSync();
         var subDirPath = Path.Combine("repo.git", "subdir");
         _CreateDirectory(subDirPath);
         _SetInput("abort");
@@ -128,7 +128,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoConfirm_OverridesRepo()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
+        new GitInitBareProcess("repo.git").StartSync();
         var subDirPath = Path.Combine("repo.git", "subdir");
         _CreateDirectory(subDirPath);
         _SetInput(Path.Combine(".", "repo.git"));
@@ -179,7 +179,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
+        new GitInitBareProcess(repoPath).StartSync();
         _CreateNonEmptyDirectory(repoPath, "subdir");
         _SetInput("abort");
         var args = new string[]{"repo", $"--group=group"};
@@ -201,7 +201,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
+        new GitInitBareProcess(repoPath).StartSync();
 
         var subDirPath = Path.Combine(repoPath, "subdir");
         _CreateDirectory(subDirPath);
@@ -226,7 +226,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
+        new GitInitBareProcess(repoPath).StartSync();
 
         var subDirPath = Path.Combine(repoPath, "subdir");
         _CreateDirectory(subDirPath);

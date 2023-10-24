@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Server.GitShell.Lib.Exceptions.SSH;
-using Server.GitShell.Lib.Utils.Commands.SSH;
+using Server.GitShell.Lib.Utils.Processes.SSH;
 
 namespace Server.GitShell.Lib.Utils;
 
@@ -44,9 +44,9 @@ public static class SSHUtils
         writer.Write(publicKey);
         writer.Close();
 
-        var sshKeygenFingerprintCommand = new SSHKeygenFingerprintCommand(tmpFile);
-        var process = sshKeygenFingerprintCommand.Start();
-        if (process.ExitCode != 0) 
+        var sshKeygenFingerprintCommand = new SSHKeygenFingerprintProcess(tmpFile);
+        int exitCode = sshKeygenFingerprintCommand.StartSync();
+        if (exitCode != 0) 
         {
             File.Delete(tmpFile);
             return false;

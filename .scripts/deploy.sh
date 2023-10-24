@@ -1,27 +1,25 @@
 #!/bin/bash
 
 # deploy.sh
-# This script deploys a .NET application and installs git-shell executables on a remote server.
+# This script deploys a .NET application and installs the simple-git-shell executable on a remote server.
 
-# Usage: ./deploy.sh [-d destination] [-g gitShellDirectory]
+# Usage: ./deploy.sh [-d destination]
 
 # Default values for optional arguments
-pathToExecutables=""
 destination=""
-gitShellDirectory=""
 
 # Function to handle errors and exit
 handle_error() {
+    echo $1
     echo "Deployment aborted."
     exit 1
 }
 
 # Parse optional arguments
-while getopts "d:g:" opt; do
+while getopts "d:" opt; do
     case "$opt" in
         d) destination=$OPTARG ;;
-        g) gitShellDirectory=$OPTARG ;;
-        \?) handle_error "Invalid option. Usage: $0 [-d destination] [-g gitShellDirectory]" ;;
+        \?) handle_error "Invalid option. Usage: $0 [-d destination]" ;;
     esac
 done
 
@@ -32,9 +30,9 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run the installation script with provided arguments and check for errors
-$(dirname "$0")/install.sh "bin/publish/commands" "$destination" "$gitShellDirectory"
+$(dirname "$0")/install.sh "bin/publish" "$destination"
 if [ $? -ne 0 ]; then
     handle_error "Installation script failed."
 fi
 
-echo "Deployment and installation completed successfully."
+echo "Deployment completed successfully."

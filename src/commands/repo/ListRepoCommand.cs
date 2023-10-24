@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using Server.GitShell.Commands.Repo.Settings;
 using Server.GitShell.Lib.Logging;
 using Server.GitShell.Lib.Utils;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Server.GitShell.Commands.Repo;

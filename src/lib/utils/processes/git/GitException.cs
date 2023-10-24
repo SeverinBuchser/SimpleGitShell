@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Utils.Git;
+namespace Server.GitShell.Lib.Utils.Processes.Git;
 
 public class GitException : ArgumentException 
 {
