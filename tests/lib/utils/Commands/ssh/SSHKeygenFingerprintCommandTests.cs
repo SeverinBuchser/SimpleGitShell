@@ -15,7 +15,7 @@ public class SSHKeygenFingerprintProcessTests : FileSystemTests
         var sshKeygenFingerprintProcess = new SSHKeygenFingerprintProcess("id_rsa.pub");
         
         // When
-        var exitCode = sshKeygenFingerprintProcess.StartSync();
+        var exitCode = sshKeygenFingerprintProcess.Start();
 
         // Then
         Assert.Equal(255, exitCode);
@@ -31,11 +31,11 @@ public class SSHKeygenFingerprintProcessTests : FileSystemTests
         var privateKeyfile = "id_rsa";
         var publicKeyfile = $"{ privateKeyfile }.pub";
         var email = "some-email@host.com";
-        new SSHKeygenGenerateProcess(privateKeyfile, email).StartSync();
+        new SSHKeygenGenerateProcess(privateKeyfile, email).Start();
         var sshKeygenFingerprintCommand = new SSHKeygenFingerprintProcess(publicKeyfile);
         
         // When
-        var exitCode = sshKeygenFingerprintCommand.StartSync();
+        var exitCode = sshKeygenFingerprintCommand.Start();
 
         // Then
         Assert.Equal(0, exitCode);

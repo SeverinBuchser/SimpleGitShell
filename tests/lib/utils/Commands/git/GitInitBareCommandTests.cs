@@ -15,7 +15,7 @@ public class GitInitBareCommandTests : GitTests
         var initProcess = new GitInitBareProcess(repo);
         
         // When
-        var exitCode = initProcess.StartSync();
+        var exitCode = initProcess.Start();
 
         // Then
         var fullRepoDir = Path.GetFullPath(repo) + "/";

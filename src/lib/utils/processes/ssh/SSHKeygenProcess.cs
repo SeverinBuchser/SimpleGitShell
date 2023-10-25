@@ -1,6 +1,6 @@
 namespace Server.GitShell.Lib.Utils.Processes.SSH;
 
-public abstract class SSHKeygenProcess : Process
+public abstract class SSHKeygenProcess : RedirectedProcess
 {
     public SSHKeygenProcess() : this("") {}
     public SSHKeygenProcess(string args) : this(args, Array.Empty<string>()) {}

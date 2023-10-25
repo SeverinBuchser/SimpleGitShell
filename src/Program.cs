@@ -11,21 +11,22 @@ public class Program
 {
     static int Main(string[] args)
     {
-        if (args.Length > 1) {
-            if (args[0] == "-c") args = args[1].Split(" ");
+        if (args.Length == 2 && args[0] == "-c") {
+            args = args[1].Split(" ").Select(arg => arg.Replace("'", "\"")).ToArray();
             switch (args[0])
             {
                 case "git-receive-pack":
                 case "git-upload-pack":
-                    var process = new Process(args[0], string.Join(" ", args.Skip(1)));
-                    process.Attach();
-                    return process.StartSync();
+                    var process = new StdandardInputProcess(args[0], string.Join(" ", args.Skip(1)));
+                    process.Start();
+                    process.WaitForExit();
+                    return process.ExitCode;
                     
                 default:
                     return Shell(args);
             }  
         }
-        return 0;
+        return 1;
     }
 
     private static int Shell(string[] args)

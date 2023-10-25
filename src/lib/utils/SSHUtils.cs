@@ -45,8 +45,7 @@ public static class SSHUtils
         writer.Close();
 
         var sshKeygenFingerprintCommand = new SSHKeygenFingerprintProcess(tmpFile);
-        int exitCode = sshKeygenFingerprintCommand.StartSync();
-        if (exitCode != 0) 
+        if (sshKeygenFingerprintCommand.Start() != 0) 
         {
             File.Delete(tmpFile);
             return false;

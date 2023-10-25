@@ -19,7 +19,7 @@ public class SSHKeygenGenerateProcessTests : FileSystemTests
         var sshKeygenGenerateProcess = new SSHKeygenGenerateProcess(privateKeyfile, email);
         
         // When
-        var exitCode = sshKeygenGenerateProcess.StartSync();
+        var exitCode = sshKeygenGenerateProcess.Start();
 
         // Then
         Assert.Equal(0, exitCode);
@@ -47,14 +47,14 @@ public class SSHKeygenGenerateProcessTests : FileSystemTests
         _CreateDirectory(sshDir);
 
         var firstKeygen = new SSHKeygenGenerateProcess(privateKeyfile, firstKeygenEmail);
-        firstKeygen.StartSync();
+        firstKeygen.Start();
         var firstKeygenPrivateKeyfileText = File.ReadAllText(privateKeyfile);
         var firstKeygenPublicKeyfileText = File.ReadAllText(publicKeyfile);
         
         var secondKeygen = new SSHKeygenGenerateProcess(privateKeyfile, secondKeygenEmail);
         
         // When
-        var exitCode = secondKeygen.StartSync();
+        var exitCode = secondKeygen.Start();
 
         // Then
         Assert.Equal(1, exitCode);

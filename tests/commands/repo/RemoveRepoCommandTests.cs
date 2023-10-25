@@ -113,7 +113,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     public void Run_ExistingRepo_PromptsUserForConfirmation()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         _SetInput("abort");
         var args = new string[]{"repo"};
         
@@ -132,7 +132,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoAbort_DoesNotRemoveRepo()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         _SetInput("abort");
         var args = new string[]{"repo"};
         
@@ -151,7 +151,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoConfirm_RemovesRepo()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         _SetInput(Path.Combine(".", "repo.git"));
         var args = new string[]{"repo"};
         
@@ -169,7 +169,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
         _SetInput("abort");
         var args = new string[]{"repo", $"--group=group"};
         
@@ -190,7 +190,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
 
         _SetInput("abort");
         var args = new string[]{"repo", $"--group=group"};
@@ -212,7 +212,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
 
         _SetInput(repoPath);
         var args = new string[]{"repo", $"--group=group"};

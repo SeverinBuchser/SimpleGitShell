@@ -88,7 +88,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepo_PromptsUserForConfirmation()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         _SetInput("abort");
         var args = new string[]{"repo"};
         
@@ -107,7 +107,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoAbort_DoesNotOverrideRepo()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         var subDirPath = Path.Combine("repo.git", "subdir");
         _CreateDirectory(subDirPath);
         _SetInput("abort");
@@ -128,7 +128,7 @@ public class CreateRepoCommandTests : FileSystemTests
     public void Run_ExistingRepoConfirm_OverridesRepo()
     {
         // Given
-        new GitInitBareProcess("repo.git").StartSync();
+        new GitInitBareProcess("repo.git").Start();
         var subDirPath = Path.Combine("repo.git", "subdir");
         _CreateDirectory(subDirPath);
         _SetInput(Path.Combine(".", "repo.git"));
@@ -179,7 +179,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
         _CreateNonEmptyDirectory(repoPath, "subdir");
         _SetInput("abort");
         var args = new string[]{"repo", $"--group=group"};
@@ -201,7 +201,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
 
         var subDirPath = Path.Combine(repoPath, "subdir");
         _CreateDirectory(subDirPath);
@@ -226,7 +226,7 @@ public class CreateRepoCommandTests : FileSystemTests
         // Given
         _CreateDirectory("group");
         var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareProcess(repoPath).StartSync();
+        new GitInitBareProcess(repoPath).Start();
 
         var subDirPath = Path.Combine(repoPath, "subdir");
         _CreateDirectory(subDirPath);
