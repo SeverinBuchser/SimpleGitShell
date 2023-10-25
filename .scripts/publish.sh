@@ -14,8 +14,12 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Prompt for runtime
-read -p "Please provide the runtime of the host (Valid runtime options: linux-arm64, linux-x64): " runtime
+if [ -z "$1" ]; then
+    # Prompt for runtime
+    read -p "Please provide the runtime of the host (Valid runtime options: linux-arm64, linux-x64): " runtime
+else
+    runtime=$1
+fi
 
 case $runtime in
     linux-arm64|linux-x64)

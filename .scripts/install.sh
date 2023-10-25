@@ -14,8 +14,8 @@ function install_git_shell() {
 
     # Install and configure on the remote server
     ssh "$destination" "sudo -S mv -f simple-git-shell \"/usr/bin/simple-git-shell\" &&
-               sudo chown root:root \"/usr/bin/simple-git-shell\" &&
-               sudo chsh -s /usr/bin/simple-git-shell git"
+               sudo -S chown root:root \"/usr/bin/simple-git-shell\" &&
+               sudo -S chsh -s /usr/bin/simple-git-shell git"
 }
 
 # Prompt for input if not provided as command-line arguments

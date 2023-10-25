@@ -7,6 +7,7 @@
 
 # Default values for optional arguments
 destination=""
+runtime=""
 
 # Function to handle errors and exit
 handle_error() {
@@ -16,15 +17,16 @@ handle_error() {
 }
 
 # Parse optional arguments
-while getopts "d:" opt; do
+while getopts "d:r:" opt; do
     case "$opt" in
         d) destination=$OPTARG ;;
+        r) runtime=$OPTARG ;;
         \?) handle_error "Invalid option. Usage: $0 [-d destination]" ;;
     esac
 done
 
 # Run the deployment script and check for errors
-$(dirname "$0")/publish.sh
+$(dirname "$0")/publish.sh "$runtime"
 if [ $? -ne 0 ]; then
     handle_error "Publishing script failed."
 fi
