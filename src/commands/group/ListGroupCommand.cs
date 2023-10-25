@@ -1,11 +1,11 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Group.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.Group.Settings;
+using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Group;
+namespace SimpleGitShell.Commands.Group;
 
 [Description("Lists all groups.")]
 public class ListGroupCommand : Command<BaseGroupCommandSettings>

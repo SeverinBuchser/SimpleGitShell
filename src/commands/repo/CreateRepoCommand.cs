@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Repo.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
-using Server.GitShell.Lib.Utils.Processes.Git;
+using SimpleGitShell.Commands.Repo.Settings;
+using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Lib.Reading;
+using SimpleGitShell.Lib.Utils;
+using SimpleGitShell.Lib.Utils.Processes.Git;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Repo;
+namespace SimpleGitShell.Commands.Repo;
 
 [Description("Creates a repository.")]
 public class CreateRepoCommand : Command<SpecificRepoCommandSettings>

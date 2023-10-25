@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Repo.Settings;
+namespace SimpleGitShell.Commands.Repo.Settings;
 
 public class SpecificRepoCommandSettings : BaseRepoCommandSettings
 {

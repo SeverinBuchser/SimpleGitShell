@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.SSH.Settings;
+namespace SimpleGitShell.Commands.SSH.User.Settings;
 
 public class BaseSSHCommandSettings : CommandSettings
 {

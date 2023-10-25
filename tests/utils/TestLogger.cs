@@ -1,6 +1,6 @@
-using Server.GitShell.Lib.Logging;
+using SimpleGitShell.Lib.Logging;
 
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils;
 
 public class TestLogger
 {

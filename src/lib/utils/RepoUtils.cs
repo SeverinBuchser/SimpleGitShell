@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using Server.GitShell.Lib.Exceptions.Repo;
+using SimpleGitShell.Lib.Exceptions.Repo;
 
-namespace Server.GitShell.Lib.Utils;
+namespace SimpleGitShell.Lib.Utils;
 
 public static class RepoUtils 
 {

@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using Server.GitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Lib.Exceptions.Group;
 
-namespace Server.GitShell.Lib.Utils;
+namespace SimpleGitShell.Lib.Utils;
 
 public static class GroupUtils 
 {

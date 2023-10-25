@@ -1,9 +1,9 @@
-using Server.GitShell.Commands.Group;
-using Server.GitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Commands.Group;
+using SimpleGitShell.Lib.Exceptions.Group;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.Utils;
 
-namespace Tests.Server.GitShell.Commands.Group;
+namespace Tests.SimpleGitShell.Commands.Group;
 
 [Collection("File System Sequential")]
 public class CreateGroupCommandTests : FileSystemTests

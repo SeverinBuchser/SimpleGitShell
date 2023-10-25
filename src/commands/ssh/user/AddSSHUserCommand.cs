@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.SSH.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.SSH.User.Settings;
+using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.SSH.User;
+namespace SimpleGitShell.Commands.SSH.User;
 
 public class AddSSHUserCommand : Command<BaseSSHCommandSettings>
 {

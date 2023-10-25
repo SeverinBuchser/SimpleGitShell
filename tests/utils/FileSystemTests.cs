@@ -1,4 +1,4 @@
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils;
 
 public class FileSystemTests : TestReader, IDisposable
 {

@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Reading;
+namespace SimpleGitShell.Lib.Reading;
 
 public class Reader : IReader
 {

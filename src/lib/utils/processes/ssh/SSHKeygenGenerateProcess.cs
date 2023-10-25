@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Utils.Processes.SSH;
+namespace SimpleGitShell.Lib.Utils.Processes.SSH;
 
 public class SSHKeygenGenerateProcess : SSHKeygenProcess
 {

@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Exceptions.Group;
+namespace SimpleGitShell.Lib.Exceptions.Group;
 
 public class GroupNameNotValidException : ArgumentException 
 {

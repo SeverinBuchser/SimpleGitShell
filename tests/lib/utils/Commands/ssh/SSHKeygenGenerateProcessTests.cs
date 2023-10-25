@@ -1,7 +1,7 @@
-using Server.GitShell.Lib.Utils.Processes.SSH;
-using Tests.Server.GitShell.Utils;
+using SimpleGitShell.Lib.Utils.Processes.SSH;
+using Tests.SimpleGitShell.Utils;
 
-namespace Tests.Server.GitShell.Lib.Utils.Commands.SSH;
+namespace Tests.SimpleGitShell.Lib.Utils.Commands.SSH;
 
 [Collection("File System Sequential")]
 public class SSHKeygenGenerateProcessTests : FileSystemTests

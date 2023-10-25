@@ -1,8 +1,8 @@
-﻿using Server.GitShell.Commands.Group;
-using Server.GitShell.Commands.Repo;
-using Server.GitShell.Commands.SSH.User;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Utils.Processes;
+﻿using SimpleGitShell.Commands.Group;
+using SimpleGitShell.Commands.Repo;
+using SimpleGitShell.Commands.SSH.User;
+using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Lib.Utils.Processes;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell;

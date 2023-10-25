@@ -1,10 +1,10 @@
-using Server.GitShell.Lib.Utils.Processes.Git;
-using Tests.Server.GitShell.Utils;
+using SimpleGitShell.Lib.Utils.Processes.Git;
+using Tests.SimpleGitShell.Utils;
 
-namespace Tests.Server.GitShell.Lib.Utils.Commands.Git;
+namespace Tests.SimpleGitShell.Lib.Utils.Commands.Git;
 
 [Collection("File System Sequential")]
-public class GitInitBareCommandTests : GitTests
+public class GitInitBareCommandTests : FileSystemTests
 {
 
     [Fact]

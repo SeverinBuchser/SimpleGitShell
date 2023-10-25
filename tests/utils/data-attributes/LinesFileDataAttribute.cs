@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils.DataAttributes;
 
 public class LinesFileDataAttribute : FileDataAttribute
 {

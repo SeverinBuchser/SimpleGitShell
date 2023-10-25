@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Exceptions.SSH;
+namespace SimpleGitShell.Lib.Exceptions.SSH;
 
 public class PublicKeyAlreadyExistsException : SSHException
 {

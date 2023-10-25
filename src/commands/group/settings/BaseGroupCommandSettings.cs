@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Group.Settings;
+namespace SimpleGitShell.Commands.Group.Settings;
 
 public class BaseGroupCommandSettings : CommandSettings
 {

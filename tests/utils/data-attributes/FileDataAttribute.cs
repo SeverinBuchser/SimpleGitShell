@@ -1,7 +1,6 @@
-using System.Reflection;
 using Xunit.Sdk;
 
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils.DataAttributes;
 
 public abstract class FileDataAttribute : DataAttribute
 {

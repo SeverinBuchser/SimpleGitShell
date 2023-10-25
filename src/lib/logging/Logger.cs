@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Logging;
+namespace SimpleGitShell.Lib.Logging;
 
 public class Logger : ILogger
 {

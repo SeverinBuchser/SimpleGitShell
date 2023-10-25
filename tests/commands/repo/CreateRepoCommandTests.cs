@@ -1,11 +1,11 @@
-using Server.GitShell.Commands.Repo;
-using Server.GitShell.Lib.Exceptions.Group;
-using Server.GitShell.Lib.Exceptions.Repo;
-using Server.GitShell.Lib.Utils.Processes.Git;
+using SimpleGitShell.Commands.Repo;
+using SimpleGitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Lib.Exceptions.Repo;
+using SimpleGitShell.Lib.Utils.Processes.Git;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.Utils;
 
-namespace Tests.Server.GitShell.Commands.Repo;
+namespace Tests.SimpleGitShell.Commands.Repo;
 
 [Collection("File System Sequential")]
 public class CreateRepoCommandTests : FileSystemTests

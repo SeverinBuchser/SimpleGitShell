@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using Server.GitShell.Lib.Logging;
+using SimpleGitShell.Lib.Logging;
 
-namespace Server.GitShell.Lib.Utils.Processes;
+namespace SimpleGitShell.Lib.Utils.Processes;
 
 public class LoggerProcess : Process
 {

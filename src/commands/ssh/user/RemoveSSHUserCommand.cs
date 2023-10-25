@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.SSH.Settings;
-using Server.GitShell.Lib.Exceptions.SSH;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.SSH.User.Settings;
+using SimpleGitShell.Lib.Exceptions.SSH;
+using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Lib.Reading;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.SSH.User;
+namespace SimpleGitShell.Commands.SSH.User;
 
 public class RemoveSSHUserCommand : Command<BaseSSHCommandSettings>
 {

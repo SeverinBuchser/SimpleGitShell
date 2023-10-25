@@ -1,4 +1,4 @@
-namespace Server.GitShell.Lib.Utils.Processes.Git;
+namespace SimpleGitShell.Lib.Utils.Processes.Git;
 
 public class GitInitBareProcess : GitProcess
 {

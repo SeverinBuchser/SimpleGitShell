@@ -1,10 +1,11 @@
-using Server.GitShell.Commands.SSH.User;
-using Server.GitShell.Lib.Exceptions.SSH;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.SSH.User;
+using SimpleGitShell.Lib.Exceptions.SSH;
+using SimpleGitShell.Lib.Utils;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.Utils;
+using Tests.SimpleGitShell.Utils.DataAttributes;
 
-namespace Tests.Server.GitShell.Commands.SSH.User;
+namespace Tests.SimpleGitShell.Commands.SSH.User;
 
 [Collection("File System Sequential")]
 public class AddSSHUserCommandTests : FileSystemTests

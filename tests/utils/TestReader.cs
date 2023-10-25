@@ -1,6 +1,6 @@
-using Server.GitShell.Lib.Reading;
+using SimpleGitShell.Lib.Reading;
 
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils;
 
 public class TestReader : TestLogger, IDisposable
 {
