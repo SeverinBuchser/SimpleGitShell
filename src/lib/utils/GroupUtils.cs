@@ -1,25 +1,36 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using SimpleGitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Library.Exceptions.Group;
 
-namespace SimpleGitShell.Lib.Utils;
+namespace SimpleGitShell.Library.Utils;
 
-public static class GroupUtils 
+public static partial class GroupUtils
 {
-    public static string PATTERN = @"^[A-Za-z\d-]*$";
 
     public static void ThrowOnEmptyGroupName([NotNullWhen(true)] string? group)
     {
-        if (string.IsNullOrWhiteSpace(group)) throw new EmptyGroupNameException();
+        if (string.IsNullOrWhiteSpace(group))
+        {
+            throw new EmptyGroupNameException();
+        }
     }
 
     public static void ThrowOnGroupNameNotValid(string repo)
     {
-        if (!Regex.IsMatch(repo, PATTERN)) throw new GroupNameNotValidException(repo);
+        if (!MyRegex().IsMatch(repo))
+        {
+            throw new GroupNameNotValidException(repo);
+        }
     }
 
-    public static void ThrowOnNonExistingGroup(string group) 
+    public static void ThrowOnNonExistingGroup(string group)
     {
-        if (!Directory.Exists(group)) throw new GroupDoesNotExistException(group);
+        if (!Directory.Exists(group))
+        {
+            throw new GroupDoesNotExistException(group);
+        }
     }
+
+    [GeneratedRegex("^[A-Za-z\\d-]*$")]
+    private static partial Regex MyRegex();
 }

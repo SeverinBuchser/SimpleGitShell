@@ -6,15 +6,43 @@ Simple Git Shell is a .NET-based project that provides a custom Git shell for ma
 
 ## Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-  - [Prerequisites](#prerequisites)
-  - [Testing](#testing)
-  - [Building](#building)
-  - [Publishing](#publishing)
-- [License](#license)
+- [Simple Git Shell](#simple-git-shell)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+    - [1. Group](#1-group)
+    - [2. Repositories](#2-repositories)
+    - [3. SSH](#3-ssh)
+      - [1. User](#1-user)
+  - [Installation](#installation)
+    - [Install with Install Script](#install-with-install-script)
+    - [Manual Installation](#manual-installation)
+    - [Verify Installation](#verify-installation)
+    - [Troubleshooting](#troubleshooting)
+  - [Usage](#usage)
+    - [Simple Git Shell Commands](#simple-git-shell-commands)
+      - [Group Commands:](#group-commands)
+      - [List all groups:](#list-all-groups)
+      - [Create a new group:](#create-a-new-group)
+      - [Remove a group:](#remove-a-group)
+      - [Repository Commands:](#repository-commands)
+      - [List all repositories:](#list-all-repositories)
+      - [Create a new repository:](#create-a-new-repository)
+      - [Remove a repository:](#remove-a-repository)
+      - [SSH Commands:](#ssh-commands)
+      - [Manage SSH access for users:](#manage-ssh-access-for-users)
+        - [Add a user by adding an SSH key:](#add-a-user-by-adding-an-ssh-key)
+        - [Remove a user by removing an SSH key:](#remove-a-user-by-removing-an-ssh-key)
+  - [Contributing](#contributing)
+    - [Prerequisites](#prerequisites)
+    - [Testing](#testing)
+    - [Pre-Commit Hooks](#pre-commit-hooks)
+    - [Installation](#installation-1)
+      - [Commit Message Hook (commit-msg)](#commit-message-hook-commit-msg)
+      - [Pre-Commit Code Analysis](#pre-commit-code-analysis)
+    - [Building](#building)
+    - [Publishing](#publishing)
+    - [Deployment](#deployment)
+  - [License](#license)
 
 ## Features
 
@@ -65,7 +93,7 @@ If you prefer to perform the installation manually, you can follow these steps (
 2. **Copy the Shell Script to the Server**: Use the following command to copy the downloaded shell script to your Git server:
 
 	```bash
-	scp -q path/to/simple-git-shell user@host:simple-git-shell
+	scp -q "path/to/simple-git-shell" user@host:simple-git-shell
 	```
 
 	Replace "path/to/simple-git-shell" with the path to the downloaded executable and the "user@host" with the credentials of your git-server. The `user` should not be the git-user but a `sudoer`.
@@ -93,12 +121,12 @@ If you prefer to perform the installation manually, you can follow these steps (
 6. **Set as Default Shell for the git user**: Configure the Git user's default shell to use the Simple Git Shell script. Run the following command on the Git server:
 
     ```bash
-    sudo chsh -s /path/to/simple-git-shell-script git
+    sudo chsh -s "/usr/bin/simple-git-shell" git
     ```
 
 Your Simple Git Shell is now installed, configured as the default shell for Git users, and ready for use on your remote Git server.
 
-### **Verify Installation**
+### Verify Installation
 
 After the installation, it's important to verify that the Simple Git Shell is correctly installed and working. You can do this by running the following command:
 
@@ -112,10 +140,10 @@ For more information on using the Simple Git Shell, refer to the [Usage](#usage)
 
 ### Troubleshooting
 
-If the Simple Git Shell script is not automatically marked as executable after the installation, you may need to make it executable manually using the `chmod` command on the Git server:
+If the Simple Git Shell script is not automatically marked as executable after the installation with the install script, you may need to make it executable manually using the `chmod` command on the Git server:
 
 ```bash
-sudo chmod +x /usr/bin/simple-git-shell
+sudo chmod +x "/usr/bin/simple-git-shell"
 ```
 
 This command ensures that the shell script is made executable.
@@ -258,6 +286,24 @@ Before submitting a pull request, ensure that you have tested the project to val
 	This script automates the testing process, making it a convenient way to ensure that your changes do not introduce regressions. It can be used as an alternative to manual testing.
 
 Both options help ensure that your contributions conform to the project's standards and do not introduce issues.
+
+### Pre-Commit Hooks
+
+To maintain a consistent and organized codebase, we utilize pre-commit hooks that help enforce certain standards and guidelines. These hooks are managed using [Husky](https://typicode.github.io/husky) and play a crucial role in ensuring that our commits adhere to a conventional format.
+
+### Installation
+
+The pre-commit hooks are automatically installed when you run `npm install` in the project directory. There's no need to configure these hooks separately; they will be set up for you.
+
+#### Commit Message Hook (commit-msg)
+
+One of the key pre-commit hooks is the "commit-msg" hook, which checks the format of commit messages to ensure they follow the conventional format defined by [@commitlint/config-conventional](https://www.npmjs.com/package/@commitlint/config-conventional). By using this pre-commit hook, we ensure that every commit message complies with these standards.
+
+Please make sure that your commits meet these commit message conventions, and if you have any questions or need assistance, feel free to reach out to us in the issue discussions or through our communication channels.
+
+#### Pre-Commit Code Analysis
+
+To ensure the quality and consistency of our codebase, we perform code analysis using `dotnet build` and the "Microsoft.CodeAnalysis.NetAnalyzers" NuGet package. This analysis enforces specific coding styles and standards across our project.
 
 ### Building
 

@@ -1,7 +1,8 @@
-namespace SimpleGitShell.Lib.Utils.Processes.SSH;
+namespace SimpleGitShell.Library.Utils.Processes.SSH;
 
 public abstract class SSHKeygenProcess : RedirectedProcess
 {
-    public SSHKeygenProcess(string args) : this(args, Array.Empty<string>()) {}
-    public SSHKeygenProcess(string args, string[] input) : base("ssh-keygen", args, input) {}
+    protected SSHKeygenProcess(string args) : this(args, Array.Empty<string>()) { }
+
+    protected SSHKeygenProcess(string args, string[] input) : base("ssh-keygen", args, input) { }
 }

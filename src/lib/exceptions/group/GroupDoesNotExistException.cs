@@ -1,7 +1,8 @@
-namespace SimpleGitShell.Lib.Exceptions.Group;
+namespace SimpleGitShell.Library.Exceptions.Group;
 
-public class GroupDoesNotExistException : GroupException 
+public class GroupDoesNotExistException : GroupException
 {
-    public GroupDoesNotExistException(string group) : 
-    base($"The group \"{group}\" does not exist.") {}
+    public GroupDoesNotExistException(string group) :
+    base($"The group \"{group}\" does not exist.")
+    { }
 }

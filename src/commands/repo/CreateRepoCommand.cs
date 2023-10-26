@@ -1,10 +1,10 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.Repo.Settings;
-using SimpleGitShell.Lib.Logging;
-using SimpleGitShell.Lib.Reading;
-using SimpleGitShell.Lib.Utils;
-using SimpleGitShell.Lib.Utils.Processes.Git;
+using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Reading;
+using SimpleGitShell.Library.Utils;
+using SimpleGitShell.Library.Utils.Processes.Git;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo;
@@ -20,10 +20,11 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
         GroupUtils.ThrowOnNonExistingGroup(groupPath);
         var repoPath = Path.Combine(groupPath, repo + ".git");
 
-        if (Directory.Exists(repoPath)) {
+        if (Directory.Exists(repoPath))
+        {
             Logger.Instance.Warn($"The repository already exists. The repository will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the repository ({ repoPath }), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != repoPath) 
+            Logger.Instance.Warn($"Please confirm by typing the name of the repository ({repoPath}), or anything else to abort:");
+            if (Reader.Instance.ReadLine() != repoPath)
             {
                 Logger.Instance.Warn("The input did not match the name of the repository. Aborting.");
                 return 0;
@@ -31,13 +32,15 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
             Directory.Delete(repoPath, true);
         }
 
-        var gitInitBareProcess = new GitInitBareProcess(repoPath);
-        if (gitInitBareProcess.Start() != 0) 
+        using (var gitInitBareProcess = new GitInitBareProcess(repoPath))
         {
-            throw new GitException(gitInitBareProcess.StandardError.ReadToEnd());
+            if (gitInitBareProcess.Start() != 0)
+            {
+                throw new GitException(gitInitBareProcess.StandardError.ReadToEnd());
+            }
         }
 
-        Logger.Instance.Info($"Created repository \"{ repo }\" of group \"{ group }\".");
+        Logger.Instance.Info($"Created repository \"{repo}\" of group \"{group}\".");
         return 0;
     }
 }

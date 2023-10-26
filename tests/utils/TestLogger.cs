@@ -1,21 +1,22 @@
-using SimpleGitShell.Lib.Logging;
+using SimpleGitShell.Library.Logging;
 
 namespace Tests.SimpleGitShell.Utils;
 
+#pragma warning disable CA1001
 public class TestLogger
+#pragma warning restore CA1001
 {
-    protected StringWriter _CaptureWriter = new();
+    public StringWriter CaptureWriter { get; } = new();
 
     public TestLogger()
     {
-        if (Environment.GetEnvironmentVariable("VERBOSE") != "true") 
+        if (Environment.GetEnvironmentVariable("VERBOSE") != "true")
         {
-            Logger.SetOut(_CaptureWriter);
-        } 
+            Logger.SetOut(CaptureWriter);
+        }
         else
         {
-            Logger.AddOut(_CaptureWriter);
+            Logger.AddOut(CaptureWriter);
         }
     }
-
-} 
+}

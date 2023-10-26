@@ -1,19 +1,19 @@
-using SimpleGitShell.Lib.Utils.Processes.SSH;
+using SimpleGitShell.Library.Utils.Processes.SSH;
 using Tests.SimpleGitShell.Utils;
 
-namespace Tests.SimpleGitShell.Lib.Utils.Commands.SSH;
+namespace Tests.SimpleGitShell.Library.Utils.Commands.SSH;
 
 [Collection("File System Sequential")]
 public class SSHKeygenFingerprintProcessTests : FileSystemTests
 {
 
     [Fact]
-    public void ValidateFingerPrint_InvalidSSHPublicKey_FailsWith255()
+    public void ValidateFingerPrintInvalidSSHPublicKeyFailsWith255()
     {
         // Given
-        _CreateFile("id_rsa.pub", "invalid content");
+        CreateFile("id_rsa.pub", "invalid content");
         var sshKeygenFingerprintProcess = new SSHKeygenFingerprintProcess("id_rsa.pub");
-        
+
         // When
         var exitCode = sshKeygenFingerprintProcess.Start();
 
@@ -21,27 +21,31 @@ public class SSHKeygenFingerprintProcessTests : FileSystemTests
         Assert.Equal(255, exitCode);
 
         // Finally
-        _DeleteFile("id_rsa.pub");
+        DeleteFile("id_rsa.pub");
+        sshKeygenFingerprintProcess.Dispose();
     }
 
     [Fact]
-    public void CreateSSHKeypair_ExistingKeyfiles_DoesNotOverrideExistingFiles()
+    public void CreateSSHKeypairExistingKeyfilesDoesNotOverrideExistingFiles()
     {
         // Given
         var privateKeyfile = "id_rsa";
-        var publicKeyfile = $"{ privateKeyfile }.pub";
+        var publicKeyfile = $"{privateKeyfile}.pub";
         var email = "some-email@host.com";
-        new SSHKeygenGenerateProcess(privateKeyfile, email).Start();
-        var sshKeygenFingerprintCommand = new SSHKeygenFingerprintProcess(publicKeyfile);
-        
+        var firstSSHKeygenFingerprintCommand = new SSHKeygenGenerateProcess(privateKeyfile, email);
+        firstSSHKeygenFingerprintCommand.Start();
+        var secondSSHKeygenFingerprintCommand = new SSHKeygenFingerprintProcess(publicKeyfile);
+
         // When
-        var exitCode = sshKeygenFingerprintCommand.Start();
+        var exitCode = secondSSHKeygenFingerprintCommand.Start();
 
         // Then
         Assert.Equal(0, exitCode);
 
         // Finally
-        _DeleteFile(privateKeyfile);
-        _DeleteFile(publicKeyfile);
+        DeleteFile(privateKeyfile);
+        DeleteFile(publicKeyfile);
+        firstSSHKeygenFingerprintCommand.Dispose();
+        secondSSHKeygenFingerprintCommand.Dispose();
     }
 }

@@ -1,11 +1,11 @@
 using System.ComponentModel;
-using SimpleGitShell.Lib.Utils;
+using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo.Settings;
 
 public class BaseRepoCommandSettings : CommandSettings
-{    
+{
     [Description("The name of the group.")]
     [CommandOption("-g|--group")]
     [DefaultValue("root")]

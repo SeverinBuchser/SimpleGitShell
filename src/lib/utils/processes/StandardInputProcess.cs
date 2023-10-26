@@ -1,15 +1,15 @@
 using System.Diagnostics;
 
-namespace SimpleGitShell.Lib.Utils.Processes;
+namespace SimpleGitShell.Library.Utils.Processes;
 
 public class StdandardInputProcess : Process
 {
-    public StdandardInputProcess(string fileName) : this(fileName, "") {}
+    public StdandardInputProcess(string fileName) : this(fileName, "") { }
     public StdandardInputProcess(string fileName, string args)
     {
-        StartInfo = new ProcessStartInfo 
+        StartInfo = new ProcessStartInfo
         {
-            FileName = fileName, 
+            FileName = fileName,
             Arguments = args,
             UseShellExecute = false,
             CreateNoWindow = true

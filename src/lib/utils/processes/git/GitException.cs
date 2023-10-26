@@ -1,6 +1,6 @@
-namespace SimpleGitShell.Lib.Utils.Processes.Git;
+namespace SimpleGitShell.Library.Utils.Processes.Git;
 
-public class GitException : ArgumentException 
+public class GitException : ArgumentException
 {
-    public GitException(string message) : base(message) {}
+    public GitException(string message) : base(message) { }
 }

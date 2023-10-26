@@ -1,6 +1,6 @@
-namespace SimpleGitShell.Lib.Exceptions.SSH;
+namespace SimpleGitShell.Library.Exceptions.SSH;
 
-public class SSHException : Exception 
+public class SSHException : Exception
 {
-    public SSHException(string message) : base(message) {}
+    public SSHException(string message) : base(message) { }
 }

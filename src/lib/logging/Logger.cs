@@ -1,4 +1,6 @@
-namespace SimpleGitShell.Lib.Logging;
+using System.Diagnostics.CodeAnalysis;
+
+namespace SimpleGitShell.Library.Logging;
 
 public class Logger : ILogger
 {
@@ -6,32 +8,32 @@ public class Logger : ILogger
         Console.Out
     };
 
-    private static readonly Logger _instance = new();
+    public static Logger Instance { get; } = new();
 
-    public static Logger Instance
+    static Logger()
     {
-        get => _instance;
     }
 
-    static Logger() {
-    }
+    private const int _prefixWidth = 28;
 
-    private static readonly int _prefixWidth = 28;
+    private Logger() { }
 
-    private Logger() {}
-
-    public void Log(string message, LogLevel level)
+    public void Log([NotNull] string message, LogLevel level)
     {
         var levelString = Enum.GetName(typeof(LogLevel), level);
         var timeString = string.Format("{0:dd/mm/yyyy HH:mm:ss}", DateTime.Now);
-        var prefix = $"[{ timeString } { levelString }]".PadRight(_prefixWidth);
+        var prefix = $"[{timeString} {levelString}]".PadRight(_prefixWidth);
         var lines = message.Split("\n").Select(line => prefix + line);
         var outMessage = string.Join("\n", lines);
-        if (!outMessage.EndsWith("\n")) outMessage += "\n";
+        if (!outMessage.EndsWith("\n"))
+        {
+            outMessage += "\n";
+        }
+
         Write(outMessage);
     }
 
-    private void Write(string message)
+    private static void Write(string message)
     {
         foreach (var writer in _writers)
         {
@@ -39,7 +41,7 @@ public class Logger : ILogger
         }
     }
 
-    public static void SetOut(TextWriter writer) 
+    public static void SetOut(TextWriter writer)
     {
         _writers = new List<TextWriter>
         {
@@ -47,7 +49,7 @@ public class Logger : ILogger
         };
     }
 
-    public static void AddOut(TextWriter writer) 
+    public static void AddOut(TextWriter writer)
     {
         _writers.Add(writer);
     }

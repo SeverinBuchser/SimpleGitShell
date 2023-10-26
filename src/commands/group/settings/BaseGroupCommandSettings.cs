@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using SimpleGitShell.Lib.Utils;
+using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Group.Settings;

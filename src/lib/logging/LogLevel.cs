@@ -1,4 +1,4 @@
-namespace SimpleGitShell.Lib.Logging;
+namespace SimpleGitShell.Library.Logging;
 
 public enum LogLevel
 {

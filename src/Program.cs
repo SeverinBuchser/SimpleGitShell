@@ -1,17 +1,18 @@
-﻿using SimpleGitShell.Commands.Group;
+using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShell.Lib.Logging;
-using SimpleGitShell.Lib.Utils.Processes;
+using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Utils.Processes;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell;
 
 public class Program
 {
-    static int Main(string[] args)
+    private static int Main(string[] args)
     {
-        if (args.Length == 2 && args[0] == "-c") {
+        if (args.Length == 2 && args[0] == "-c")
+        {
             args = args[1].Split(" ").Select(arg => arg.Replace("'", "\"")).ToArray();
             switch (args[0])
             {
@@ -21,10 +22,10 @@ public class Program
                     process.Start();
                     process.WaitForExit();
                     return process.ExitCode;
-                    
+
                 default:
                     return Shell(args);
-            }  
+            }
         }
         return 1;
     }
@@ -32,11 +33,15 @@ public class Program
     private static int Shell(string[] args)
     {
         var app = BuildShell();
-        try 
+        try
         {
             return app.Run(args);
         }
-        catch (Exception e) {
+
+#pragma warning disable CA1031
+        catch (Exception e)
+#pragma warning restore CA1031
+        {
             Logger.Instance.Error(e.Message);
             return 128;
         }
@@ -45,26 +50,26 @@ public class Program
     private static CommandApp BuildShell()
     {
         var app = new CommandApp();
-        app.Configure(config => 
+        app.Configure(config =>
         {
             // TODO
             config.SetApplicationVersion("___VERSION___");
-            config.AddBranch("group", config => 
+            config.AddBranch("group", config =>
             {
                 config.AddCommand<ListGroupCommand>("list");
                 config.AddCommand<CreateGroupCommand>("create");
                 config.AddCommand<RemoveGroupCommand>("remove");
             });
 
-            config.AddBranch("repo", config => 
+            config.AddBranch("repo", config =>
             {
                 config.AddCommand<ListRepoCommand>("list");
                 config.AddCommand<CreateRepoCommand>("create");
                 config.AddCommand<RemoveRepoCommand>("remove");
             });
-            config.AddBranch("ssh", config => 
+            config.AddBranch("ssh", config =>
             {
-                config.AddBranch("user", config => 
+                config.AddBranch("user", config =>
                 {
                     config.AddCommand<AddSSHUserCommand>("add");
                     config.AddCommand<RemoveSSHUserCommand>("remove");

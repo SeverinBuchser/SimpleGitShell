@@ -1,6 +1,6 @@
-namespace SimpleGitShell.Lib.Exceptions.SSH;
+namespace SimpleGitShell.Library.Exceptions.SSH;
 
-public class PublicKeyDoesNotExistException : SSHException 
+public class PublicKeyDoesNotExistException : SSHException
 {
-    public PublicKeyDoesNotExistException() : base($"The public key does not exist.") {}
+    public PublicKeyDoesNotExistException() : base($"The public key does not exist.") { }
 }

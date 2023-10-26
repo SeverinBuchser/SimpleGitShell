@@ -1,23 +1,23 @@
-using SimpleGitShell.Lib.Utils.Processes.SSH;
+using SimpleGitShell.Library.Utils;
+using SimpleGitShell.Library.Utils.Processes.SSH;
 using Tests.SimpleGitShell.Utils;
 
-namespace Tests.SimpleGitShell.Lib.Utils.Commands.SSH;
+namespace Tests.SimpleGitShell.Library.Utils.Commands.SSH;
 
 [Collection("File System Sequential")]
 public class SSHKeygenGenerateProcessTests : FileSystemTests
 {
 
     [Fact]
-    public void CreateSSHKeypair_NonExistingKeyfiles_GeneratesKeypair()
+    public void CreateSSHKeypairNonExistingKeyfilesGeneratesKeypair()
     {
         // Given
-        var sshDir = ".ssh";
-        var privateKeyfile = Path.Combine(sshDir, "id_rsa");
-        var publicKeyfile = Path.Combine(sshDir, "id_rsa.pub");
+        var privateKeyfile = Path.Combine(SSHUtils.SSHPath, "id_rsa");
+        var publicKeyfile = Path.Combine(SSHUtils.SSHPath, "id_rsa.pub");
         var email = "some-email@host.com";
-        _CreateDirectory(sshDir);
+        CreateDirectory(SSHUtils.SSHPath);
         var sshKeygenGenerateProcess = new SSHKeygenGenerateProcess(privateKeyfile, email);
-        
+
         // When
         var exitCode = sshKeygenGenerateProcess.Start();
 
@@ -26,17 +26,20 @@ public class SSHKeygenGenerateProcessTests : FileSystemTests
 
         Assert.True(File.Exists(privateKeyfile));
         var privateKeyfileText = File.ReadAllText(privateKeyfile);
-        Assert.Contains("-----BEGIN OPENSSH PRIVATE KEY-----", privateKeyfileText);
-        Assert.Contains("-----END OPENSSH PRIVATE KEY-----", privateKeyfileText);
+        Assert.Contains("-----BEGIN OPENSSH PRIVATE KEY-----", privateKeyfileText, StringComparison.Ordinal);
+        Assert.Contains("-----END OPENSSH PRIVATE KEY-----", privateKeyfileText, StringComparison.Ordinal);
 
         Assert.True(File.Exists(publicKeyfile));
         var publicKeyfileText = File.ReadAllText(publicKeyfile);
-        Assert.Contains("ssh-rsa", publicKeyfileText);
-        Assert.Contains(email, publicKeyfileText);
+        Assert.Contains("ssh-rsa", publicKeyfileText, StringComparison.Ordinal);
+        Assert.Contains(email, publicKeyfileText, StringComparison.Ordinal);
+
+        // Finally
+        sshKeygenGenerateProcess.Dispose();
     }
 
     [Fact]
-    public void CreateSSHKeypair_ExistingKeyfiles_DoesNotOverrideExistingFiles()
+    public void CreateSSHKeypairExistingKeyfilesDoesNotOverrideExistingFiles()
     {
         // Given
         var sshDir = ".ssh";
@@ -44,15 +47,15 @@ public class SSHKeygenGenerateProcessTests : FileSystemTests
         var publicKeyfile = Path.Combine(sshDir, "id_rsa.pub");
         var firstKeygenEmail = "first-email@host.com";
         var secondKeygenEmail = "second-email@host.com";
-        _CreateDirectory(sshDir);
+        CreateDirectory(sshDir);
 
         var firstKeygen = new SSHKeygenGenerateProcess(privateKeyfile, firstKeygenEmail);
         firstKeygen.Start();
         var firstKeygenPrivateKeyfileText = File.ReadAllText(privateKeyfile);
         var firstKeygenPublicKeyfileText = File.ReadAllText(publicKeyfile);
-        
+
         var secondKeygen = new SSHKeygenGenerateProcess(privateKeyfile, secondKeygenEmail);
-        
+
         // When
         var exitCode = secondKeygen.Start();
 
@@ -64,6 +67,8 @@ public class SSHKeygenGenerateProcessTests : FileSystemTests
         Assert.Equal(firstKeygenPublicKeyfileText, secondKeygenPublicKeyfileText);
 
         // Finally
-        _DeleteDirectory(".ssh");
+        DeleteDirectory(".ssh");
+        firstKeygen.Dispose();
+        secondKeygen.Dispose();
     }
 }

@@ -1,6 +1,6 @@
-namespace SimpleGitShell.Lib.Exceptions.Group;
+namespace SimpleGitShell.Library.Exceptions.Group;
 
-public class GroupException : Exception 
+public class GroupException : Exception
 {
-    public GroupException(string message) : base(message) {}
+    public GroupException(string message) : base(message) { }
 }

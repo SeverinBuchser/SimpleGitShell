@@ -1,6 +1,6 @@
-namespace SimpleGitShell.Lib.Reading;
+namespace SimpleGitShell.Library.Reading;
 
-interface IReader
+internal interface IReader
 {
     public string? ReadLine();
 }

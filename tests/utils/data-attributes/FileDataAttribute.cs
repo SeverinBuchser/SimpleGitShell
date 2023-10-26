@@ -4,18 +4,24 @@ namespace Tests.SimpleGitShell.Utils.DataAttributes;
 
 public abstract class FileDataAttribute : DataAttribute
 {
-    private readonly string _filename;
-
-    protected string _fileData 
+    protected string FileData
     {
-        get {
-            if (!File.Exists(_filename)) throw new ArgumentException("The file does not exit");
-            return File.ReadAllText(_filename);
+        get
+        {
+#pragma warning disable CA1065
+            if (!File.Exists(Filename))
+            {
+                throw new ArgumentException("The file does not exit");
+            }
+#pragma warning restore CA1065
+            return File.ReadAllText(Filename);
         }
     }
 
-    public FileDataAttribute(string filename)
+    protected FileDataAttribute(string filename)
     {
-        _filename = filename;
+        Filename = filename;
     }
+
+    public string Filename { get; }
 }
