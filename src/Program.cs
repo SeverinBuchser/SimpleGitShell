@@ -2,6 +2,7 @@ using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Commands.SSH.User;
 using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Utils;
 using SimpleGitShell.Library.Utils.Processes;
 using Spectre.Console.Cli;
 
@@ -52,8 +53,7 @@ public class Program
         var app = new CommandApp();
         app.Configure(config =>
         {
-            // TODO
-            config.SetApplicationVersion("___VERSION___");
+            config.SetApplicationVersion(VerstionUtils.InformationalVersion());
             config.AddBranch("group", config =>
             {
                 config.AddCommand<ListGroupCommand>("list");

@@ -1,19 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<PublishSingleFile>true</PublishSingleFile>
-		<DebugType>embedded</DebugType>
-		<PublishDir>$(SolutionDir)/bin/publish</PublishDir>
-	</PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PublishSingleFile>true</PublishSingleFile>
+        <DebugType>embedded</DebugType>
+        <PublishDir>$(SolutionDir)/bin/publish</PublishDir>
+        <Version>1.3.0</Version>
+    </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="ConsoleTables" Version="2.5.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
+    </ItemGroup>
+
+    <Target Name="MessageBeforeBuild" BeforeTargets="BeforeBuild">
+        <Message Text="$(ApplicationVersion)" Importance="high" />
+    </Target>
 </Project>
