@@ -35,13 +35,16 @@ Simple Git Shell is a .NET-based project that provides a custom Git shell for ma
   - [Contributing](#contributing)
     - [Prerequisites](#prerequisites)
     - [Testing](#testing)
+      - [Options](#options)
     - [Pre-Commit Hooks](#pre-commit-hooks)
-    - [Installation](#installation-1)
+      - [Installation](#installation-1)
       - [Commit Message Hook (commit-msg)](#commit-message-hook-commit-msg)
       - [Pre-Commit Code Analysis](#pre-commit-code-analysis)
     - [Building](#building)
     - [Publishing](#publishing)
+      - [Options](#options-1)
     - [Deployment](#deployment)
+      - [Options](#options-2)
   - [License](#license)
 
 ## Features
@@ -259,39 +262,30 @@ We welcome contributions from the open-source community. If you would like to co
 Before contributing, ensure you have the following prerequisites:
 
 - **.NET SDK**: Install .NET if you haven't already. You can download it from [dotnet.microsoft.com](https://dotnet.microsoft.com/download).
+- **Node.js**: Install Node.js if you haven't already. You can download it from [nodejs.org](https://nodejs.org/).
 
 ### Testing
 
-Before submitting a pull request, ensure that you have tested the project to validate your changes. You have two options for testing:
+Before submitting a pull request, ensure that you have tested the project to validate your changes. You can use the testing script `.scripts/test.sh`. To run tests, use the following command:
 
-1. **Manual Testing**: Navigate to the project directory and run the tests using the following command:
+```bash
+$ .scripts/test.sh [options]
+```
 
-     ```bash
-     dotnet test
-     ```
+#### Options
 
-   This will execute the test suite to verify that your changes do not introduce regressions and conform to the project's coding standards.
-
-2. **Automated Testing Script**: Alternatively, you can use the provided testing script located at `.scripts/test.sh` to run the tests:
-
-     ```bash
-     .scripts/test.sh [options]
-     ```
-
-	Options:
-	- `-c, --coverage`: Perform coverage analysis. Cannot be used with the watch option.
-	- `-w, --watch`: Start watching for changes.
-	- `-d, --debug`: Enable debugging mode.
-
-	This script automates the testing process, making it a convenient way to ensure that your changes do not introduce regressions. It can be used as an alternative to manual testing.
-
-Both options help ensure that your contributions conform to the project's standards and do not introduce issues.
+- `-c, --coverage`: Perform coverage analysis (Cannot be used with the watch option).
+- `-w, --watch`: Start watching for changes.
+- `-v, --verbose`: Set verbosity level:
+  - `quiet` for quiet output (default).
+  - `debug` for debug output.
+- `-h, --help`: Show this usage information.
 
 ### Pre-Commit Hooks
 
 To maintain a consistent and organized codebase, we utilize pre-commit hooks that help enforce certain standards and guidelines. These hooks are managed using [Husky](https://typicode.github.io/husky) and play a crucial role in ensuring that our commits adhere to a conventional format.
 
-### Installation
+#### Installation
 
 The pre-commit hooks are automatically installed when you run `npm install` in the project directory. There's no need to configure these hooks separately; they will be set up for you.
 
@@ -317,32 +311,32 @@ This will compile the project, and you can then execute the generated shell scri
 
 ### Publishing
 
-To publish the project and create the shell script, use the following command:
+The `publish.sh` script is used for publishing your project. This section provides information on how to use the script for publishing purposes. You can use the publishing script `.scripts/publish.sh`. To publish the application, use the following command:
 
 ```bash
-dotnet publish
+$ .scripts/publish.sh [-b bump-version] [-r runtime]
 ```
 
-This command will generate the shell script, and you can deploy it to your Git server.
+#### Options
 
-Please ensure that you follow the project's code of conduct and licensing terms.
+- `-r, --runtime`: Set the target runtime, which can be either `linux-arm64` or `linux-x64`.
+- `-b, --bump-version`: Specify the type of version bump you want to apply. Options include `major`, `minor`, `patch`, or `nobump` (default: `nobump`).
+- `-h, --help`: Display usage information.
 
 ### Deployment
 
-If you are responsible for deploying the Simple Git Shell to a Git server, you can use the provided deployment script located at `.scripts/deploy.sh`. To deploy the Simple Git Shell, follow these steps:
+If you are responsible for deploying the Simple Git Shell to a Git server, you can use the provided deployment script located at `.scripts/deploy.sh`. To deploy your project, use the following command:
 
-1. Open a terminal and navigate to your project directory.
-2. Run the deployment script using the following command:
+```bash
+$ .scripts/deploy.sh [-d destination] [-r runtime] [-b version]
+```
 
-   ```bash
-   .scripts/deploy.sh -d user@host
-   ```
+#### Options
 
-   Replace `user@host` with the destination SSH address of your Git server.
-
-This deployment script automates the process of deploying the Simple Git Shell to your remote Git server, making it a convenient way to ensure a smooth deployment.
-
-If you have any further updates or questions, please let me know.
+- `-d, --destination`: Set the deployment destination (e.g., user@server).
+- `-r, --runtime`: Set the target runtime, which can be either `linux-arm64` or `linux-x64`.
+- `-b, --bump-version`: Set the version bump type, which can be `major`, `minor`, or `patch`.
+- `-h, --help`: Display usage information.
 
 ## License
 
