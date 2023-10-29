@@ -1,23 +1,19 @@
-namespace Server.GitShell.Lib.Reading;
+namespace SimpleGitShell.Library.Reading;
 
 public class Reader : IReader
 {
     private static TextReader _reader = Console.In;
 
-    private static readonly Reader _instance = new();
+    public static Reader Instance { get; } = new();
 
-    public static Reader Instance
+    static Reader()
     {
-        get => _instance;
     }
 
-    static Reader() {
-    }
-
-    private Reader() {}
+    private Reader() { }
 
     public string? ReadLine()
-    {   
+    {
         return _reader.ReadLine();
     }
 

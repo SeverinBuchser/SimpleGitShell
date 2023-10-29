@@ -1,51 +1,51 @@
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils;
 
-public class FileSystemTests : TestReader, IDisposable
+public class FileSystemTests : TestReader
 {
-    protected static string _CWD = "test_dir";
+    protected static readonly string CWD = "test_dir";
 
     public FileSystemTests() : base()
     {
-        _CreateDirectory(_CWD);
-        Directory.SetCurrentDirectory(_CWD);
+        CreateDirectory(CWD);
+        Directory.SetCurrentDirectory(CWD);
     }
 
     public override void Dispose()
     {
         base.Dispose();
         Directory.SetCurrentDirectory(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName);
-        Directory.Delete(_CWD, true);
+        Directory.Delete(CWD, true);
     }
 
-    protected static void _CreateDirectory(string directory)
+    protected static void CreateDirectory(string directory)
     {
         Directory.CreateDirectory(directory);
     }
 
-    protected static void _CreateNonEmptyDirectory(string directory, string subdir)
+    protected static void CreateNonEmptyDirectory(string directory, string subdir)
     {
         Directory.CreateDirectory(Path.Combine(directory, subdir));
     }
 
-    protected static void _DeleteDirectory(string directory)
+    protected static void DeleteDirectory(string directory)
     {
         Directory.Delete(directory, true);
     }
 
-    protected static string _CreationTime(string directory)
+    protected static string CreationTime(string directory)
     {
         return Directory.GetCreationTime(directory).ToString();
     }
 
-    protected static void _CreateFile(string filename, string content)
+    protected static void CreateFile(string filename, string content)
     {
         var writer = File.CreateText(filename);
         writer.Write(content);
         writer.Close();
     }
 
-    protected static void _DeleteFile(string filename)
+    protected static void DeleteFile(string filename)
     {
         File.Delete(filename);
     }
-} 
+}

@@ -1,29 +1,30 @@
-using Server.GitShell.Lib.Utils.Commands.Git;
-using Tests.Server.GitShell.Utils;
+using SimpleGitShell.Library.Utils.Processes.Git;
+using Tests.SimpleGitShell.Utils;
 
-namespace Tests.Server.GitShell.Lib.Utils.Commands.Git;
+namespace Tests.SimpleGitShell.Library.Utils.Commands.Git;
 
 [Collection("File System Sequential")]
-public class GitInitBareCommandTests : GitTests
+public class GitInitBareCommandTests : FileSystemTests
 {
 
     [Fact]
-    public void CreateGitRepo_ValidRepo_CreatesGitRepository()
+    public void CreateGitRepoValidRepoCreatesGitRepository()
     {
         // Given
         var repo = "repo";
-        var initCommand = new GitInitBareCommand(repo);
-        
+        var initProcess = new GitInitBareProcess(repo);
+
         // When
-        var process = initCommand.Start();
+        var exitCode = initProcess.Start();
 
         // Then
         var fullRepoDir = Path.GetFullPath(repo) + "/";
-        Assert.Equal(0, process.ExitCode);
-        Assert.Equal($"Initialized empty Git repository in { fullRepoDir }", process.StandardOutput.ReadLine());
+        Assert.Equal(0, exitCode);
+        Assert.Equal($"Initialized empty Git repository in {fullRepoDir}", initProcess.StandardOutput.ReadLine());
         Assert.True(Directory.Exists(repo));
 
         // Finally
-        _DeleteDirectory(repo);
+        DeleteDirectory(repo);
+        initProcess.Dispose();
     }
 }

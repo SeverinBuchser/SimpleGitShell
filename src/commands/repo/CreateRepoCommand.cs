@@ -1,14 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Repo.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
-using Server.GitShell.Lib.Utils.Commands.Git;
-using Server.GitShell.Lib.Utils.Git;
+using SimpleGitShell.Commands.Repo.Settings;
+using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Reading;
+using SimpleGitShell.Library.Utils;
+using SimpleGitShell.Library.Utils.Processes.Git;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Repo;
+namespace SimpleGitShell.Commands.Repo;
 
 [Description("Creates a repository.")]
 public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
@@ -21,10 +20,11 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
         GroupUtils.ThrowOnNonExistingGroup(groupPath);
         var repoPath = Path.Combine(groupPath, repo + ".git");
 
-        if (Directory.Exists(repoPath)) {
+        if (Directory.Exists(repoPath))
+        {
             Logger.Instance.Warn($"The repository already exists. The repository will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the repository ({ repoPath }), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != repoPath) 
+            Logger.Instance.Warn($"Please confirm by typing the name of the repository ({repoPath}), or anything else to abort:");
+            if (Reader.Instance.ReadLine() != repoPath)
             {
                 Logger.Instance.Warn("The input did not match the name of the repository. Aborting.");
                 return 0;
@@ -32,14 +32,15 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
             Directory.Delete(repoPath, true);
         }
 
-        var gitInitCommand = new GitInitBareCommand(repoPath);
-        var process = gitInitCommand.Start();
-        if (process.ExitCode != 0) 
+        using (var gitInitBareProcess = new GitInitBareProcess(repoPath))
         {
-            throw new GitException(process.StandardError.ReadToEnd());
+            if (gitInitBareProcess.Start() != 0)
+            {
+                throw new GitException(gitInitBareProcess.StandardError.ReadToEnd());
+            }
         }
 
-        Logger.Instance.Info($"Created repository \"{ repo }\" of group \"{ group }\".");
+        Logger.Instance.Info($"Created repository \"{repo}\" of group \"{group}\".");
         return 0;
     }
 }

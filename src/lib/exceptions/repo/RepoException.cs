@@ -1,5 +1,6 @@
-namespace Server.GitShell.Lib.Exceptions.Repo;
-public class RepoException : Exception 
+namespace SimpleGitShell.Library.Exceptions.Repo;
+
+public class RepoException : Exception
 {
-    public RepoException(string message) : base(message) {}
+    public RepoException(string message) : base(message) { }
 }

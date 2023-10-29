@@ -1,10 +1,10 @@
-using Server.GitShell.Lib.Reading;
+using SimpleGitShell.Library.Reading;
 
-namespace Tests.Server.GitShell.Utils;
+namespace Tests.SimpleGitShell.Utils;
 
 public class TestReader : TestLogger, IDisposable
 {
-    protected static void _SetInput(string input)
+    protected static void SetInput(string input)
     {
         Reader.SetIn(new StringReader(input));
     }
@@ -13,4 +13,4 @@ public class TestReader : TestLogger, IDisposable
     {
         Reader.SetIn(Console.In);
     }
-} 
+}

@@ -1,12 +1,12 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Group.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.Group.Settings;
+using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Reading;
+using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Group;
+namespace SimpleGitShell.Commands.Group;
 
 [Description("Creates a group.")]
 public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
@@ -19,10 +19,11 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
         GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
         var groupPath = Path.Combine(baseGroupPath, group);
 
-        if (Directory.Exists(groupPath)) {
+        if (Directory.Exists(groupPath))
+        {
             Logger.Instance.Warn($"The group already exists. The group will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the group ({ groupPath }), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != groupPath) 
+            Logger.Instance.Warn($"Please confirm by typing the name of the group ({groupPath}), or anything else to abort:");
+            if (Reader.Instance.ReadLine() != groupPath)
             {
                 Logger.Instance.Warn("The input did not match the name of the group. Aborting.");
                 return 0;
@@ -31,7 +32,7 @@ public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
         }
 
         Directory.CreateDirectory(groupPath);
-        Logger.Instance.Info($"Created group \"{ group }\" of group \"{ baseGroup }\".");
+        Logger.Instance.Info($"Created group \"{group}\" of group \"{baseGroup}\".");
         return 0;
     }
 }

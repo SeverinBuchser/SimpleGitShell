@@ -1,12 +1,12 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Repo.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
+using SimpleGitShell.Commands.Repo.Settings;
+using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Library.Reading;
+using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
-namespace Server.GitShell.Commands.Repo;
+namespace SimpleGitShell.Commands.Repo;
 
 [Description("Removes a repository.")]
 public class RemoveRepoCommand : Command<SpecificRepoCommandSettings>
@@ -20,15 +20,15 @@ public class RemoveRepoCommand : Command<SpecificRepoCommandSettings>
         var repoPath = Path.Combine(groupPath, repo + ".git");
         RepoUtils.ThrowOnNonExistingRepo(repoPath);
 
-        Logger.Instance.Warn($"Please confirm by typing the name of the repository ({ repoPath }):");
-        if (Reader.Instance.ReadLine() != repoPath) 
+        Logger.Instance.Warn($"Please confirm by typing the name of the repository ({repoPath}):");
+        if (Reader.Instance.ReadLine() != repoPath)
         {
             Logger.Instance.Warn("The input did not match the name of the repository. Aborting.");
             return 0;
         }
 
         Directory.Delete(repoPath, true);
-        Logger.Instance.Info($"Removed repository \"{ repo }\" of group \"{ group }\".");
+        Logger.Instance.Info($"Removed repository \"{repo}\" of group \"{group}\".");
         return 0;
     }
 }

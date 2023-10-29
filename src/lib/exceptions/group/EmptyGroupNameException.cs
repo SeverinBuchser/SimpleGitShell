@@ -1,6 +1,7 @@
-namespace Server.GitShell.Lib.Exceptions.Group;
+namespace SimpleGitShell.Library.Exceptions.Group;
 
-public class EmptyGroupNameException : ArgumentException 
+public class EmptyGroupNameException : ArgumentException
 {
-    public EmptyGroupNameException() : base("The name of the group cannot be empty.") {}
+    public EmptyGroupNameException() : base("The name of the group cannot be empty.") { }
+
 }
