@@ -1,20 +1,14 @@
-using System.Text.RegularExpressions;
 using SimpleGitShell.Commands.SSH.User;
 using SimpleGitShell.Library.Utils;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.Utils;
 using Tests.SimpleGitShell.Utils.DataAttributes;
-using Match = System.Text.RegularExpressions.Match;
 
 namespace Tests.SimpleGitShell.Commands.SSH.User;
 
 [Collection("File System Sequential")]
 public partial class ListSSHUserCommandTests : FileSystemTests
 {
-
-    [GeneratedRegex("ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3} ([^@]+@[^@]+)")]
-    private static partial Regex CommentRegex();
-
     private static CommandAppTester App()
     {
         var app = new CommandAppTester();
@@ -57,8 +51,7 @@ public partial class ListSSHUserCommandTests : FileSystemTests
         var output = CaptureWriter.ToString();
         foreach (var publicKey in existingKeys)
         {
-            Match m = CommentRegex().Match(publicKey);
-            Assert.Contains(m.Groups[1].ToString(), output);
+            Assert.Contains(SSHUtils.Comment(publicKey), output);
         }
 
         // Finally

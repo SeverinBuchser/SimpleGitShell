@@ -8,6 +8,9 @@ namespace SimpleGitShell.Library.Utils;
 
 public static partial class SSHUtils
 {
+
+    [GeneratedRegex("ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3} ([^@]+@[^@]+)")]
+    private static partial Regex CommentRegex();
     public static readonly string SSHPath = ".ssh";
     public static readonly string SSHAuthorizedKeys = Path.Combine(SSHPath, "authorized_keys");
 
@@ -94,9 +97,6 @@ public static partial class SSHUtils
 
     public static string Comment(string publicKey)
     {
-        return MyRegex().Match(publicKey).Groups[1].ToString();
+        return CommentRegex().Match(publicKey).Groups[1].ToString();
     }
-
-    [GeneratedRegex("= (.*)$")]
-    private static partial Regex MyRegex();
 }

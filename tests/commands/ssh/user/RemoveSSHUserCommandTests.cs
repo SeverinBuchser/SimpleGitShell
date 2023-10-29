@@ -114,7 +114,7 @@ public class RemoveSSHUserCommandTests : FileSystemTests
         // Given
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, string.Join("\n", existingPublicKeys));
-        SetInput("hello1");
+        SetInput("user@hello1");
         var args = new string[] { publicKeyToRemove };
 
         // When
