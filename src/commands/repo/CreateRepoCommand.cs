@@ -1,46 +1,46 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using SimpleGitShell.Commands.Base.Commands.Confirmation;
 using SimpleGitShell.Commands.Repo.Settings;
 using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Reading;
 using SimpleGitShell.Library.Utils;
 using SimpleGitShell.Library.Utils.Processes.Git;
-using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo;
 
 [Description("Creates a repository.")]
-public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
+public class CreateRepoCommand : AOverridePathCommand<SpecificRepoCommandSettings>
 {
-    public override int Execute([NotNull] CommandContext context, [NotNull] SpecificRepoCommandSettings settings)
+    private string? Repo;
+    private string? BaseGroup;
+    private string? BaseGroupPath;
+
+    protected override string AlreadyExistsMessage => "The repository already exists. The repository will be removed and created again!";
+
+    protected override string OverridePath => Path.Combine(BaseGroupPath!, Repo + ".git");
+
+    protected override void PreComnfirm([NotNull] SpecificRepoCommandSettings settings)
     {
-        var repo = settings.CheckRepoName();
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        var repoPath = Path.Combine(baseGroupPath, repo + ".git");
+        Repo = settings.CheckRepoName();
+        BaseGroup = settings.CheckBaseGroupName();
+        BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";
+        GroupUtils.ThrowOnNonExistingGroup(BaseGroupPath);
+    }
 
-        if (Directory.Exists(repoPath))
-        {
-            Logger.Instance.Warn($"The repository already exists. The repository will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the repository ({repoPath}), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != repoPath)
-            {
-                Logger.Instance.Warn("The input did not match the name of the repository. Aborting.");
-                return 0;
-            }
-            Directory.Delete(repoPath, true);
-        }
+    protected override void OnConfirm()
+    {
+        Directory.Delete(OverridePath, true);
+    }
 
-        using (var gitInitBareProcess = new GitInitBareProcess(repoPath))
+    protected override void PostConfirm()
+    {
+        using (var gitInitBareProcess = new GitInitBareProcess(OverridePath))
         {
             if (gitInitBareProcess.Start() != 0)
             {
                 throw new GitException(gitInitBareProcess.StandardError.ReadToEnd());
             }
         }
-
-        Logger.Instance.Info($"Created repository \"{repo}\" of group \"{baseGroup}\".");
-        return 0;
+        Logger.Instance.Info($"Created repository \"{Repo}\" of group \"{BaseGroup}\".");
     }
 }

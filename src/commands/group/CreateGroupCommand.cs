@@ -1,38 +1,39 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using SimpleGitShell.Commands.Base.Commands.Confirmation;
 using SimpleGitShell.Commands.Group.Settings;
 using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Reading;
 using SimpleGitShell.Library.Utils;
-using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Group;
 
 [Description("Creates a group.")]
-public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
+public class CreateGroupCommand : AOverridePathCommand<SpecificGroupCommandSettings>
 {
-    public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
+    private string? Group;
+    private string? BaseGroup;
+    private string? BaseGroupPath;
+
+    protected override string AlreadyExistsMessage => "The group already exists. The group will be removed and created again!";
+
+    protected override string OverridePath => Path.Combine(BaseGroupPath!, Group!);
+
+    protected override void PreComnfirm([NotNull] SpecificGroupCommandSettings settings)
     {
-        var group = settings.CheckGroupName();
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        var groupPath = Path.Combine(baseGroupPath, group);
+        Group = settings.CheckGroupName();
+        BaseGroup = settings.CheckBaseGroupName();
+        BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";
+        GroupUtils.ThrowOnNonExistingGroup(BaseGroupPath);
+    }
 
-        if (Directory.Exists(groupPath))
-        {
-            Logger.Instance.Warn($"The group already exists. The group will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the group ({groupPath}), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != groupPath)
-            {
-                Logger.Instance.Warn("The input did not match the name of the group. Aborting.");
-                return 0;
-            }
-            Directory.Delete(groupPath, true);
-        }
+    protected override void OnConfirm()
+    {
+        Directory.Delete(OverridePath, true);
+    }
 
-        Directory.CreateDirectory(groupPath);
-        Logger.Instance.Info($"Created group \"{group}\" of group \"{baseGroup}\".");
-        return 0;
+    protected override void PostConfirm()
+    {
+        Directory.CreateDirectory(OverridePath);
+        Logger.Instance.Info($"Created group \"{Group}\" of group \"{BaseGroup}\".");
     }
 }
