@@ -32,9 +32,9 @@ public partial class ListSSHUserCommandTests : FileSystemTests
     }
 
     [Theory]
-    [LinesFileData("data/keys/keys.txt", 0, 0)]
-    [LinesFileData("data/keys/keys.txt", 0, 0, 1)]
-    [LinesFileData("data/keys/keys.txt", 0, 1, 0)]
+    [LinesFileData("data/keys/keys.txt", 0)]
+    [LinesFileData("data/keys/keys.txt", 0, 1)]
+    [LinesFileData("data/keys/keys.txt", 0, 1, 2)]
     [LinesFileData("data/keys/keys.txt", 0, 1, 2, 3)]
     public void ExecuteExistingSSHKeysListsKeys(params string[] existingKeys)
     {

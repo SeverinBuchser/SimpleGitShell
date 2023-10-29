@@ -25,7 +25,7 @@ public class ListSSHUserCommand : Command
             foreach (var key in keys)
             {
                 rows.Add(new string[] {
-                    Path.GetFileName(key)
+                    Path.GetFileName(SSHUtils.Comment(key))
                 });
             }
             Logger.Instance.Table(new string[] { "Key" }, rows);
