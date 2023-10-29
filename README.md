@@ -30,6 +30,7 @@ Simple Git Shell is a .NET-based project that provides a custom Git shell for ma
       - [Remove a repository:](#remove-a-repository)
       - [SSH Commands:](#ssh-commands)
       - [Manage SSH access for users:](#manage-ssh-access-for-users)
+        - [List all SSH keys:](#list-all-ssh-keys)
         - [Add a user by adding an SSH key:](#add-a-user-by-adding-an-ssh-key)
         - [Remove a user by removing an SSH key:](#remove-a-user-by-removing-an-ssh-key)
   - [Contributing](#contributing)
@@ -66,8 +67,9 @@ To use the Simple Git Shell, please refer to the detailed usage instructions pro
 ### 3. SSH
 #### 1. User
 
-- **Add SSH Key**: Add an SSH key for a user to allow secure access.
-- **Remove SSH Key**: Remove an SSH key from a user's authorized keys list.
+- **List SSH Keys**: List all SSH keys on the Git server.
+- **Add SSH Key**: Add an SSH key to the servers authorized keys list.
+- **Remove SSH Key**: Remove an SSH key from the servers authorized keys list.
 
 ## Installation
 
@@ -227,6 +229,12 @@ simple-git-shell ssh <COMMAND>
 
 ```bash
 simple-git-shell ssh user <COMMAND>
+```
+
+##### List all SSH keys:
+
+```bash
+simple-git-shell ssh user list
 ```
 
 ##### Add a user by adding an SSH key:
