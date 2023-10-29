@@ -274,7 +274,7 @@ $ .scripts/test.sh [options]
 
 #### Options
 
-- `-c, --coverage`: Perform coverage analysis (Cannot be used with the watch option).
+- `-c, --coverage`: Perform coverage analysis.
 - `-w, --watch`: Start watching for changes.
 - `-v, --verbose`: Set verbosity level:
   - `quiet` for quiet output (default).

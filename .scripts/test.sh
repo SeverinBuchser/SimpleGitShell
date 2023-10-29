@@ -7,7 +7,6 @@
 set -e
 
 # Initialize variables and flags for optional arguments
-extraArgs=""
 coverage=false
 watch=false
 verbose="quiet"
@@ -25,7 +24,7 @@ show_usage() {
 Usage: $0 [options]
 
 Options:
-  -c, --coverage  Perform coverage analysis (Cannot be used with the watch option).
+  -c, --coverage  Perform coverage analysis.
   -w, --watch     Start watching for changes.
   -v, --verbose   Set verbosity level:
                    - 'quiet' for quiet output (default).
@@ -69,26 +68,29 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-# You can use the boolean variables and the verbosity level as needed in your script.
-if [ "$coverage" = true ]; then
-    extraArgs="-p:CollectCoverage=true -p:CoverletOutput=tests/TestResults/ -p:CoverletOutputFormat=opencover"
-fi
+extraArgs=""
 
 if [ "$watch" = true ]; then
-    if [ "$verbose" = "debug" ]; then
-        extraArgs="$extraArgs --settings debug.runsettings"
-    elif [ "$verbose" = "quiet" ]; then
-        extraArgs="$extraArgs --quiet --no-logo"
+    extraArgs="$extraArgs --"
+fi
+
+if [ "$verbose" = "debug" ] || [ "$verbose" = "d" ]; then
+    extraArgs="$extraArgs --settings debug.runsettings"
+elif [ "$verbose" = "quiet" ] || [ "$verbose" = "q" ]; then
+    if [ "$watch" = true ]; then
+        extraArgs="--quiet --nologo $extraArgs"
+    else
+        extraArgs="$extraArgs --verbosity quiet --nologo"
     fi
 fi
 
-if [ "$watch" = true ] && [ "$coverage" = true ]; then
-    echo "Warning: 'coverage' and 'watch' options cannot be used together. Coverage analysis will be disabled." >&2
-    coverage=false
+if [ "$coverage" = true ]; then
+    extraArgs="$extraArgs -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover"
 fi
 
 if [ "$watch" = true ]; then
-    dotnet watch test $extraArgs --project tests
+    dotnet watch test --project tests $extraArgs
 else
+    cd tests
     dotnet test $extraArgs
 fi
