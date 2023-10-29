@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Settings;
+using SimpleGitShell.Library.Exceptions.Repo;
 using SimpleGitShell.Library.Utils;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo.Settings;
@@ -9,12 +11,24 @@ public class SpecificRepoCommandSettings : BaseGroupSettings
 {
     [Description("The name of the repository.")]
     [CommandArgument(0, "<repository>")]
-    public string? Repo { get; init; }
+    public string Repo { get; init; } = "";
 
-    public string CheckRepoName()
+    public override ValidationResult Validate()
     {
-        RepoUtils.ThrowOnEmptyRepoName(Repo);
-        RepoUtils.ThrowOnRepoNameNotValid(Repo!);
-        return Repo!;
+        var result = base.Validate();
+        if (!result.Successful)
+        {
+            return result;
+        }
+        try
+        {
+            RepoUtils.ThrowOnEmptyRepoName(Repo);
+            RepoUtils.ThrowOnRepoNameNotValid(Repo);
+        }
+        catch (RepoException e)
+        {
+            return ValidationResult.Error(e.Message);
+        }
+        return ValidationResult.Success();
     }
 }

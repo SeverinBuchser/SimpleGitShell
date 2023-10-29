@@ -9,13 +9,13 @@ public abstract class AOverridePathCommand<TSettings> : Command<TSettings> where
 {
     protected abstract string AlreadyExistsMessage { get; }
     protected abstract string OverridePath { get; }
-    protected abstract void PreComnfirm([NotNull] TSettings settings);
-    protected abstract void OnConfirm();
     protected abstract void PostConfirm();
+
+    protected TSettings? Settings { get; private set; }
 
     public override int Execute([NotNull] CommandContext context, [NotNull] TSettings settings)
     {
-        PreComnfirm(settings);
+        Settings = settings;
         if (Directory.Exists(OverridePath))
         {
             Logger.Instance.Warn(AlreadyExistsMessage);
@@ -25,7 +25,7 @@ public abstract class AOverridePathCommand<TSettings> : Command<TSettings> where
                 Logger.Instance.Warn("The input did not match the name of the path. Aborting.");
                 return 0;
             }
-            OnConfirm();
+            Directory.Delete(OverridePath, true);
         }
         PostConfirm();
         return 0;

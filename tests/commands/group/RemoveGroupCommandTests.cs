@@ -1,5 +1,6 @@
 using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Library.Exceptions.Group;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.Utils;
 
@@ -73,10 +74,10 @@ public class RemoveGroupCommandTests : FileSystemTests
         var args = new string[] { "group", "--base-group=basegroup" };
 
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
     }
 
     [Fact]

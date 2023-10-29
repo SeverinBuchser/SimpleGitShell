@@ -4,7 +4,7 @@ using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Base.Commands.List;
 
-public abstract class AListCommand : Command
+public abstract class AListCommand<TSettings> : Command<TSettings> where TSettings : CommandSettings
 {
     protected abstract string AvailableMessage { get; }
     protected abstract string NoElementsMessage { get; }
@@ -12,8 +12,11 @@ public abstract class AListCommand : Command
     protected abstract IEnumerable<string> GetElements();
     protected abstract string[] ToRow(string element);
 
-    public override int Execute([NotNull] CommandContext context)
+    protected TSettings? Settings { get; private set; }
+
+    public override int Execute([NotNull] CommandContext context, [NotNull] TSettings settings)
     {
+        Settings = settings;
         Logger.Instance.Info(AvailableMessage);
         var elements = GetElements().ToArray();
         if (!elements.Any())
@@ -32,3 +35,5 @@ public abstract class AListCommand : Command
         return 0;
     }
 }
+
+public abstract class AListCommand : AListCommand<EmptyCommandSettings> { }

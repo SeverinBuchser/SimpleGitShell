@@ -2,6 +2,7 @@ using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Library.Exceptions.Group;
 using SimpleGitShell.Library.Exceptions.Repo;
 using SimpleGitShell.Library.Utils.Processes.Git;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.Utils;
 
@@ -75,10 +76,10 @@ public class RemoveRepoCommandTests : FileSystemTests
         var args = new string[] { "repo", "--base-group=group" };
 
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
     }
 
     [Fact]

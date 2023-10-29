@@ -13,11 +13,7 @@ public class RemoveGroupCommand : Command<SpecificGroupCommandSettings>
 {
     public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
     {
-        var group = settings.CheckGroupName();
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        var groupPath = Path.Combine(baseGroupPath, group);
+        var groupPath = Path.Combine(settings.BaseGroupPath, settings.Group);
         GroupUtils.ThrowOnNonExistingGroup(groupPath);
 
         Logger.Instance.Warn($"Please confirm by typing the name of the group ({groupPath}):");
@@ -28,7 +24,7 @@ public class RemoveGroupCommand : Command<SpecificGroupCommandSettings>
         }
 
         Directory.Delete(groupPath, true);
-        Logger.Instance.Info($"Removed group \"{group}\" of group \"{baseGroup}\".");
+        Logger.Instance.Info($"Removed group \"{settings.Group}\" of group \"{settings.BaseGroup}\".");
         return 0;
     }
 }

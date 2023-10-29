@@ -13,11 +13,7 @@ public class RemoveRepoCommand : Command<SpecificRepoCommandSettings>
 {
     public override int Execute([NotNull] CommandContext context, [NotNull] SpecificRepoCommandSettings settings)
     {
-        var repo = settings.CheckRepoName();
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        var repoPath = Path.Combine(baseGroupPath, repo + ".git");
+        var repoPath = Path.Combine(settings.BaseGroupPath, settings.Repo + ".git");
         RepoUtils.ThrowOnNonExistingRepo(repoPath);
 
         Logger.Instance.Warn($"Please confirm by typing the name of the repository ({repoPath}):");
@@ -28,7 +24,7 @@ public class RemoveRepoCommand : Command<SpecificRepoCommandSettings>
         }
 
         Directory.Delete(repoPath, true);
-        Logger.Instance.Info($"Removed repository \"{repo}\" of group \"{baseGroup}\".");
+        Logger.Instance.Info($"Removed repository \"{settings.Repo}\" of group \"{settings.BaseGroup}\".");
         return 0;
     }
 }

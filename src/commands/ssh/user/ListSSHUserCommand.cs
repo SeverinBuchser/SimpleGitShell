@@ -9,8 +9,7 @@ public class ListSSHUserCommand : AListCommand
 {
     protected override string AvailableMessage => $"Available ssh users:";
     protected override string NoElementsMessage => $"There are no ssh users.";
-    protected override string[] Columns => new string[] { "Key" };
-
+    protected override IEnumerable<string> Columns => new string[] { "Key" };
     protected override IEnumerable<string> GetElements()
     {
         return SSHUtils.ReadKeys();
