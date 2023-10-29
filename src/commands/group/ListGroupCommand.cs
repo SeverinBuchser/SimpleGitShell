@@ -22,7 +22,7 @@ public class ListGroupCommand : Command<BaseGroupCommandSettings>
             .Where(dir => !dir.EndsWith(".git") && !dir.Contains("/.") && !dir.Equals("./git-shell-commands")).ToList();
         if (!directories.Any())
         {
-            Logger.Instance.Info($"There are no groups in base group \"{baseGroup}\":");
+            Logger.Instance.Info($"There are no groups in base group \"{baseGroup}\".");
         }
         else
         {
