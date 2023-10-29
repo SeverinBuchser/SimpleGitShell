@@ -23,7 +23,7 @@ public class ListRepoCommand : Command<BaseRepoCommandSettings>
 
         if (!directories.Any())
         {
-            Logger.Instance.Info($"There are no repositories in group \"{group}\":");
+            Logger.Instance.Info($"There are no repositories in group \"{group}\".");
         }
         else
         {

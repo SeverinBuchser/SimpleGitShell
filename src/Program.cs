@@ -71,6 +71,7 @@ public class Program
             {
                 config.AddBranch("user", config =>
                 {
+                    config.AddCommand<ListSSHUserCommand>("list");
                     config.AddCommand<AddSSHUserCommand>("add");
                     config.AddCommand<RemoveSSHUserCommand>("remove");
                 });
