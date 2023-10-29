@@ -6,15 +6,15 @@ namespace SimpleGitShell.Commands.Repo.Settings;
 
 public class BaseRepoCommandSettings : CommandSettings
 {
-    [Description("The name of the group.")]
-    [CommandOption("-g|--group")]
+    [Description("The base group in which to perform the command.")]
+    [CommandOption("-b|--base-group")]
     [DefaultValue("root")]
-    public string? Group { get; init; }
+    public string? BaseGroup { get; init; }
 
-    public string CheckGroupName()
+    public string CheckBaseGroupName()
     {
-        GroupUtils.ThrowOnEmptyGroupName(Group);
-        GroupUtils.ThrowOnGroupNameNotValid(Group!);
-        return Group!;
+        GroupUtils.ThrowOnEmptyGroupName(BaseGroup);
+        GroupUtils.ThrowOnGroupNameNotValid(BaseGroup!);
+        return BaseGroup!;
     }
 }

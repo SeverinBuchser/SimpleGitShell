@@ -54,14 +54,14 @@ To use the Simple Git Shell, please refer to the detailed usage instructions pro
 
 ### 1. Group
 
-- **List Groups**: List all existing groups on the Git server.
-- **Create Group**: Create a new group on the Git server.
+- **List Groups**: List all existing groups of a base group.
+- **Create Group**: Create a new group inside a base group.
 - **Remove Group**: Delete an existing group from the Git server.
 
 ### 2. Repositories
 
-- **List Repositories**: List all Git projects (repositories) on the Git server.
-- **Create Repository**: Create a new Git project (repository) on the Git server.
+- **List Repositories**: List all Git projects (repositories) of a base group.
+- **Create Repository**: Create a new Git project (repository) inside a base group.
 - **Remove Repository**: Delete an existing Git project (repository) from the Git server.
 
 ### 3. SSH
@@ -204,19 +204,19 @@ simple-git-shell repo <COMMAND>
 #### List all repositories:
 
 ```bash
-simple-git-shell repo list [-g|--group]
+simple-git-shell repo list [-b|--base-group]
 ```
 
 #### Create a new repository:
 
 ```bash
-simple-git-shell repo create <repository> [-g|--group]
+simple-git-shell repo create <repository> [-b|--base-group]
 ```
 
 #### Remove a repository:
 
 ```bash
-simple-git-shell repo remove <repository> [-g|--group]
+simple-git-shell repo remove <repository> [-b|--base-group]
 ```
 
 #### SSH Commands:

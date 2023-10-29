@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using SimpleGitShell.Library.Exceptions.SSH;
@@ -14,7 +13,7 @@ public static partial class SSHUtils
     public static readonly string SSHPath = ".ssh";
     public static readonly string SSHAuthorizedKeys = Path.Combine(SSHPath, "authorized_keys");
 
-    public static Collection<string> ReadKeys()
+    public static List<string> ReadKeys()
     {
         if (!Directory.Exists(SSHPath))
         {
@@ -22,8 +21,8 @@ public static partial class SSHUtils
         }
 
         string authorizedKeys = File.ReadAllText(SSHAuthorizedKeys);
-        return new Collection<string>(new List<string>(authorizedKeys.Split("\n"))
-            .FindAll(publicKey => !string.IsNullOrWhiteSpace(publicKey)));
+        return new List<string>(authorizedKeys.Split("\n"))
+            .FindAll(publicKey => !string.IsNullOrWhiteSpace(publicKey));
     }
 
     public static void AddKey(string? publicKey)

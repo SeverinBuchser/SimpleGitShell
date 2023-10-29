@@ -1,35 +1,25 @@
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using SimpleGitShell.Library.Logging;
+using SimpleGitShell.Commands.Base.List;
 using SimpleGitShell.Library.Utils;
-using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.SSH.User;
 
 [Description("Lists all SSH users.")]
-public class ListSSHUserCommand : Command
+public class ListSSHUserCommand : AListCommand
 {
+    protected override string AvailableMessage => $"Available ssh users:";
+    protected override string NoElementsMessage => $"There are no ssh users.";
+    protected override string[] Columns => new string[] { "Key" };
 
-    public override int Execute([NotNull] CommandContext context)
+    protected override IEnumerable<string> GetList()
     {
+        return SSHUtils.ReadKeys();
+    }
 
-        Logger.Instance.Info($"Registered ssh users:");
-        var keys = SSHUtils.ReadKeys();
-        if (!keys.Any())
-        {
-            Logger.Instance.Info($"There are no ssh users.");
-        }
-        else
-        {
-            var rows = new List<string[]>();
-            foreach (var key in keys)
-            {
-                rows.Add(new string[] {
-                    Path.GetFileName(SSHUtils.Comment(key))
-                });
-            }
-            Logger.Instance.Table(new string[] { "Key" }, rows);
-        }
-        return 0;
+    protected override string[] ToRow(string element)
+    {
+        return new string[] {
+            Path.GetFileName(SSHUtils.Comment(element))
+        };
     }
 }

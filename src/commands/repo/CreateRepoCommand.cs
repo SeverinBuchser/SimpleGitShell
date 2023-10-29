@@ -15,10 +15,10 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
     public override int Execute([NotNull] CommandContext context, [NotNull] SpecificRepoCommandSettings settings)
     {
         var repo = settings.CheckRepoName();
-        var group = settings.CheckGroupName();
-        var groupPath = group != "root" ? group : ".";
-        GroupUtils.ThrowOnNonExistingGroup(groupPath);
-        var repoPath = Path.Combine(groupPath, repo + ".git");
+        var baseGroup = settings.CheckBaseGroupName();
+        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
+        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
+        var repoPath = Path.Combine(baseGroupPath, repo + ".git");
 
         if (Directory.Exists(repoPath))
         {
@@ -40,7 +40,7 @@ public class CreateRepoCommand : Command<SpecificRepoCommandSettings>
             }
         }
 
-        Logger.Instance.Info($"Created repository \"{repo}\" of group \"{group}\".");
+        Logger.Instance.Info($"Created repository \"{repo}\" of group \"{baseGroup}\".");
         return 0;
     }
 }

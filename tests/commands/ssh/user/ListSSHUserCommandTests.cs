@@ -17,7 +17,7 @@ public partial class ListSSHUserCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void ExecuteNoExistingKeysListsNoKeys()
+    public void RunNoExistingKeysListsNoKeys()
     {
         // Given
         var args = Array.Empty<string>();
@@ -36,7 +36,7 @@ public partial class ListSSHUserCommandTests : FileSystemTests
     [LinesFileData("data/keys/keys.txt", 0, 1)]
     [LinesFileData("data/keys/keys.txt", 0, 1, 2)]
     [LinesFileData("data/keys/keys.txt", 0, 1, 2, 3)]
-    public void ExecuteExistingSSHKeysListsKeys(params string[] existingKeys)
+    public void RunExistingSSHKeysListsKeys(params string[] existingKeys)
     {
         // Given
         CreateDirectory(SSHUtils.SSHPath);

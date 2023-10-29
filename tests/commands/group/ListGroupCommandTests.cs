@@ -35,7 +35,7 @@ public class ListGroupCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void ExecuteGroupsInRootOnlyListsGroupsInRoot()
+    public void RunGroupsInRootOnlyListsGroupsInRoot()
     {
         // Given
         /*
@@ -145,7 +145,7 @@ public class ListGroupCommandTests : FileSystemTests
 
 
     [Fact]
-    public void ExecuteGroupsInBaseGroupOnlyListsGroupsInBaseGroup()
+    public void RunGroupsInBaseGroupOnlyListsGroupsInBaseGroup()
     {
         // Given
         /*

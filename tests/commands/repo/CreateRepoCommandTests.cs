@@ -56,10 +56,10 @@ public class CreateRepoCommandTests : FileSystemTests
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void RunInvalidGroupThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsGroupNameNotValidException(string baseGroup)
     {
         // Given
-        var args = new string[] { "repo", $"--group={group}" };
+        var args = new string[] { "repo", $"--base-group={baseGroup}" };
 
         // When
         var result = App().RunAndCatch<GroupNameNotValidException>(args);
@@ -153,10 +153,10 @@ public class CreateRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunNonExistingGroupThrowsGroupDoesNotExistException()
+    public void RunNonExistingBaseGroupThrowsGroupDoesNotExistException()
     {
         // Given
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().RunAndCatch<GroupDoesNotExistException>(args);
@@ -166,11 +166,11 @@ public class CreateRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingGroupCreatesRepoInGroup()
+    public void RunExistingBaseGroupCreatesRepoInBaseGroup()
     {
         // Given
         CreateDirectory("group");
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);
@@ -181,7 +181,7 @@ public class CreateRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupPromptsUserForConfirmation()
+    public void RunExistingRepoInBaseGroupPromptsUserForConfirmation()
     {
         // Given
         CreateDirectory("group");
@@ -190,7 +190,7 @@ public class CreateRepoCommandTests : FileSystemTests
         gitInitBareProcess.Start();
         CreateNonEmptyDirectory(repoPath, "subdir");
         SetInput("abort");
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);
@@ -205,7 +205,7 @@ public class CreateRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupAbortDoesNotOverrideRepo()
+    public void RunExistingRepoInBaseGroupAbortDoesNotOverrideRepo()
     {
         // Given
         CreateDirectory("group");
@@ -217,7 +217,7 @@ public class CreateRepoCommandTests : FileSystemTests
         CreateDirectory(subDirPath);
 
         SetInput("abort");
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);
@@ -232,7 +232,7 @@ public class CreateRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupConfirmOverridesRepo()
+    public void RunExistingRepoInBaseGroupConfirmOverridesRepo()
     {
         // Given
         CreateDirectory("group");
@@ -243,7 +243,7 @@ public class CreateRepoCommandTests : FileSystemTests
         var subDirPath = Path.Combine(repoPath, "subdir");
         CreateDirectory(subDirPath);
         SetInput(repoPath);
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);

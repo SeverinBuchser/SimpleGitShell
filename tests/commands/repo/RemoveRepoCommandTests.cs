@@ -56,10 +56,10 @@ public class RemoveRepoCommandTests : FileSystemTests
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void RunInvalidGroupThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsGroupNameNotValidException(string baseGroup)
     {
         // Given
-        var args = new string[] { "repo", $"--group={group}" };
+        var args = new string[] { "repo", $"--base-group={baseGroup}" };
 
         // When
         var result = App().RunAndCatch<GroupNameNotValidException>(args);
@@ -69,10 +69,10 @@ public class RemoveRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunNonExistingGroupThrowsGroupDoesNotExistException()
+    public void RunNonExistingBaseGroupThrowsGroupDoesNotExistException()
     {
         // Given
-        var args = new string[] { "repo", "--group=group" };
+        var args = new string[] { "repo", "--base-group=group" };
 
         // When
         var result = App().RunAndCatch<GroupDoesNotExistException>(args);
@@ -95,11 +95,11 @@ public class RemoveRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunNonExistingRepoExistingGroupThrowsRepoDoesNotExistException()
+    public void RunNonExistingRepoExistingBaseGroupThrowsRepoDoesNotExistException()
     {
         // Given
         CreateDirectory("group");
-        var args = new string[] { "repo", "--group=group" };
+        var args = new string[] { "repo", "--base-group=group" };
 
         // When
         var result = App().RunAndCatch<RepoDoesNotExistException>(args);
@@ -172,7 +172,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupPromptsUserForConfirmation()
+    public void RunExistingRepoInBaseGroupPromptsUserForConfirmation()
     {
         // Given
         CreateDirectory("group");
@@ -180,7 +180,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         var gitInitBareProcess = new GitInitBareProcess(repoPath);
         gitInitBareProcess.Start();
         SetInput("abort");
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);
@@ -195,7 +195,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupAbortDoesNotOverrideRepo()
+    public void RunExistingRepoInBaseGroupAbortDoesNotOverrideRepo()
     {
         // Given
         CreateDirectory("group");
@@ -204,7 +204,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         gitInitBareProcess.Start();
 
         SetInput("abort");
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);
@@ -219,7 +219,7 @@ public class RemoveRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void RunExistingRepoInGroupConfirmOverridesRepo()
+    public void RunExistingRepoInBaseGroupConfirmOverridesRepo()
     {
         // Given
         CreateDirectory("group");
@@ -228,7 +228,7 @@ public class RemoveRepoCommandTests : FileSystemTests
         gitInitBareProcess.Start();
 
         SetInput(repoPath);
-        var args = new string[] { "repo", $"--group=group" };
+        var args = new string[] { "repo", $"--base-group=group" };
 
         // When
         var result = App().Run(args);

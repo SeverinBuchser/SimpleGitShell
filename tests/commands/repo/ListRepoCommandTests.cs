@@ -22,10 +22,10 @@ public class ListRepoCommandTests : FileSystemTests
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void RunInvalidGroupThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsGroupNameNotValidException(string baseGroup)
     {
         // Given
-        var args = new string[] { $"--group={group}" };
+        var args = new string[] { $"--base-group={baseGroup}" };
 
         // When
         var result = App().RunAndCatch<GroupNameNotValidException>(args);
@@ -35,7 +35,7 @@ public class ListRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void ExecuteReposInRootOnlyListsReposInRoot()
+    public void RunReposInRootOnlyListsReposInRoot()
     {
         // Given
         /*
@@ -143,7 +143,7 @@ public class ListRepoCommandTests : FileSystemTests
     }
 
     [Fact]
-    public void ExecuteReposInGroupOnlyListsReposInGroup()
+    public void RunReposInBaseGroupOnlyListsReposInBaseGroup()
     {
         // Given
         /*
@@ -204,7 +204,7 @@ public class ListRepoCommandTests : FileSystemTests
             CreateDirectory(Path.Combine("group", group));
         }
 
-        var args = new string[] { $"--group=group" };
+        var args = new string[] { $"--base-group=group" };
 
         // When
         var result = App().Run(args);
