@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using SimpleGitShell.Commands.Base.List;
-using SimpleGitShell.Commands.Group.Settings;
+using SimpleGitShell.Commands.Base.Commands.List;
+using SimpleGitShell.Commands.Base.Settings;
 using SimpleGitShell.Library.Utils;
 
 namespace SimpleGitShell.Commands.Group;
 
 [Description("Lists all groups.")]
-public class ListGroupCommand : AListCommandSettings<BaseGroupCommandSettings>
+public class ListGroupCommand : AListCommandSettings<BaseGroupSettings>
 {
     private string? BaseGroup;
     private string? BaseGroupPath;
@@ -15,7 +15,7 @@ public class ListGroupCommand : AListCommandSettings<BaseGroupCommandSettings>
     protected override string NoElementsMessage => $"There are no groups in base group \"{BaseGroup}\".";
     protected override IEnumerable<string> Columns => new string[] { "Group", "Creation Time" };
 
-    protected override void PreExecute([NotNull] BaseGroupCommandSettings settings)
+    protected override void PreExecute([NotNull] BaseGroupSettings settings)
     {
         BaseGroup = settings.CheckBaseGroupName();
         BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";

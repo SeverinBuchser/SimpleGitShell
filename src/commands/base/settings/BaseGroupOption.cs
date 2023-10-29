@@ -2,9 +2,9 @@ using System.ComponentModel;
 using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
-namespace SimpleGitShell.Commands.Group.Settings;
+namespace SimpleGitShell.Commands.Base.Settings;
 
-public class BaseGroupCommandSettings : CommandSettings
+public class BaseGroupSettings : CommandSettings
 {
     [Description("The base group in which to perform the command.")]
     [CommandOption("-b|--base-group")]

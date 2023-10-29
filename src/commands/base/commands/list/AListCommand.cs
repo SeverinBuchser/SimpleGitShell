@@ -2,20 +2,18 @@ using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Library.Logging;
 using Spectre.Console.Cli;
 
-namespace SimpleGitShell.Commands.Base.List;
+namespace SimpleGitShell.Commands.Base.Commands.List;
 
-public abstract class AListCommandSettings<TSettings> : Command<TSettings> where TSettings : CommandSettings
+public abstract class AListCommand : Command
 {
     protected abstract string AvailableMessage { get; }
     protected abstract string NoElementsMessage { get; }
     protected abstract IEnumerable<string> Columns { get; }
-    protected abstract void PreExecute([NotNull] TSettings settings);
     protected abstract IEnumerable<string> GetElements();
     protected abstract string[] ToRow(string element);
 
-    public override int Execute([NotNull] CommandContext context, [NotNull] TSettings settings)
+    public override int Execute([NotNull] CommandContext context)
     {
-        PreExecute(settings);
         Logger.Instance.Info(AvailableMessage);
         var elements = GetElements().ToArray();
         if (!elements.Any())

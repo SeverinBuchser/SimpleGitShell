@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using SimpleGitShell.Commands.Base.List;
-using SimpleGitShell.Commands.Repo.Settings;
+using SimpleGitShell.Commands.Base.Commands.List;
+using SimpleGitShell.Commands.Base.Settings;
 using SimpleGitShell.Library.Utils;
 
 namespace SimpleGitShell.Commands.Repo;
 
 [Description("Lists all repositories.")]
-public class ListRepoCommand : AListCommandSettings<BaseRepoCommandSettings>
+public class ListRepoCommand : AListCommandSettings<BaseGroupSettings>
 {
     private string? BaseGroup;
     private string? BaseGroupPath;
@@ -17,7 +17,7 @@ public class ListRepoCommand : AListCommandSettings<BaseRepoCommandSettings>
 
     protected override IEnumerable<string> Columns => new string[] { "Repository", "Creation Time" };
 
-    protected override void PreExecute([NotNull] BaseRepoCommandSettings settings)
+    protected override void PreExecute([NotNull] BaseGroupSettings settings)
     {
         BaseGroup = settings.CheckBaseGroupName();
         BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";

@@ -1,10 +1,11 @@
 using System.ComponentModel;
+using SimpleGitShell.Commands.Base.Settings;
 using SimpleGitShell.Library.Utils;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo.Settings;
 
-public class SpecificRepoCommandSettings : BaseRepoCommandSettings
+public class SpecificRepoCommandSettings : BaseGroupSettings
 {
     [Description("The name of the repository.")]
     [CommandArgument(0, "<repository>")]
