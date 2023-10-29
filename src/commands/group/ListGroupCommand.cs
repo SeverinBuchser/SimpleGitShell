@@ -13,7 +13,7 @@ public class ListGroupCommand : AListCommandSettings<BaseGroupCommandSettings>
     private string? BaseGroupPath;
     protected override string AvailableMessage => $"Available groups in base group \"{BaseGroup}\":";
     protected override string NoElementsMessage => $"There are no groups in base group \"{BaseGroup}\".";
-    protected override string[] Columns => new string[] { "Group", "Creation Time" };
+    protected override IEnumerable<string> Columns => new string[] { "Group", "Creation Time" };
 
     protected override void PreExecute([NotNull] BaseGroupCommandSettings settings)
     {
@@ -22,7 +22,7 @@ public class ListGroupCommand : AListCommandSettings<BaseGroupCommandSettings>
         GroupUtils.ThrowOnNonExistingGroup(BaseGroupPath);
     }
 
-    protected override IEnumerable<string> GetList()
+    protected override IEnumerable<string> GetElements()
     {
         return Directory.GetDirectories(BaseGroupPath!)
             .Where(dir => !dir.EndsWith(".git") && !dir.Contains("/.") && !dir.Equals("./git-shell-commands"))

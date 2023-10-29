@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User;
 using SimpleGitShell.Library.Utils;
 using Spectre.Console.Testing;
@@ -36,7 +37,7 @@ public partial class ListSSHUserCommandTests : FileSystemTests
     [LinesFileData("data/keys/keys.txt", 0, 1)]
     [LinesFileData("data/keys/keys.txt", 0, 1, 2)]
     [LinesFileData("data/keys/keys.txt", 0, 1, 2, 3)]
-    public void RunExistingSSHKeysListsKeys(params string[] existingKeys)
+    public void RunExistingSSHKeysListsKeys([NotNull] params string[] existingKeys)
     {
         // Given
         CreateDirectory(SSHUtils.SSHPath);

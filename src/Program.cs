@@ -6,6 +6,7 @@ using SimpleGitShell.Library.Utils;
 using SimpleGitShell.Library.Utils.Processes;
 using Spectre.Console.Cli;
 
+[assembly: CLSCompliant(false)]
 namespace SimpleGitShell;
 
 public class Program

@@ -15,7 +15,7 @@ public class ListRepoCommand : AListCommandSettings<BaseRepoCommandSettings>
 
     protected override string NoElementsMessage => $"There are no repositories in base group \"{BaseGroup}\".";
 
-    protected override string[] Columns => new string[] { "Repository", "Creation Time" };
+    protected override IEnumerable<string> Columns => new string[] { "Repository", "Creation Time" };
 
     protected override void PreExecute([NotNull] BaseRepoCommandSettings settings)
     {
@@ -24,7 +24,7 @@ public class ListRepoCommand : AListCommandSettings<BaseRepoCommandSettings>
         GroupUtils.ThrowOnNonExistingGroup(BaseGroupPath);
     }
 
-    protected override IEnumerable<string> GetList()
+    protected override IEnumerable<string> GetElements()
     {
         return Directory.GetDirectories(BaseGroupPath!)
             .Where(dir => dir.EndsWith(".git"))

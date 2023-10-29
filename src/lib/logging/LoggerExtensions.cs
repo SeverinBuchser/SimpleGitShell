@@ -25,7 +25,7 @@ public static class LoggerExtensions
         logger.Log(message, LogLevel.ERROR);
     }
 
-    public static void Table([NotNull] this ILogger logger, string[] headers, [NotNull] IEnumerable<string[]> rows, LogLevel level = LogLevel.INFO)
+    public static void Table([NotNull] this ILogger logger, IEnumerable<string> headers, [NotNull] IEnumerable<string[]> rows, LogLevel level = LogLevel.INFO)
     {
         var writer = new StringWriter();
         var table = new ConsoleTable(new ConsoleTableOptions

@@ -1,2 +1,4 @@
 global using Xunit;
-global using Moq;
+
+[assembly: CLSCompliant(false)]
+namespace Tests.SimpleGitShell;

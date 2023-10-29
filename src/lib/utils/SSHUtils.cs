@@ -13,15 +13,15 @@ public static partial class SSHUtils
     public static readonly string SSHPath = ".ssh";
     public static readonly string SSHAuthorizedKeys = Path.Combine(SSHPath, "authorized_keys");
 
-    public static List<string> ReadKeys()
+    public static IList<string> ReadKeys()
     {
         if (!Directory.Exists(SSHPath))
         {
-            return new();
+            return new List<string>();
         }
 
         string authorizedKeys = File.ReadAllText(SSHAuthorizedKeys);
-        return new List<string>(authorizedKeys.Split("\n"))
+        return authorizedKeys.Split("\n").ToList()
             .FindAll(publicKey => !string.IsNullOrWhiteSpace(publicKey));
     }
 
