@@ -37,6 +37,53 @@ public class ListRepoCommandTests : FileSystemTests
     }
 
     [Fact]
+    public void RunNoGroupsInRootListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+
+        // When
+        var result = App().Run();
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no repositories in base group \"root\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+    }
+
+    [Fact]
+    public void RunNoGroupsInBaseGroupListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+        CreateDirectory("basegroup");
+        var args = new string[] { $"--base-group=basegroup" };
+
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no repositories in base group \"basegroup\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+        DeleteDirectory("basegroup");
+    }
+
+    [Fact]
     public void RunReposInRootOnlyListsReposInRoot()
     {
         // Given
