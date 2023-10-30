@@ -1,38 +1,28 @@
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Group.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Utils;
-using Spectre.Console.Cli;
+using SimpleGitShell.Commands.Base.Commands.List;
+using SimpleGitShell.Commands.Base.Settings;
 
-namespace Server.GitShell.Commands.Group;
+namespace SimpleGitShell.Commands.Group;
 
 [Description("Lists all groups.")]
-public class ListGroupCommand : Command<BaseGroupCommandSettings>
+public class ListGroupCommand : AListCommand<BaseGroupOption>
 {
+    protected override string AvailableMessage => $"Available groups in base group \"{Settings!.BaseGroup}\":";
+    protected override string NoElementsMessage => $"There are no groups in base group \"{Settings!.BaseGroup}\".";
+    protected override IEnumerable<string> Columns => new string[] { "Group", "Creation Time" };
 
-    public override int Execute([NotNull] CommandContext context, [NotNull] BaseGroupCommandSettings settings)
+    protected override IEnumerable<string> GetElements()
     {
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        
-        Logger.Instance.Info($"Available groups in base group \"{ baseGroup }\":");
-        var directories = Directory.GetDirectories(baseGroupPath)
-            .Where(dir => !dir.EndsWith(".git") && !dir.Contains("/.") && !dir.Equals("./git-shell-commands"));
-        if (!directories.Any()) {
-            Logger.Instance.Info($"There are no groups in base group \"{ baseGroup }\":");
-        } else {
-            var rows = new List<string[]>();
-            foreach (var directory in directories)
-            {                
-                rows.Add(new string[] {
-                    Path.GetFileName(directory),
-                    Directory.GetCreationTime(directory).ToString()
-                });
-            }
-            Logger.Instance.Table(new string[] {"Group", "Creation Time"}, rows);
-        }
-        return 0;
+        return Directory.GetDirectories(Settings!.BaseGroupPath)
+            .Where(dir => !dir.EndsWith(".git") && !dir.Contains("/.") && !dir.Equals("./git-shell-commands"))
+            .OrderBy(s => s);
+    }
+
+    protected override string[] ToRow(string element)
+    {
+        return new string[] {
+            Path.GetFileName(element),
+            Directory.GetCreationTime(element).ToString("dd/MM/yyyy HH:mm:ss")
+        };
     }
 }

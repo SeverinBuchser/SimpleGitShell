@@ -1,37 +1,20 @@
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Group.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Reading;
-using Server.GitShell.Lib.Utils;
-using Spectre.Console.Cli;
+using SimpleGitShell.Commands.Base.Commands.Confirmation;
+using SimpleGitShell.Commands.Base.Settings;
+using SimpleGitShellrary.Logging;
 
-namespace Server.GitShell.Commands.Group;
+namespace SimpleGitShell.Commands.Group;
 
 [Description("Creates a group.")]
-public class CreateGroupCommand : Command<SpecificGroupCommandSettings>
+public class CreateGroupCommand : AOverridePathCommand<GroupOption>
 {
-    public override int Execute([NotNull] CommandContext context, [NotNull] SpecificGroupCommandSettings settings)
+    protected override string AlreadyExistsMessage => "The group already exists. The group will be removed and created again!";
+
+    protected override string OverridePath => Path.Combine(Settings!.BaseGroupPath, Settings!.Group);
+
+    protected override void PostConfirm()
     {
-        var group = settings.CheckGroupName();
-        var baseGroup = settings.CheckBaseGroupName();
-        var baseGroupPath = baseGroup != "root" ? baseGroup : ".";
-        GroupUtils.ThrowOnNonExistingGroup(baseGroupPath);
-        var groupPath = Path.Combine(baseGroupPath, group);
-
-        if (Directory.Exists(groupPath)) {
-            Logger.Instance.Warn($"The group already exists. The group will be removed and created again!");
-            Logger.Instance.Warn($"Please confirm by typing the name of the group ({ groupPath }), or anything else to abort:");
-            if (Reader.Instance.ReadLine() != groupPath) 
-            {
-                Logger.Instance.Warn("The input did not match the name of the group. Aborting.");
-                return 0;
-            }
-            Directory.Delete(groupPath, true);
-        }
-
-        Directory.CreateDirectory(groupPath);
-        Logger.Instance.Info($"Created group \"{ group }\" of group \"{ baseGroup }\".");
-        return 0;
+        Directory.CreateDirectory(OverridePath);
+        Logger.Instance.Info($"Created group \"{Settings!.Group}\" of group \"{Settings!.BaseGroup}\".");
     }
 }

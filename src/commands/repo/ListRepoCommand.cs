@@ -1,40 +1,27 @@
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using Server.GitShell.Commands.Repo.Settings;
-using Server.GitShell.Lib.Logging;
-using Server.GitShell.Lib.Utils;
-using Spectre.Console;
-using Spectre.Console.Cli;
+using SimpleGitShell.Commands.Base.Commands.List;
+using SimpleGitShell.Commands.Base.Settings;
 
-namespace Server.GitShell.Commands.Repo;
+namespace SimpleGitShell.Commands.Repo;
 
 [Description("Lists all repositories.")]
-public class ListRepoCommand : Command<BaseRepoCommandSettings>
+public class ListRepoCommand : AListCommand<BaseGroupOption>
 {
-
-    public override int Execute([NotNull] CommandContext context, [NotNull] BaseRepoCommandSettings settings)
+    protected override string AvailableMessage => $"Available repositories in base group \"{Settings!.BaseGroup}\":";
+    protected override string NoElementsMessage => $"There are no repositories in base group \"{Settings!.BaseGroup}\".";
+    protected override IEnumerable<string> Columns => new string[] { "Repository", "Creation Time" };
+    protected override IEnumerable<string> GetElements()
     {
-        var group = settings.CheckGroupName();
-        var groupPath = group != "root" ? group : ".";
-        GroupUtils.ThrowOnNonExistingGroup(groupPath);
+        return Directory.GetDirectories(Settings!.BaseGroupPath)
+            .Where(dir => dir.EndsWith(".git"))
+            .OrderBy(s => s);
+    }
 
-        Logger.Instance.Info($"Available repositories in group \"{ group }\":");
-        var directories = Directory.GetDirectories(groupPath)
-            .Where(dir => dir.EndsWith(".git")).OrderBy(s => s);
-
-        if (!directories.Any()) {
-            Logger.Instance.Info($"There are no repositories in group \"{ group }\":");
-        } else {
-            var rows = new List<string[]>();
-            foreach (var directory in directories)
-            {                
-                rows.Add(new string[] {
-                    Path.GetFileName(directory),
-                    Directory.GetCreationTime(directory).ToString()
-                });
-            }
-            Logger.Instance.Table(new string[] {"Repository", "Creation Time"}, rows);
-        }
-        return 0;
+    protected override string[] ToRow(string element)
+    {
+        return new string[] {
+            Path.GetFileName(element),
+            Directory.GetCreationTime(element).ToString("dd/MM/yyyy HH:mm:ss")
+        };
     }
 }

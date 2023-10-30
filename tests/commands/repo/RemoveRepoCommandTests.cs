@@ -1,11 +1,10 @@
-using Server.GitShell.Commands.Repo;
-using Server.GitShell.Lib.Exceptions.Group;
-using Server.GitShell.Lib.Exceptions.Repo;
-using Server.GitShell.Lib.Utils.Commands.Git;
+using SimpleGitShell.Commands.Repo;
+using SimpleGitShellrary.Utils.Processes.Git;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
-namespace Tests.Server.GitShell.Commands.Repo;
+namespace Tests.SimpleGitShell.Commands.Repo;
 
 [Collection("File System Sequential")]
 public class RemoveRepoCommandTests : FileSystemTests
@@ -17,214 +16,225 @@ public class RemoveRepoCommandTests : FileSystemTests
         return app;
     }
 
-    [Fact]
-    public void Run_EmptyRepo_ThrowsEmptyRepoNameException()
-    {
-        // Given
-        var args = new string[]{""};
-        
-        // When
-        var result = App().RunAndCatch<EmptyRepoNameException>(args);
-
-        // Then
-        Assert.IsType<EmptyRepoNameException>(result.Exception);
-    }
-
     [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Run_InvalidRepo_ThrowsRepoNameNotValidException(string repo)
+    public void RunInvalidRepoThrowsCommandRuntimeException(string repo)
     {
         // Given
-        var args = new string[]{repo};
-        
+        var args = new string[] { repo };
+
         // When
-        var result = App().RunAndCatch<RepoNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<RepoNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("repository name", result.Exception.Message);
     }
 
     [Theory]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Run_InvalidGroup_ThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsCommandRuntimeException(string baseGroup)
     {
         // Given
-        var args = new string[]{"repo", $"--group={ group }"};
-        
+        var args = new string[] { "repo", $"--base-group={baseGroup}" };
+
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("base group name", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingGroup_ThrowsGroupDoesNotExistException()
+    public void RunNonExistingBaseGroupThrowsCommandRuntimeException()
     {
         // Given
-        var args = new string[]{"repo", "--group=group"};
-        
+        var args = new string[] { "repo", "--base-group=basegroup" };
+
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("basegroup", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingRepo_ThrowsRepoDoesNotExistException()
+    public void RunNonExistingRepoThrowsCommandRuntimeException()
     {
         // Given
-        var args = new string[]{"repo"};
-        
+        var args = new string[] { "repo" };
+
         // When
-        var result = App().RunAndCatch<RepoDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<RepoDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("repo", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingRepoExistingGroup_ThrowsRepoDoesNotExistException()
+    public void RunNonExistingRepoExistingBaseGroupThrowsCommandRuntimeException()
     {
         // Given
-        _CreateDirectory("group");
-        var args = new string[]{"repo", "--group=group"};
-        
+        CreateDirectory("basegroup");
+        var args = new string[] { "repo", "--base-group=basegroup" };
+
         // When
-        var result = App().RunAndCatch<RepoDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<RepoDoesNotExistException>(result.Exception);
-        _DeleteDirectory("group");
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("repo", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_ExistingRepo_PromptsUserForConfirmation()
+    public void RunExistingRepoPromptsUserForConfirmation()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
-        _SetInput("abort");
-        var args = new string[]{"repo"};
-        
+        var gitInitBareProcess = new GitInitBareProcess("repo.git");
+        gitInitBareProcess.Start();
+        SetInput("abort");
+        var args = new string[] { "repo" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        Assert.Contains("confirm", _CaptureWriter.ToString());
-        
+        Assert.Contains("confirm", CaptureWriter.ToString());
+
         // Finally
-        _DeleteDirectory("repo.git");
+        DeleteDirectory("repo.git");
+        gitInitBareProcess.Dispose();
     }
 
     [Fact]
-    public void Run_ExistingRepoAbort_DoesNotRemoveRepo()
+    public void RunExistingRepoAbortDoesNotRemoveRepo()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
-        _SetInput("abort");
-        var args = new string[]{"repo"};
-        
+        var gitInitBareProcess = new GitInitBareProcess("repo.git");
+        gitInitBareProcess.Start();
+        SetInput("abort");
+        var args = new string[] { "repo" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists("repo.git"));
-        
+
         // Finally
-        _DeleteDirectory("repo.git");
+        DeleteDirectory("repo.git");
+        gitInitBareProcess.Dispose();
     }
 
     [Fact]
-    public void Run_ExistingRepoConfirm_RemovesRepo()
+    public void RunExistingRepoConfirmRemovesRepo()
     {
         // Given
-        new GitInitBareCommand("repo.git").Start();
-        _SetInput(Path.Combine(".", "repo.git"));
-        var args = new string[]{"repo"};
-        
+        var gitInitBareProcess = new GitInitBareProcess("repo.git");
+        gitInitBareProcess.Start();
+        SetInput(Path.Combine(".", "repo.git"));
+        var args = new string[] { "repo" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists("repo.git"));
+
+        // Finally
+        gitInitBareProcess.Dispose();
     }
-    
+
     [Fact]
-    public void Run_ExistingRepoInGroup_PromptsUserForConfirmation()
+    public void RunExistingRepoInBaseGroupPromptsUserForConfirmation()
     {
         // Given
-        _CreateDirectory("group");
-        var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
-        _SetInput("abort");
-        var args = new string[]{"repo", $"--group=group"};
-        
+        CreateDirectory("basegroup");
+        var repoPath = Path.Combine("basegroup", "repo.git");
+        var gitInitBareProcess = new GitInitBareProcess(repoPath);
+        gitInitBareProcess.Start();
+        SetInput("abort");
+        var args = new string[] { "repo", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        Assert.Contains("confirm", _CaptureWriter.ToString());
-        
+        Assert.Contains("confirm", CaptureWriter.ToString());
+
         // Finally
-        _DeleteDirectory("group");
+        DeleteDirectory("basegroup");
+        gitInitBareProcess.Dispose();
     }
 
     [Fact]
-    public void Run_ExistingRepoInGroupAbort_DoesNotOverrideRepo()
+    public void RunExistingRepoInBaseGroupAbortDoesNotOverrideRepo()
     {
         // Given
-        _CreateDirectory("group");
-        var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
+        CreateDirectory("basegroup");
+        var repoPath = Path.Combine("basegroup", "repo.git");
+        var gitInitBareProcess = new GitInitBareProcess(repoPath);
+        gitInitBareProcess.Start();
 
-        _SetInput("abort");
-        var args = new string[]{"repo", $"--group=group"};
-        
+        SetInput("abort");
+        var args = new string[] { "repo", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(repoPath));
-        
+
         // Finally
-        _DeleteDirectory("group");
+        DeleteDirectory("basegroup");
+        gitInitBareProcess.Dispose();
     }
 
     [Fact]
-    public void Run_ExistingRepoInGroupConfirm_OverridesRepo()
+    public void RunExistingRepoInBaseGroupConfirmOverridesRepo()
     {
         // Given
-        _CreateDirectory("group");
-        var repoPath = Path.Combine("group", "repo.git");
-        new GitInitBareCommand(repoPath).Start();
+        CreateDirectory("basegroup");
+        var repoPath = Path.Combine("basegroup", "repo.git");
+        var gitInitBareProcess = new GitInitBareProcess(repoPath);
+        gitInitBareProcess.Start();
 
-        _SetInput(repoPath);
-        var args = new string[]{"repo", $"--group=group"};
-        
+        SetInput(repoPath);
+        var args = new string[] { "repo", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(repoPath));
-        
+
         // Finally
-        _DeleteDirectory("group");
+        DeleteDirectory("basegroup");
+        gitInitBareProcess.Dispose();
     }
-} 
+}

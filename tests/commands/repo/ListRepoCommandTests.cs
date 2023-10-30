@@ -1,9 +1,9 @@
-using Server.GitShell.Commands.Repo;
-using Server.GitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Commands.Repo;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
-namespace Tests.Server.GitShell.Commands.Repo;
+namespace Tests.SimpleGitShell.Commands.Repo;
 
 [Collection("File System Sequential")]
 public class ListRepoCommandTests : FileSystemTests
@@ -16,26 +16,75 @@ public class ListRepoCommandTests : FileSystemTests
     }
 
     [Theory]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Run_InvalidGroup_ThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsCommandRuntimeException(string baseGroup)
     {
         // Given
-        var args = new string[]{$"--group={ group }"};
-        
+        var args = new string[] { $"--base-group={baseGroup}" };
+
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("base group name", result.Exception.Message);
     }
 
     [Fact]
-    public void Execute_ReposInRoot_OnlyListsReposInRoot()
+    public void RunNoGroupsInRootListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+
+        // When
+        var result = App().Run();
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no repositories in base group \"root\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+    }
+
+    [Fact]
+    public void RunNoGroupsInBaseGroupListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+        CreateDirectory("basegroup");
+        var args = new string[] { $"--base-group=basegroup" };
+
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no repositories in base group \"basegroup\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+        DeleteDirectory("basegroup");
+    }
+
+    [Fact]
+    public void RunReposInRootOnlyListsReposInRoot()
     {
         // Given
         /*
@@ -73,39 +122,77 @@ public class ListRepoCommandTests : FileSystemTests
         var groups2 = new string[] {
             "group5", "group6", "group7", "group8"
         };
-        _CreateDirectory("git-shell-commands");
-        _CreateDirectory(".ssh");
-        _CreateDirectory(".config");
-        foreach (var repo in repos1) _CreateDirectory(repo);
-        foreach (var group in groups1) _CreateDirectory(group);
-        foreach (var repo in repos2) _CreateDirectory(Path.Combine("group", repo));
-        foreach (var group in groups2) _CreateDirectory(Path.Combine("group", group));
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+        foreach (var repo in repos1)
+        {
+            CreateDirectory(repo);
+        }
+
+        foreach (var group in groups1)
+        {
+            CreateDirectory(group);
+        }
+
+        foreach (var repo in repos2)
+        {
+            CreateDirectory(Path.Combine("group", repo));
+        }
+
+        foreach (var group in groups2)
+        {
+            CreateDirectory(Path.Combine("group", group));
+        }
 
         // When
         var result = App().Run();
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        var output = _CaptureWriter.ToString();
+        var output = CaptureWriter.ToString();
         Assert.DoesNotContain("git-shell-commands", output);
         Assert.DoesNotContain(".ssh", output);
         Assert.DoesNotContain(".config", output);
-        foreach (var repo in repos1) Assert.Contains(repo, output);
-        foreach (var group in groups1) Assert.DoesNotContain(group, output);
-        foreach (var repo in repos2) Assert.DoesNotContain(repo, output);
-        foreach (var group in groups2) Assert.DoesNotContain(group, output);
+        foreach (var repo in repos1)
+        {
+            Assert.Contains(repo, output);
+        }
+
+        foreach (var group in groups1)
+        {
+            Assert.DoesNotContain(group, output);
+        }
+
+        foreach (var repo in repos2)
+        {
+            Assert.DoesNotContain(repo, output);
+        }
+
+        foreach (var group in groups2)
+        {
+            Assert.DoesNotContain(group, output);
+        }
 
         // Finally
-        _DeleteDirectory("git-shell-commands");
-        _DeleteDirectory(".ssh");
-        _DeleteDirectory(".config");
-        foreach (var repo in repos1) _DeleteDirectory(repo);
-        foreach (var group in groups1) _DeleteDirectory(group);
-        _DeleteDirectory("group");
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+        foreach (var repo in repos1)
+        {
+            DeleteDirectory(repo);
+        }
+
+        foreach (var group in groups1)
+        {
+            DeleteDirectory(group);
+        }
+
+        DeleteDirectory("group");
     }
 
     [Fact]
-    public void Execute_ReposInGroup_OnlyListsReposInGroup()
+    public void RunReposInBaseGroupOnlyListsReposInBaseGroup()
     {
         // Given
         /*
@@ -143,35 +230,74 @@ public class ListRepoCommandTests : FileSystemTests
         var groups2 = new string[] {
             "group5", "group6", "group7", "group8"
         };
-        _CreateDirectory("git-shell-commands");
-        _CreateDirectory(".ssh");
-        _CreateDirectory(".config");
-        foreach (var repo in repos1) _CreateDirectory(repo);
-        foreach (var group in groups1) _CreateDirectory(group);
-        foreach (var repo in repos2) _CreateDirectory(Path.Combine("group", repo));
-        foreach (var group in groups2) _CreateDirectory(Path.Combine("group", group));
-        var args = new string[]{$"--group=group"};
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+        foreach (var repo in repos1)
+        {
+            CreateDirectory(repo);
+        }
+
+        foreach (var group in groups1)
+        {
+            CreateDirectory(group);
+        }
+
+        foreach (var repo in repos2)
+        {
+            CreateDirectory(Path.Combine("group", repo));
+        }
+
+        foreach (var group in groups2)
+        {
+            CreateDirectory(Path.Combine("group", group));
+        }
+
+        var args = new string[] { $"--base-group=group" };
 
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        var output = _CaptureWriter.ToString();
+        var output = CaptureWriter.ToString();
         Assert.DoesNotContain("git-shell-commands", output);
         Assert.DoesNotContain(".ssh", output);
         Assert.DoesNotContain(".config", output);
-        foreach (var repo in repos1) Assert.DoesNotContain(repo, output);
-        foreach (var group in groups1) Assert.DoesNotContain(group, output);
-        foreach (var repo in repos2) Assert.Contains(repo, output);
-        foreach (var group in groups2) Assert.DoesNotContain(group, output);
+        foreach (var repo in repos1)
+        {
+            Assert.DoesNotContain(repo, output);
+        }
+
+        foreach (var group in groups1)
+        {
+            Assert.DoesNotContain(group, output);
+        }
+
+        foreach (var repo in repos2)
+        {
+            Assert.Contains(repo, output);
+        }
+
+        foreach (var group in groups2)
+        {
+            Assert.DoesNotContain(group, output);
+        }
 
         // Finally
-        _DeleteDirectory("git-shell-commands");
-        _DeleteDirectory(".ssh");
-        _DeleteDirectory(".config");
-        foreach (var repo in repos1) _DeleteDirectory(repo);
-        foreach (var group in groups1) _DeleteDirectory(group);
-        _DeleteDirectory("group");
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+        foreach (var repo in repos1)
+        {
+            DeleteDirectory(repo);
+        }
+
+        foreach (var group in groups1)
+        {
+            DeleteDirectory(group);
+        }
+
+        DeleteDirectory("group");
     }
-} 
+}

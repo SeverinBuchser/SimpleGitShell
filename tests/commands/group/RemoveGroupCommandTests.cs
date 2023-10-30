@@ -1,9 +1,9 @@
-using Server.GitShell.Commands.Group;
-using Server.GitShell.Lib.Exceptions.Group;
+using SimpleGitShell.Commands.Group;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
-using Tests.Server.GitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
-namespace Tests.Server.GitShell.Commands.Group;
+namespace Tests.SimpleGitShell.Commands.Group;
 
 [Collection("File System Sequential")]
 public class RemoveGroupCommandTests : FileSystemTests
@@ -15,144 +15,142 @@ public class RemoveGroupCommandTests : FileSystemTests
         return app;
     }
 
-    [Fact]
-    public void Run_EmptyGroup_ThrowsEmptyGroupNameException()
-    {
-        // Given
-        var args = new string[]{""};
-        
-        // When
-        var result = App().RunAndCatch<EmptyGroupNameException>(args);
-
-        // Then
-        Assert.IsType<EmptyGroupNameException>(result.Exception);
-    }
-
     [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Run_InvalidGroup_ThrowsGroupNameNotValidException(string group)
+    public void RunInvalidGroupThrowsCommandRuntimeException(string group)
     {
         // Given
-        var args = new string[]{group};
-        
+        var args = new string[] { group };
+
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("group name", result.Exception.Message);
     }
 
     [Theory]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void Run_InvalidBaseGroup_ThrowsGroupNameNotValidException(string basegroup)
+    public void RunInvalidBaseGroupThrowsCommandRuntimeException(string basegroup)
     {
         // Given
-        var args = new string[]{"group", $"--base-group={ basegroup }"};
-        
+        var args = new string[] { "group", $"--base-group={basegroup}" };
+
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("base group name", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingBaseGroup_ThrowsGroupDoesNotExistException()
+    public void RunNonExistingBaseGroupThrowsCommandRuntimeException()
     {
         // Given
-        var args = new string[]{"group", "--base-group=basegroup"};
-        
+        var args = new string[] { "group", "--base-group=basegroup" };
+
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("basegroup", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingGroup_ThrowsGroupDoesNotExistException()
+    public void RunNonExistingGroupThrowsCommandRuntimeException()
     {
         // Given
-        var args = new string[]{"group"};
-        
+        var args = new string[] { "group" };
+
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("group", result.Exception.Message);
     }
 
     [Fact]
-    public void Run_NonExistingGroupInExistingBaseGroup_ThrowsGroupDoesNotExistException()
+    public void RunNonExistingGroupInExistingBaseGroupThrowsCommandRuntimeException()
     {
         // Given
-        _CreateDirectory("basegroup");
-        var args = new string[]{"group", "--base-group=basegroup"};
-        
+        CreateDirectory("basegroup");
+        var args = new string[] { "group", "--base-group=basegroup" };
+
         // When
-        var result = App().RunAndCatch<GroupDoesNotExistException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupDoesNotExistException>(result.Exception);
-        _DeleteDirectory("basegroup");
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("directory", result.Exception.Message);
+        Assert.Contains("group", result.Exception.Message);
+        DeleteDirectory("basegroup");
     }
 
     [Fact]
-    public void Run_ExistingGroup_PromptsUserForConfirmation()
+    public void RunExistingGroupPromptsUserForConfirmation()
     {
         // Given
-        _CreateDirectory("group");
-        _SetInput("abort");
-        var args = new string[]{"group"};
-        
+        CreateDirectory("group");
+        SetInput("abort");
+        var args = new string[] { "group" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        Assert.Contains("confirm", _CaptureWriter.ToString());
-        
+        Assert.Contains("confirm", CaptureWriter.ToString());
+
         // Finally
-        _DeleteDirectory("group");
+        DeleteDirectory("group");
     }
 
     [Fact]
-    public void Run_ExistingGroupAbort_DoesNotRemoveGroup()
+    public void RunExistingGroupAbortDoesNotRemoveGroup()
     {
         // Given
-        _CreateDirectory("group");
-        _SetInput("abort");
-        var args = new string[]{"group"};
-        
+        CreateDirectory("group");
+        SetInput("abort");
+        var args = new string[] { "group" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists("group"));
-        
+
         // Finally
-        _DeleteDirectory("group");
+        DeleteDirectory("group");
     }
 
     [Fact]
-    public void Run_ExistingGroupConfirm_RemovesGroup()
+    public void RunExistingGroupConfirmRemovesGroup()
     {
         // Given
-        _CreateDirectory("group");
-        _SetInput(Path.Combine(".", "group"));
-        var args = new string[]{"group"};
-        
+        CreateDirectory("group");
+        SetInput(Path.Combine(".", "group"));
+        var args = new string[] { "group" };
+
         // When
         var result = App().Run(args);
 
@@ -160,65 +158,65 @@ public class RemoveGroupCommandTests : FileSystemTests
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists("group"));
     }
-    
+
     [Fact]
-    public void Run_ExistingGroupInGroup_PromptsUserForConfirmation()
+    public void RunExistingGroupInGroupPromptsUserForConfirmation()
     {
         // Given
-        _CreateNonEmptyDirectory("basegroup", "group");
-        _SetInput("abort");
-        var args = new string[]{"group", $"--base-group=basegroup"};
-        
+        CreateNonEmptyDirectory("basegroup", "group");
+        SetInput("abort");
+        var args = new string[] { "group", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
-        Assert.Contains("confirm", _CaptureWriter.ToString());
-        
+        Assert.Contains("confirm", CaptureWriter.ToString());
+
         // Finally
-        _DeleteDirectory("basegroup");
+        DeleteDirectory("basegroup");
     }
 
     [Fact]
-    public void Run_ExistingGroupInGroupAbort_DoesNotOverrideGroup()
+    public void RunExistingGroupInGroupAbortDoesNotOverrideGroup()
     {
         // Given
         var groupPath = Path.Combine("basegroup", "group");
-        _CreateDirectory(groupPath);
+        CreateDirectory(groupPath);
 
-        _SetInput("abort");
-        var args = new string[]{"group", $"--base-group=basegroup"};
-        
+        SetInput("abort");
+        var args = new string[] { "group", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.True(Directory.Exists(groupPath));
-        
+
         // Finally
-        _DeleteDirectory("basegroup");
+        DeleteDirectory("basegroup");
     }
 
     [Fact]
-    public void Run_ExistingGroupInGroupConfirm_OverridesGroup()
+    public void RunExistingGroupInGroupConfirmOverridesGroup()
     {
         // Given
         var groupPath = Path.Combine("basegroup", "group");
-        _CreateDirectory(groupPath);
+        CreateDirectory(groupPath);
 
-        _SetInput(groupPath);
-        var args = new string[]{"group", $"--base-group=basegroup"};
-        
+        SetInput(groupPath);
+        var args = new string[] { "group", $"--base-group=basegroup" };
+
         // When
         var result = App().Run(args);
 
         // Then
         Assert.Equal(0, result.ExitCode);
         Assert.False(Directory.Exists(groupPath));
-        
+
         // Finally
-        _DeleteDirectory("basegroup");
+        DeleteDirectory("basegroup");
     }
-} 
+}
