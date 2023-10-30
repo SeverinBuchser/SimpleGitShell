@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Settings;
-using SimpleGitShell.Library.Exceptions.Group;
-using SimpleGitShell.Library.Utils;
+using SimpleGitShellrary.Exceptions.Group;
+using SimpleGitShellrary.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Reading;
+using SimpleGitShellrary.Logging;
+using SimpleGitShellrary.Reading;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Base.Commands.Confirmation;

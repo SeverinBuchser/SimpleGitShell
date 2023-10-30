@@ -1,9 +1,9 @@
 using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Utils;
-using SimpleGitShell.Library.Utils.Processes;
+using SimpleGitShellrary.Logging;
+using SimpleGitShellrary.Utils;
+using SimpleGitShellrary.Utils.Processes;
 using Spectre.Console.Cli;
 
 [assembly: CLSCompliant(false)]

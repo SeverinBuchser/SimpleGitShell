@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.Repo.Settings;
-using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Reading;
-using SimpleGitShell.Library.Utils;
+using SimpleGitShellrary.Logging;
+using SimpleGitShellrary.Reading;
+using SimpleGitShellrary.Utils;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Repo;

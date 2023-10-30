@@ -1,7 +1,7 @@
 using SimpleGitShell.Commands.Group;
-using SimpleGitShell.Library.Exceptions.Group;
+using SimpleGitShellrary.Exceptions.Group;
 using Spectre.Console.Testing;
-using Tests.SimpleGitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
 namespace Tests.SimpleGitShell.Commands.Group;
 

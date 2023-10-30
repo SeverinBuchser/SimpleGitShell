@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Commands.Confirmation;
 using SimpleGitShell.Commands.Group.Settings;
-using SimpleGitShell.Library.Logging;
+using SimpleGitShellrary.Logging;
 
 namespace SimpleGitShell.Commands.Group;
 

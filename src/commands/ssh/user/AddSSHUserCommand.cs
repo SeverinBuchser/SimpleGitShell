@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User.Settings;
-using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Utils;
+using SimpleGitShellrary.Logging;
+using SimpleGitShellrary.Utils;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.SSH.User;

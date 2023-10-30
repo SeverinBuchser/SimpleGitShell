@@ -1,10 +1,10 @@
 using SimpleGitShell.Commands.Repo;
-using SimpleGitShell.Library.Exceptions.Group;
-using SimpleGitShell.Library.Exceptions.Repo;
-using SimpleGitShell.Library.Utils.Processes.Git;
+using SimpleGitShellrary.Exceptions.Group;
+using SimpleGitShellrary.Exceptions.Repo;
+using SimpleGitShellrary.Utils.Processes.Git;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
-using Tests.SimpleGitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
 namespace Tests.SimpleGitShell.Commands.Repo;
 

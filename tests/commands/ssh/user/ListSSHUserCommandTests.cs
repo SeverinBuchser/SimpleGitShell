@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShell.Library.Utils;
+using SimpleGitShellrary.Utils;
 using Spectre.Console.Testing;
-using Tests.SimpleGitShell.Utils;
-using Tests.SimpleGitShell.Utils.DataAttributes;
+using Tests.SimpleGitShell.TestUtils;
+using Tests.SimpleGitShell.TestUtils.DataAttributes;
 
 namespace Tests.SimpleGitShell.Commands.SSH.User;
 
