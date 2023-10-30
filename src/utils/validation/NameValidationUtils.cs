@@ -5,12 +5,11 @@ namespace SimpleGitShellrary.Utils.Validation;
 
 public static partial class NameValidationUtils
 {
-    [GeneratedRegex("^[A-Za-z\\d-]+$")]
-    private static partial Regex GroupNameRegex();
+    private static readonly Regex _GroupNameRegex = new(@"^[A-Za-z\d-]+$");
 
     public static void ThrowOnNameNotValid(string kind, string name)
     {
-        if (!GroupNameRegex().IsMatch(name))
+        if (!_GroupNameRegex.IsMatch(name))
         {
             throw new InvalidNameException(kind, name);
         }

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using SimpleGitShellrary.Logging;
 
 namespace SimpleGitShellrary.Utils.Processes;
 
