@@ -1,7 +1,7 @@
 using SimpleGitShell.Commands.Group;
-using SimpleGitShell.Library.Exceptions.Group;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
-using Tests.SimpleGitShell.Utils;
+using Tests.SimpleGitShell.TestUtils;
 
 namespace Tests.SimpleGitShell.Commands.Group;
 
@@ -16,26 +16,75 @@ public class ListGroupCommandTests : FileSystemTests
     }
 
     [Theory]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void RunInvalidBaseGroupThrowsGroupNameNotValidException(string group)
+    public void RunInvalidBaseGroupThrowsCommandRuntimeException(string baseGroup)
     {
         // Given
-        var args = new string[] { $"--base-group={group}" };
+        var args = new string[] { $"--base-group={baseGroup}" };
 
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("base group name", result.Exception.Message);
     }
 
     [Fact]
-    public void ExecuteGroupsInRootOnlyListsGroupsInRoot()
+    public void RunNoGroupsInRootListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+
+        // When
+        var result = App().Run();
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no groups in base group \"root\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+    }
+
+    [Fact]
+    public void RunNoGroupsInBaseGroupListsNoGroups()
+    {
+        // Given
+        CreateDirectory("git-shell-commands");
+        CreateDirectory(".ssh");
+        CreateDirectory(".config");
+        CreateDirectory("basegroup");
+        var args = new string[] { $"--base-group=basegroup" };
+
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains("There are no groups in base group \"basegroup\".", output);
+
+        // Finally
+        DeleteDirectory("git-shell-commands");
+        DeleteDirectory(".ssh");
+        DeleteDirectory(".config");
+        DeleteDirectory("basegroup");
+    }
+
+    [Fact]
+    public void RunGroupsInRootOnlyListsGroupsInRoot()
     {
         // Given
         /*
@@ -145,7 +194,7 @@ public class ListGroupCommandTests : FileSystemTests
 
 
     [Fact]
-    public void ExecuteGroupsInBaseGroupOnlyListsGroupsInBaseGroup()
+    public void RunGroupsInBaseGroupOnlyListsGroupsInBaseGroup()
     {
         // Given
         /*

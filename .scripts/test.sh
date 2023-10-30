@@ -8,6 +8,7 @@ set -e
 
 # Initialize variables and flags for optional arguments
 coverage=false
+report=false
 watch=false
 verbose="quiet"
 
@@ -25,6 +26,8 @@ Usage: $0 [options]
 
 Options:
   -c, --coverage  Perform coverage analysis.
+  -r, --report    Create coverage report (only available
+                  with coverage enabled).
   -w, --watch     Start watching for changes.
   -v, --verbose   Set verbosity level:
                    - 'quiet' for quiet output (default).
@@ -50,6 +53,9 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         -c|--coverage)
             coverage=true
+            ;;
+        -r|--report)
+            report=true
             ;;
         -w|--watch)
             watch=true
@@ -85,7 +91,7 @@ elif [ "$verbose" = "quiet" ] || [ "$verbose" = "q" ]; then
 fi
 
 if [ "$coverage" = true ]; then
-    extraArgs="$extraArgs -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover"
+    extraArgs="$extraArgs -p:ExcludeFromCoverage=/home/** -p:CollectCoverage=true -p:CoverletOutput=coverage/ -p:CoverletOutputFormat=opencover"
 fi
 
 if [ "$watch" = true ]; then
@@ -93,4 +99,11 @@ if [ "$watch" = true ]; then
 else
     cd tests
     dotnet test $extraArgs
+    cd ..
+fi
+
+if [ "$report" = true ]; then
+    dotnet tool restore "-v" "q"
+    dotnet tool run reportgenerator "-reports:tests/coverage/coverage.opencover.xml" "-targetdir:tests/coverage/report/" "-reporttypes:Html"
+    open tests/coverage/report/index.html 1>/dev/null 2>&1
 fi

@@ -1,16 +1,19 @@
+using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShell.Library.Logging;
-using SimpleGitShell.Library.Utils;
-using SimpleGitShell.Library.Utils.Processes;
+using SimpleGitShellrary.Logging;
+using SimpleGitShellrary.Utils;
+using SimpleGitShellrary.Utils.Processes;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
+[assembly: CLSCompliant(false)]
 namespace SimpleGitShell;
 
-public class Program
+public static class Program
 {
-    private static int Main(string[] args)
+    public static int Main([NotNull] string[] args)
     {
         if (args.Length == 2 && args[0] == "-c")
         {
@@ -28,24 +31,13 @@ public class Program
                     return Shell(args);
             }
         }
-        return 1;
+        return 128;
     }
 
     private static int Shell(string[] args)
     {
         var app = BuildShell();
-        try
-        {
-            return app.Run(args);
-        }
-
-#pragma warning disable CA1031
-        catch (Exception e)
-#pragma warning restore CA1031
-        {
-            Logger.Instance.Error(e.Message);
-            return 128;
-        }
+        return app.Run(args);
     }
 
     private static CommandApp BuildShell()
@@ -54,6 +46,11 @@ public class Program
         app.Configure(config =>
         {
             config.SetApplicationVersion(VerstionUtils.InformationalVersion());
+            config.SetExceptionHandler(e =>
+            {
+                Logger.Instance.Error(e.Message);
+                return 1;
+            });
             config.AddBranch("group", config =>
             {
                 config.AddCommand<ListGroupCommand>("list");
