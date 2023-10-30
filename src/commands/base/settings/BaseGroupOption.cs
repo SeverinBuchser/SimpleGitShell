@@ -1,26 +1,17 @@
 using System.ComponentModel;
-using SimpleGitShellrary.Exceptions.Group;
-using SimpleGitShellrary.Utils;
+using SimpleGitShellrary.Exceptions;
+using SimpleGitShellrary.Utils.Validation;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Base.Settings;
 
-public class BaseGroupSettings : CommandSettings
+public class BaseGroupOption : CommandSettings
 {
-    private string _BaseGroup = "root";
     [Description("The base group in which to perform the command.")]
     [CommandOption("-b|--base-group")]
     [DefaultValue("root")]
-    public string BaseGroup
-    {
-        get => _BaseGroup;
-        set
-        {
-            _BaseGroup = value;
-            BaseGroupPath = value != "root" ? value : ".";
-        }
-    }
+    public string BaseGroup { get; set; } = "root";
 
     public string BaseGroupPath { get; private set; } = ".";
 
@@ -28,11 +19,11 @@ public class BaseGroupSettings : CommandSettings
     {
         try
         {
-            GroupUtils.ThrowOnEmptyGroupName(BaseGroup);
-            GroupUtils.ThrowOnGroupNameNotValid(BaseGroup);
-            GroupUtils.ThrowOnNonExistingGroup(BaseGroupPath);
+            NameValidationUtils.ThrowOnNameNotValid("base group", BaseGroup);
+            BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";
+            FileSystemValidationUtils.ThrowOnNonExistingDirectory(BaseGroupPath);
         }
-        catch (GroupException e)
+        catch (Exception e) when (e is InvalidNameException or DirectoryNotFoundException)
         {
             return ValidationResult.Error(e.Message);
         }

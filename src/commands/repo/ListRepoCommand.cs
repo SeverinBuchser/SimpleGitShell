@@ -5,7 +5,7 @@ using SimpleGitShell.Commands.Base.Settings;
 namespace SimpleGitShell.Commands.Repo;
 
 [Description("Lists all repositories.")]
-public class ListRepoCommand : AListCommand<BaseGroupSettings>
+public class ListRepoCommand : AListCommand<BaseGroupOption>
 {
     protected override string AvailableMessage => $"Available repositories in base group \"{Settings!.BaseGroup}\":";
     protected override string NoElementsMessage => $"There are no repositories in base group \"{Settings!.BaseGroup}\".";

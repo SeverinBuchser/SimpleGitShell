@@ -1,12 +1,12 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Commands.Confirmation;
-using SimpleGitShell.Commands.Group.Settings;
+using SimpleGitShell.Commands.Base.Settings;
 using SimpleGitShellrary.Logging;
 
 namespace SimpleGitShell.Commands.Group;
 
 [Description("Creates a group.")]
-public class CreateGroupCommand : AOverridePathCommand<SpecificGroupCommandSettings>
+public class CreateGroupCommand : AOverridePathCommand<GroupOption>
 {
     protected override string AlreadyExistsMessage => "The group already exists. The group will be removed and created again!";
 

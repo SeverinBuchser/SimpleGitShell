@@ -1,5 +1,5 @@
 using SimpleGitShell.Commands.Repo;
-using SimpleGitShellrary.Exceptions.Group;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.TestUtils;
 
@@ -16,22 +16,24 @@ public class ListRepoCommandTests : FileSystemTests
     }
 
     [Theory]
+    [InlineData(" ")]
     [InlineData("$")]
     [InlineData("#")]
     [InlineData("\\")]
     [InlineData("(")]
     [InlineData("`")]
     [InlineData("_")]
-    public void RunInvalidBaseGroupThrowsGroupNameNotValidException(string baseGroup)
+    public void RunInvalidBaseGroupThrowsCommandRuntimeException(string baseGroup)
     {
         // Given
         var args = new string[] { $"--base-group={baseGroup}" };
 
         // When
-        var result = App().RunAndCatch<GroupNameNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<GroupNameNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.Contains("base group name", result.Exception.Message);
     }
 
     [Fact]

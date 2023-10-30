@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Commands.Confirmation;
-using SimpleGitShell.Commands.Repo.Settings;
+using SimpleGitShell.Commands.Base.Settings;
 using SimpleGitShellrary.Logging;
 using SimpleGitShellrary.Utils.Processes.Git;
 
 namespace SimpleGitShell.Commands.Repo;
 
 [Description("Creates a repository.")]
-public class CreateRepoCommand : AOverridePathCommand<SpecificRepoCommandSettings>
+public class CreateRepoCommand : AOverridePathCommand<RepoOption>
 {
     protected override string AlreadyExistsMessage => "The repository already exists. The repository will be removed and created again!";
 

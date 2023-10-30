@@ -5,7 +5,7 @@ using SimpleGitShell.Commands.Base.Settings;
 namespace SimpleGitShell.Commands.Group;
 
 [Description("Lists all groups.")]
-public class ListGroupCommand : AListCommand<BaseGroupSettings>
+public class ListGroupCommand : AListCommand<BaseGroupOption>
 {
     protected override string AvailableMessage => $"Available groups in base group \"{Settings!.BaseGroup}\":";
     protected override string NoElementsMessage => $"There are no groups in base group \"{Settings!.BaseGroup}\".";
