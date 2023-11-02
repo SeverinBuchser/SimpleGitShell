@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using SimpleGitShellrary.Exceptions.SSH;
-using SimpleGitShellrary.Utils.Processes.SSH;
+using SimpleGitShell.Exceptions.SSH;
+using SimpleGitShell.Utils.Processes.SSH;
 
-namespace SimpleGitShellrary.Utils;
+namespace SimpleGitShell.Utils;
 
 public static partial class SSHUtils
 {

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using SimpleGitShellrary.Exceptions;
+using SimpleGitShell.Exceptions;
 
-namespace SimpleGitShellrary.Utils.Validation;
+namespace SimpleGitShell.Utils.Validation;
 
 public static partial class NameValidationUtils
 {

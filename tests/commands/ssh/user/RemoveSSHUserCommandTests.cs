@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShellrary.Exceptions.SSH;
-using SimpleGitShellrary.Utils;
+using SimpleGitShell.Exceptions.SSH;
+using SimpleGitShell.Utils;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.TestUtils;
 using Tests.SimpleGitShell.TestUtils.DataAttributes;

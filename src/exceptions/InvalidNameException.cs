@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Exceptions;
+namespace SimpleGitShell.Exceptions;
 
 public class InvalidNameException : Exception
 {

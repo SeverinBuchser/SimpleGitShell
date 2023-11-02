@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.Group.Settings;
-using SimpleGitShellrary.Logging;
-using SimpleGitShellrary.Reading;
+using SimpleGitShell.Logging;
+using SimpleGitShell.Reading;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Group;

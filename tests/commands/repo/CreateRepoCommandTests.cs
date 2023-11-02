@@ -1,5 +1,5 @@
 using SimpleGitShell.Commands.Repo;
-using SimpleGitShellrary.Utils.Processes.Git;
+using SimpleGitShell.Utils.Processes.Git;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.TestUtils;

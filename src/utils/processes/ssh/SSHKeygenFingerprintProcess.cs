@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Utils.Processes.SSH;
+namespace SimpleGitShell.Utils.Processes.SSH;
 
 public class SSHKeygenFingerprintProcess : SSHKeygenProcess
 {

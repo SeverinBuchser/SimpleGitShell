@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ConsoleTables;
 
-namespace SimpleGitShellrary.Logging;
+namespace SimpleGitShell.Logging;
 
 public static class LoggerExtensions
 {

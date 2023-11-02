@@ -2,9 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.Group;
 using SimpleGitShell.Commands.Repo;
 using SimpleGitShell.Commands.SSH.User;
-using SimpleGitShellrary.Logging;
-using SimpleGitShellrary.Utils;
-using SimpleGitShellrary.Utils.Processes;
+using SimpleGitShell.Logging;
+using SimpleGitShell.Utils;
+using SimpleGitShell.Utils.Processes;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

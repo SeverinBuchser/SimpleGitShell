@@ -300,4 +300,36 @@ public class ListRepoCommandTests : FileSystemTests
 
         DeleteDirectory("group");
     }
+
+    [Fact]
+    public void RunGroupsInNestedGroupsAreListed()
+    {
+        // Given
+        /*
+            root:
+                - group
+                    - subgroup
+                        - subsubgroup
+                            - subsubsubgroup
+        */
+        var group = "group";
+        var subgroup = "subgroup";
+        var subsubgroup = "subsubgroup";
+        var repo = "repo.git";
+        var baseGroup = Path.Combine(group, subgroup, subsubgroup);
+        CreateDirectory(Path.Combine(baseGroup, repo));
+
+        var args = new string[] { $"--base-group={baseGroup}" };
+
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains(repo, output);
+
+        // Finally
+        DeleteDirectory(group);
+    }
 }

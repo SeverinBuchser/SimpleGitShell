@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace SimpleGitShellrary.Utils.Processes;
+namespace SimpleGitShell.Utils.Processes;
 
 public class StdandardInputProcess : Process
 {
