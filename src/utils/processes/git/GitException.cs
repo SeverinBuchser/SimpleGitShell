@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Utils.Processes.Git;
+namespace SimpleGitShell.Utils.Processes.Git;
 
 public class GitException : ArgumentException
 {

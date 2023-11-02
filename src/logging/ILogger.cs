@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Logging;
+namespace SimpleGitShell.Logging;
 
 public interface ILogger
 {

@@ -1,7 +1,7 @@
-using SimpleGitShellrary.Utils.Processes.Git;
+using SimpleGitShell.Utils.Processes.Git;
 using Tests.SimpleGitShell.TestUtils;
 
-namespace Tests.SimpleGitShellrary.Utils.Commands.Git;
+namespace Tests.SimpleGitShell.Utils.Commands.Git;
 
 [Collection("File System Sequential")]
 public class GitInitBareCommandTests : FileSystemTests

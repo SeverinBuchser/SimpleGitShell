@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using SimpleGitShellrary.Exceptions;
-using SimpleGitShellrary.Utils.Validation;
+using SimpleGitShell.Exceptions;
+using SimpleGitShell.Utils.Validation;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

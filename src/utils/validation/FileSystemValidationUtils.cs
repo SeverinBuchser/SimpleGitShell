@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Utils.Validation;
+namespace SimpleGitShell.Utils.Validation;
 
 public static partial class FileSystemValidationUtils
 {

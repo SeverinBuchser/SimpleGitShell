@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Exceptions.SSH;
+namespace SimpleGitShell.Exceptions.SSH;
 
 public class SSHException : Exception
 {

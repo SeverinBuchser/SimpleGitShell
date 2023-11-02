@@ -1,4 +1,4 @@
-using SimpleGitShellrary.Reading;
+using SimpleGitShell.Reading;
 
 namespace Tests.SimpleGitShell.TestUtils;
 

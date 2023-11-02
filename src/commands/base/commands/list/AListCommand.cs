@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using SimpleGitShellrary.Logging;
+using SimpleGitShell.Logging;
 using Spectre.Console.Cli;
 
 namespace SimpleGitShell.Commands.Base.Commands.List;
