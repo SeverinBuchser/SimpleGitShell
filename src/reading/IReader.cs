@@ -1,4 +1,4 @@
-namespace SimpleGitShellrary.Reading;
+namespace SimpleGitShell.Reading;
 
 internal interface IReader
 {

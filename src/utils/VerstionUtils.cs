@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace SimpleGitShellrary.Utils;
+namespace SimpleGitShell.Utils;
 
 public static class VerstionUtils
 {

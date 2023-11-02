@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace SimpleGitShellrary.Logging;
+namespace SimpleGitShell.Logging;
 
 public class Logger : ILogger
 {

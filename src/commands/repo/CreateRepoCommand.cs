@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Commands.Confirmation;
 using SimpleGitShell.Commands.Base.Settings;
-using SimpleGitShellrary.Logging;
-using SimpleGitShellrary.Utils.Processes.Git;
+using SimpleGitShell.Logging;
+using SimpleGitShell.Utils.Processes.Git;
 
 namespace SimpleGitShell.Commands.Repo;
 

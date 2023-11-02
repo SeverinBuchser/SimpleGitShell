@@ -1,4 +1,4 @@
-using SimpleGitShellrary.Logging;
+using SimpleGitShell.Logging;
 
 namespace Tests.SimpleGitShell.TestUtils;
 

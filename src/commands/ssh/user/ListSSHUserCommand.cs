@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using SimpleGitShell.Commands.Base.Commands.List;
-using SimpleGitShellrary.Utils;
+using SimpleGitShell.Utils;
 
 namespace SimpleGitShell.Commands.SSH.User;
 

@@ -191,8 +191,6 @@ public class ListGroupCommandTests : FileSystemTests
         DeleteDirectory("group");
     }
 
-
-
     [Fact]
     public void RunGroupsInBaseGroupOnlyListsGroupsInBaseGroup()
     {
@@ -301,5 +299,37 @@ public class ListGroupCommandTests : FileSystemTests
         }
 
         DeleteDirectory("basegroup");
+    }
+
+    [Fact]
+    public void RunGroupsInNestedGroupsAreListed()
+    {
+        // Given
+        /*
+            root:
+                - group
+                    - subgroup
+                        - subsubgroup
+                            - subsubsubgroup
+        */
+        var group = "group";
+        var subgroup = "subgroup";
+        var subsubgroup = "subsubgroup";
+        var subsubsubgroup = "subsubsubgroup";
+        var baseGroup = Path.Combine(group, subgroup, subsubgroup);
+        CreateDirectory(Path.Combine(baseGroup, subsubsubgroup));
+
+        var args = new string[] { $"--base-group={baseGroup}" };
+
+        // When
+        var result = App().Run(args);
+
+        // Then
+        Assert.Equal(0, result.ExitCode);
+        var output = CaptureWriter.ToString();
+        Assert.Contains(subsubsubgroup, output);
+
+        // Finally
+        DeleteDirectory(group);
     }
 }

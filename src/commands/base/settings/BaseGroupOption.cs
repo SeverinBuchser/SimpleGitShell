@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using SimpleGitShellrary.Exceptions;
-using SimpleGitShellrary.Utils.Validation;
+using SimpleGitShell.Exceptions;
+using SimpleGitShell.Utils.Validation;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -19,7 +19,10 @@ public class BaseGroupOption : CommandSettings
     {
         try
         {
-            NameValidationUtils.ThrowOnNameNotValid("base group", BaseGroup);
+            foreach (var group in BaseGroup.Split("/"))
+            {
+                NameValidationUtils.ThrowOnNameNotValid("base group", group);
+            }
             BaseGroupPath = BaseGroup != "root" ? BaseGroup : ".";
             FileSystemValidationUtils.ThrowOnNonExistingDirectory(BaseGroupPath);
         }
