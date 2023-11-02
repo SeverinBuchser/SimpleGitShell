@@ -8,7 +8,7 @@
         <PublishSingleFile>true</PublishSingleFile>
         <DebugType>embedded</DebugType>
         <PublishDir>$(SolutionDir)/bin/publish</PublishDir>
-        <Version>2.0.0</Version>
+        <Version>2.0.1</Version>
         <NoWarn>$(NoWarn);SYSLIB1045</NoWarn>
     </PropertyGroup>
 
