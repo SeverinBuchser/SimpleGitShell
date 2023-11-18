@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User;
 using SimpleGitShell.Exceptions.SSH;
 using SimpleGitShell.Utils;
+using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.TestUtils;
 using Tests.SimpleGitShell.TestUtils.DataAttributes;
@@ -22,16 +23,16 @@ public class RemoveSSHUserCommandTests : FileSystemTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("      ")]
-    public void RunInvalidPublicKeyThrowsPublicKeyNotValidException(string publicKey)
+    public void RunInvalidPublicKeyThrowsCommandRuntimeException(string publicKey)
     {
         // Given
-        var args = new string[] { publicKey };
+        var args = new string[] { $"-p='{publicKey}'" };
 
         // When
-        var result = App().RunAndCatch<PublicKeyNotValidException>(args);
+        var result = App().RunAndCatch<CommandRuntimeException>(args);
 
         // Then
-        Assert.IsType<PublicKeyNotValidException>(result.Exception);
+        Assert.IsType<CommandRuntimeException>(result.Exception);
     }
 
     [Theory]
@@ -42,7 +43,7 @@ public class RemoveSSHUserCommandTests : FileSystemTests
     public void RunNonExistingPublicKeyThrowsPublicKeyDoesNotExistException(string publicKey)
     {
         // Given
-        var args = new string[] { publicKey };
+        var args = new string[] { $"-p='{publicKey}'" };
 
         // When
         var result = App().RunAndCatch<PublicKeyDoesNotExistException>(args);
@@ -61,7 +62,7 @@ public class RemoveSSHUserCommandTests : FileSystemTests
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, string.Join("\n", existingKeys));
         SetInput("abort");
-        var args = new string[] { publicKeyToRemove };
+        var args = new string[] { $"-p='{publicKeyToRemove}'" };
 
         // When
         var result = App().Run(args);
@@ -84,7 +85,7 @@ public class RemoveSSHUserCommandTests : FileSystemTests
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, string.Join("\n", existingKeys));
         SetInput("abort");
-        var args = new string[] { publicKeyToRemove };
+        var args = new string[] { $"-p='{publicKeyToRemove}'" };
 
         // When
         var result = App().Run(args);
@@ -115,7 +116,7 @@ public class RemoveSSHUserCommandTests : FileSystemTests
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, string.Join("\n", existingPublicKeys));
         SetInput("user@hello1");
-        var args = new string[] { publicKeyToRemove };
+        var args = new string[] { $"-p='{publicKeyToRemove}'" };
 
         // When
         var result = App().Run(args);
