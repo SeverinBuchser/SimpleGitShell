@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using SimpleGitShell;
 using Tests.SimpleGitShell.TestUtils;
 
@@ -89,7 +90,7 @@ public class ProgramTests : FileSystemTests
     }
 
     [Fact]
-    public void MainRepoCreateInvalid()
+    public void MainGroupCreateInvalid()
     {
         // Given
         var args = new string[] { "-c", "repo create r3p@@" };

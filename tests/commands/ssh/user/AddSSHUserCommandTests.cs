@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using SimpleGitShell.Commands.SSH.User;
 using SimpleGitShell.Exceptions.SSH;
 using SimpleGitShell.Utils;
-using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 using Tests.SimpleGitShell.TestUtils;
 using Tests.SimpleGitShell.TestUtils.DataAttributes;
@@ -25,16 +24,16 @@ public class AddSSHUserCommandTests : FileSystemTests
     [InlineData("ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQDwWPacdjBDrzWt2ddZchxa/axy0XznF6Wb6HPZQ8rBkOY8h74edi/pkmZm13SRNY8X6OYqBUaUYOTMek9KGsbyRtge2OyOwDZh0Hdt4RmsqwP2fvc8dnPYgMNAV4BU200JSuEJGC/2OEKAVIf+RkQcRZ9pnEQkjLSEc0zSvT7isPxyZktmhr1q23JvESWqrlMh1qAhOK2+nX230p5iV+qcH8EhNm9R48pD6wBNHZvGaYw0pNjS/YyjGDGWysf2PeDyYvcNhVk6e8Ce+/g+gMOHAJApEWtn596pFuTk8KgZuvwJMJ2L89M7xMGMFTUkLk6su3chqTfjjCDUB04Uf19ei9PJw0keXnFHpDVzQe6ST1aRz5S31aq989WWv26Jyw0edpUrmDSI3QN8foQYk2WcR2jWBfPT1R45UkUarUK937opo/XpuCFDY7mYhI5BZbQKGVbnmmoEkUiPQTmbvLgVxF89bFzJOlWZwC/fFtdUFOaSinMi6/M/U7b2nfTzxX8= hello")]
     [InlineData("  ")]
     [InlineData("")]
-    public void RunInvalidPublicKeyThrowsCommandRuntimeException(string publicKey)
+    public void RunInvalidPublicKeyThrowsPublicKeyNotValidException(string publicKey)
     {
         // Given
-        var args = new string[] { $"-p='{publicKey}'" };
+        var args = new string[] { publicKey };
 
         // When
-        var result = App().RunAndCatch<CommandRuntimeException>(args);
+        var result = App().RunAndCatch<PublicKeyNotValidException>(args);
 
         // Then
-        Assert.IsType<CommandRuntimeException>(result.Exception);
+        Assert.IsType<PublicKeyNotValidException>(result.Exception);
     }
 
     [Theory]
@@ -45,7 +44,7 @@ public class AddSSHUserCommandTests : FileSystemTests
     public void RunValidPublicKeyWithNonExistingAuthorizedKeysCreatesAuthorizedKeysWithPublicKey(string publicKey)
     {
         // Given
-        var args = new string[] { $"-p='{publicKey}'" };
+        var args = new string[] { publicKey };
 
         // When
         var result = App().Run(args);
@@ -70,7 +69,7 @@ public class AddSSHUserCommandTests : FileSystemTests
         // Given
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, "some other key");
-        var args = new string[] { $"-p='{publicKey}'" };
+        var args = new string[] { publicKey };
 
         // When
         var result = App().Run(args);
@@ -95,7 +94,7 @@ public class AddSSHUserCommandTests : FileSystemTests
         var argsList = new List<string[]>();
         foreach (var publicKey in publicKeys)
         {
-            argsList.Add(new string[] { $"-p='{publicKey}'" });
+            argsList.Add(new string[] { publicKey });
         }
 
 
@@ -136,7 +135,7 @@ public class AddSSHUserCommandTests : FileSystemTests
         // Given
         CreateDirectory(SSHUtils.SSHPath);
         CreateFile(SSHUtils.SSHAuthorizedKeys, string.Join("\n", existingPublicKeys));
-        var args = new string[] { $"-p='{publicKeyToAdd}'" };
+        var args = new string[] { publicKeyToAdd };
 
         // When
         var result = App().RunAndCatch<PublicKeyAlreadyExistsException>(args);

@@ -25,7 +25,10 @@ public static partial class SSHUtils
 
     public static void AddKey(string? publicKey)
     {
-        publicKey = ValidateKey(publicKey);
+        if (!IsValidKey(publicKey))
+        {
+            throw new PublicKeyNotValidException();
+        }
 
         if (DoesKeyExist(publicKey))
         {
@@ -49,18 +52,11 @@ public static partial class SSHUtils
         WriteKeys(keys);
     }
 
-    public static string ValidateKey([NotNullWhen(true)] string? publicKey)
+    public static bool IsValidKey([NotNullWhen(true)] string? publicKey)
     {
         if (string.IsNullOrWhiteSpace(publicKey))
         {
-            throw new PublicKeyNotValidException();
-        }
-
-        publicKey = publicKey.Replace("\"", string.Empty).Replace("'", string.Empty);
-
-        if (string.IsNullOrWhiteSpace(publicKey))
-        {
-            throw new PublicKeyNotValidException();
+            return false;
         }
 
         var uuid = Guid.NewGuid();
@@ -74,11 +70,11 @@ public static partial class SSHUtils
             if (sshKeygenFingerprintCommand.Start() != 0)
             {
                 File.Delete(tmpFile);
-                throw new PublicKeyNotValidException();
+                return false;
             }
         }
         File.Delete(tmpFile);
-        return publicKey;
+        return true;
     }
 
     public static bool DoesKeyExist(string publicKey)
