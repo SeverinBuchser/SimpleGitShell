@@ -12,7 +12,6 @@ public class RemoveSSHUserCommand : Command<BaseSSHCommandSettings>
 {
     public override int Execute([NotNull] CommandContext context, [NotNull] BaseSSHCommandSettings settings)
     {
-        Console.WriteLine(settings.PublicKey);
         if (string.IsNullOrWhiteSpace(settings.PublicKey))
         {
             throw new PublicKeyNotValidException();
